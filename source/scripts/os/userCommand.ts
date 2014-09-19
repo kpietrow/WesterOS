@@ -1,4 +1,4 @@
-module TSOS {
+module Viper {
     export class UserCommand {
         constructor(public command = "",
                     public args = []) {

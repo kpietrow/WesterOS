@@ -17,8 +17,8 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 //
 // Control Services
 //
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var Control = (function () {
         function Control() {
         }
@@ -30,7 +30,7 @@ var TSOS;
             _DrawingContext = _Canvas.getContext('2d');
 
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
-            TSOS.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
+            Viper.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
 
             // Clear the log text box.
             // Use the TypeScript cast to HTMLInputElement
@@ -79,14 +79,14 @@ var TSOS;
             document.getElementById("display").focus();
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
-            _CPU = new TSOS.Cpu();
+            _CPU = new Viper.Cpu();
             _CPU.init();
 
             // ... then set the host clock pulse ...
-            _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
+            _hardwareClockID = setInterval(Viper.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
             // .. and call the OS Kernel Bootstrap routine.
-            _Kernel = new TSOS.Kernel();
+            _Kernel = new Viper.Kernel();
             _Kernel.krnBootstrap();
         };
 
@@ -111,5 +111,5 @@ var TSOS;
         };
         return Control;
     })();
-    TSOS.Control = Control;
-})(TSOS || (TSOS = {}));
+    Viper.Control = Control;
+})(Viper || (Viper = {}));
