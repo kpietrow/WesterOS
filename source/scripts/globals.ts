@@ -53,6 +53,7 @@ var _StdOut = null;
 // UI
 var _Console: Viper.Console;
 var _OsShell: Viper.Shell;
+var _DateTimeDisplay: Viper.DateTimeDisplay;
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;
