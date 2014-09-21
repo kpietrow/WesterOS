@@ -49,7 +49,6 @@ var _StdOut = null;
 // UI
 var _Console;
 var _OsShell;
-var _DateTimeDisplay;
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;

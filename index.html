@@ -33,15 +33,6 @@
    <!-- Uncomment this line below to enable Glados testing -->
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 
-    <script type="text/javascript">
-        function updateDateTime() {
-            //var dateTime= new Date();
-            // dateString = dateTime.toDateString();
-            //dateString += dateTime.getTime();
-            document.getElementById("dateTime").innerHTML = "POOP";
-            //setTimeout(updateDateTime, 1000);
-        }
-    </script>
 </head>
 
 <body onload="onDocumentLoad();">
@@ -61,8 +52,7 @@
                    <script type="text/javascript">
                        function updateDateTime() {
                            var dateTime= new Date();
-                           dateString = dateTime.toDateString() + "  ";
-                           dateString += dateTime.getTime();
+                           dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
                            document.getElementById("dateTime").innerHTML = dateString;
                            setTimeout(updateDateTime, 1000);
                        }
