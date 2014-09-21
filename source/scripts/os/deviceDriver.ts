@@ -4,7 +4,7 @@
  The "base class" for all Device Drivers.
  ------------------------------ */
 
-module Viper {
+module WesterOS {
     export class DeviceDriver {
         public version = '0.117';
         public status = 'unloaded';

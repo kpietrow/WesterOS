@@ -2,8 +2,8 @@
 DeviceDriver.ts
 The "base class" for all Device Drivers.
 ------------------------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var DeviceDriver = (function () {
         function DeviceDriver(driverEntry, isr) {
             if (typeof driverEntry === "undefined") { driverEntry = null; }
@@ -16,6 +16,6 @@ var Viper;
         }
         return DeviceDriver;
     })();
-    Viper.DeviceDriver = DeviceDriver;
-})(Viper || (Viper = {}));
+    WesterOS.DeviceDriver = DeviceDriver;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=deviceDriver.js.map

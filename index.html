@@ -3,9 +3,9 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
    <meta name="author"             content="Alan G. Labouseur" />
-   <link rel="stylesheet" href="dist/styles/Viper.css" type="text/css" media="screen" />
+   <link rel="stylesheet" href="dist/styles/WesterOS.css" type="text/css" media="screen" />
    <title>
-      Viper - a browser-based virtual Operating System in TypeScript
+      WesterOS - a browser-based virtual Operating System in TypeScript
    </title>
 
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
@@ -52,7 +52,7 @@
                    <script type="text/javascript">
                        function updateDateTime() {
                            var dateTime= new Date();
-                           dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+                           dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + ((dateTime.getMinutes() < 10) ? "0" : "") + dateTime.getMinutes() + ":" + dateTime.getSeconds();
                            document.getElementById("dateTime").innerHTML = dateString;
                            setTimeout(updateDateTime, 1000);
                        }
@@ -71,7 +71,7 @@
              class="normal_button"
              value="Start"
              tabindex="0"
-             onclick="Viper.Control.hostBtnStartOS_click(this);">
+             onclick="WesterOS.Control.hostBtnStartOS_click(this);">
 
       <input type="button"
              id = "btnHaltOS"
@@ -80,7 +80,7 @@
              disabled="disabled"
              value="Halt"
              tabindex="1"
-             onclick="Viper.Control.hostBtnHaltOS_click(this);">
+             onclick="WesterOS.Control.hostBtnHaltOS_click(this);">
 
       <input type="button"
              id = "btnReset"
@@ -89,7 +89,7 @@
              disabled="disabled"
              value="Reset"
              tabindex="2"
-             onclick="Viper.Control.hostBtnReset_click(this);">
+             onclick="WesterOS.Control.hostBtnReset_click(this);">
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;" class="col-xs-7">

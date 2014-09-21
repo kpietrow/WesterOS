@@ -45,7 +45,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/scripts/utils.js" afterPath="$PROJECT_DIR$/dist/scripts/utils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/scripts/utils.ts" afterPath="$PROJECT_DIR$/source/scripts/utils.ts" />
     </list>
-    <ignored path="Viper-OS.iws" />
+    <ignored path="WesterOS.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +62,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
-    <favorites_list name="Viper-OS" />
+    <favorites_list name="WesterOS" />
   </component>
   <component name="FileEditorManager">
     <leaf>
@@ -100,8 +100,8 @@
         </entry>
       </file>
 <<<<<<< HEAD
-      <file leaf-file-name="Viper.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/source/styles/Viper.css">
+      <file leaf-file-name="WesterOS.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/styles/WesterOS.css">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1035">
               <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
@@ -214,7 +214,7 @@
 <<<<<<< HEAD
         <option value="$PROJECT_DIR$/dist/scripts/os/console.js" />
         <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
-        <option value="$PROJECT_DIR$/source/styles/Viper.css" />
+        <option value="$PROJECT_DIR$/source/styles/WesterOS.css" />
         <option value="$PROJECT_DIR$/index.html" />
 =======
 >>>>>>> fd4736db0abd9f5ba343f3e01038f8a06e576e0a
@@ -264,27 +264,27 @@
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -298,11 +298,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -316,11 +316,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -338,11 +338,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -360,11 +360,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -379,11 +379,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -397,11 +397,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -419,11 +419,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -441,11 +441,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Viper-OS" />
+              <option name="myItemId" value="WesterOS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -802,7 +802,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/styles/Viper.css">
+    <entry file="file://$PROJECT_DIR$/dist/styles/WesterOS.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.041899443" vertical-offset="30" max-vertical-offset="810">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -864,7 +864,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/styles/Viper.css">
+    <entry file="file://$PROJECT_DIR$/source/styles/WesterOS.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1035">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />

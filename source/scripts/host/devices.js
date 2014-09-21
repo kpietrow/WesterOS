@@ -13,8 +13,8 @@ DOM manipulation and TypeScript/JavaScript event handling, and so on.  (Index.ht
 This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Devices = (function () {
         function Devices() {
             _hardwareClockID = -1;
@@ -59,6 +59,6 @@ var Viper;
         };
         return Devices;
     })();
-    Viper.Devices = Devices;
-})(Viper || (Viper = {}));
+    WesterOS.Devices = Devices;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=devices.js.map

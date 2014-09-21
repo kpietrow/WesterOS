@@ -1,8 +1,8 @@
 /* ------------
 Interrupt.ts
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Interrupt = (function () {
         function Interrupt(irq, params) {
             this.irq = irq;
@@ -10,6 +10,6 @@ var Viper;
         }
         return Interrupt;
     })();
-    Viper.Interrupt = Interrupt;
-})(Viper || (Viper = {}));
+    WesterOS.Interrupt = Interrupt;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=interrupt.js.map

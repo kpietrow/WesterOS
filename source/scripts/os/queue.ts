@@ -8,7 +8,7 @@
 
    ------------ */
 
-module Viper {
+module WesterOS {
     export class Queue {
         constructor(public q = new Array()) {
 

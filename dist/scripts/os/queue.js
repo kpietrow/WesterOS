@@ -5,8 +5,8 @@ See the Javascript Array documentation at
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 Look at the push and shift methods, as they are the least obvious here.
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Queue = (function () {
         function Queue(q) {
             if (typeof q === "undefined") { q = new Array(); }
@@ -41,5 +41,5 @@ var Viper;
         };
         return Queue;
     })();
-    Viper.Queue = Queue;
-})(Viper || (Viper = {}));
+    WesterOS.Queue = Queue;
+})(WesterOS || (WesterOS = {}));

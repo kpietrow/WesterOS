@@ -12,8 +12,8 @@
 *
 * Port to TypeScript by Bob Nisco.
 * ----------------- */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var CanvasTextFunctions = (function () {
         function CanvasTextFunctions() {
         }
@@ -201,6 +201,6 @@ var Viper;
         };
         return CanvasTextFunctions;
     })();
-    Viper.CanvasTextFunctions = CanvasTextFunctions;
-})(Viper || (Viper = {}));
+    WesterOS.CanvasTextFunctions = CanvasTextFunctions;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=canvastext.js.map

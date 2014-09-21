@@ -1,5 +1,5 @@
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var ShellCommand = (function () {
         function ShellCommand(func, command, description) {
             if (typeof command === "undefined") { command = ""; }
@@ -10,5 +10,5 @@ var Viper;
         }
         return ShellCommand;
     })();
-    Viper.ShellCommand = ShellCommand;
-})(Viper || (Viper = {}));
+    WesterOS.ShellCommand = ShellCommand;
+})(WesterOS || (WesterOS = {}));

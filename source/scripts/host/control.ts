@@ -23,7 +23,7 @@
 //
 // Control Services
 //
-module Viper {
+module WesterOS {
 
     export class Control {
 

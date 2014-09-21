@@ -5,8 +5,8 @@ Routines for the Operating System, NOT the host.
 This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Kernel = (function () {
         function Kernel() {
         }
@@ -165,6 +165,6 @@ var Viper;
         };
         return Kernel;
     })();
-    Viper.Kernel = Kernel;
-})(Viper || (Viper = {}));
+    WesterOS.Kernel = Kernel;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=kernel.js.map

@@ -6,8 +6,8 @@ Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
 ------------ */
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Shell = (function () {
         function Shell() {
             // Properties
@@ -26,51 +26,51 @@ var Viper;
             //
             // Load the command list.
             // ver
-            sc = new Viper.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
+            sc = new WesterOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
 
             // whereami
-            sc = new Viper.ShellCommand(this.shellWhereAmI, "whereami", "- Gives a location from Westeros.");
+            sc = new WesterOS.ShellCommand(this.shellWhereAmI, "whereami", "- Gives a location from Westeros.");
             this.commandList[this.commandList.length] = sc;
 
             // date
-            sc = new Viper.ShellCommand(this.shellDate, "date", "- Gives the date.");
+            sc = new WesterOS.ShellCommand(this.shellDate, "date", "- Gives the date.");
             this.commandList[this.commandList.length] = sc;
 
             // whoami
-            sc = new Viper.ShellCommand(this.shellWhoAmI, "whoami", "- Tells you your Westerosi identity.");
+            sc = new WesterOS.ShellCommand(this.shellWhoAmI, "whoami", "- Tells you your Westerosi identity.");
             this.commandList[this.commandList.length] = sc;
 
             // status
-            sc = new Viper.ShellCommand(this.shellStatus, "status", "- Update your status.");
+            sc = new WesterOS.ShellCommand(this.shellStatus, "status", "[args\] - Update your status.");
             this.commandList[this.commandList.length] = sc;
 
             // help
-            sc = new Viper.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
+            sc = new WesterOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
 
             // shutdown
-            sc = new Viper.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying hardware simulation running.");
+            sc = new WesterOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
 
             // cls
-            sc = new Viper.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
+            sc = new WesterOS.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
-            sc = new Viper.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
+            sc = new WesterOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
 
             // trace <on | off>
-            sc = new Viper.ShellCommand(this.shellTrace, "trace", "<on | off> - Turns the OS trace on or off.");
+            sc = new WesterOS.ShellCommand(this.shellTrace, "trace", "<on | off> - Turns the OS trace on or off.");
             this.commandList[this.commandList.length] = sc;
 
             // rot13 <string>
-            sc = new Viper.ShellCommand(this.shellRot13, "rot13", "<string> - Does rot13 obfuscation on <string>.");
+            sc = new WesterOS.ShellCommand(this.shellRot13, "rot13", "<string> - Does rot13 obfuscation on <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // prompt <string>
-            sc = new Viper.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+            sc = new WesterOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -90,7 +90,7 @@ var Viper;
             //
             // Parse the input...
             //
-            var userCommand = new Viper.UserCommand();
+            var userCommand = new WesterOS.UserCommand();
             userCommand = this.parseInput(buffer);
 
             // ... and assign the command and args to local variables.
@@ -117,7 +117,7 @@ var Viper;
                 this.execute(fn, args);
             } else {
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + Viper.Utils.rot13(cmd) + "]") >= 0) {
+                if (this.curses.indexOf("[" + WesterOS.Utils.rot13(cmd) + "]") >= 0) {
                     this.execute(this.shellCurse);
                 } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
                     this.execute(this.shellApology);
@@ -145,10 +145,10 @@ var Viper;
         };
 
         Shell.prototype.parseInput = function (buffer) {
-            var retVal = new Viper.UserCommand();
+            var retVal = new WesterOS.UserCommand();
 
             // 1. Remove leading and trailing spaces.
-            buffer = Viper.Utils.trim(buffer);
+            buffer = WesterOS.Utils.trim(buffer);
 
             // 2. Lower-case it.
             buffer = buffer.toLowerCase();
@@ -160,13 +160,13 @@ var Viper;
             var cmd = tempList.shift();
 
             // 4.1 Remove any left-over spaces.
-            cmd = Viper.Utils.trim(cmd);
+            cmd = WesterOS.Utils.trim(cmd);
 
             // 4.2 Record it in the return value.
             retVal.command = cmd;
 
             for (var i in tempList) {
-                var arg = Viper.Utils.trim(tempList[i]);
+                var arg = WesterOS.Utils.trim(tempList[i]);
                 if (arg != "") {
                     retVal.args[retVal.args.length] = tempList[i];
                 }
@@ -294,7 +294,7 @@ var Viper;
         Shell.prototype.shellRot13 = function (args) {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.
-                _StdOut.putText(args.join(' ') + " = '" + Viper.Utils.rot13(args.join(' ')) + "'");
+                _StdOut.putText(args.join(' ') + " = '" + WesterOS.Utils.rot13(args.join(' ')) + "'");
             } else {
                 _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
             }
@@ -309,5 +309,5 @@ var Viper;
         };
         return Shell;
     })();
-    Viper.Shell = Shell;
-})(Viper || (Viper = {}));
+    WesterOS.Shell = Shell;
+})(WesterOS || (WesterOS = {}));

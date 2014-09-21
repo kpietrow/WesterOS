@@ -4,7 +4,7 @@
    Utility functions.
    -------- */
 
-module Viper {
+module WesterOS {
 
     export class Utils {
 

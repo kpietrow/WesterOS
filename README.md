@@ -1,4 +1,4 @@
-Viper-2014
+WesterOS-2014
 ============
 
 This is my Fall 2014 Operating Systems class initial project.

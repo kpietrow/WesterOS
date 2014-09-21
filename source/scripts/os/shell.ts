@@ -10,7 +10,7 @@
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
-module Viper {
+module WesterOS {
     export class Shell {
         // Properties
         public promptStr = ">";
@@ -58,7 +58,7 @@ module Viper {
             // status
             sc = new ShellCommand(this.shellStatus,
                 "status",
-                "- Update your status.");
+                "[args\] - Update your status.");
             this.commandList[this.commandList.length] = sc;
 
             // help

@@ -8,7 +8,7 @@
    The Kernel Keyboard Device Driver.
    ---------------------------------- */
 
-module Viper {
+module WesterOS {
 
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {
@@ -45,6 +45,9 @@ module Viper {
             } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
                         (keyCode == 32)                     ||   // space
                         (keyCode == 13)) {                       // enter
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40) {                           // backspace
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

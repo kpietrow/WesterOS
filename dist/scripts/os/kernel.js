@@ -5,8 +5,8 @@ Routines for the Operating System, NOT the host.
 This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Kernel = (function () {
         function Kernel() {
         }
@@ -14,13 +14,13 @@ var Viper;
         // OS Startup and Shutdown Routines
         //
         Kernel.prototype.krnBootstrap = function () {
-            Viper.Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
+            WesterOS.Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
 
             // Initialize our global queues.
-            _KernelInterruptQueue = new Viper.Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
+            _KernelInterruptQueue = new WesterOS.Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
             _KernelBuffers = new Array(); // Buffers... for the kernel.
-            _KernelInputQueue = new Viper.Queue(); // Where device input lands before being processed out somewhere.
-            _Console = new Viper.Console(); // The command line interface / console I/O device.
+            _KernelInputQueue = new WesterOS.Queue(); // Where device input lands before being processed out somewhere.
+            _Console = new WesterOS.Console(); // The command line interface / console I/O device.
 
             // Initialize the console.
             _Console.init();
@@ -31,7 +31,7 @@ var Viper;
 
             // Load the Keyboard Device Driver
             this.krnTrace("Loading the keyboard device driver.");
-            _krnKeyboardDriver = new Viper.DeviceDriverKeyboard(); // Construct it.
+            _krnKeyboardDriver = new WesterOS.DeviceDriverKeyboard(); // Construct it.
             _krnKeyboardDriver.driverEntry(); // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
 
@@ -44,7 +44,7 @@ var Viper;
 
             // Launch the shell.
             this.krnTrace("Creating and Launching the shell.");
-            _OsShell = new Viper.Shell();
+            _OsShell = new WesterOS.Shell();
             _OsShell.init();
 
             // Finally, initiate testing.
@@ -91,13 +91,13 @@ var Viper;
         //
         Kernel.prototype.krnEnableInterrupts = function () {
             // Keyboard
-            Viper.Devices.hostEnableKeyboardInterrupt();
+            WesterOS.Devices.hostEnableKeyboardInterrupt();
             // Put more here.
         };
 
         Kernel.prototype.krnDisableInterrupts = function () {
             // Keyboard
-            Viper.Devices.hostDisableKeyboardInterrupt();
+            WesterOS.Devices.hostDisableKeyboardInterrupt();
             // Put more here.
         };
 
@@ -149,21 +149,21 @@ var Viper;
                     if (_OSclock % 10 == 0) {
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
                         // idea of the tick rate and adjust this line accordingly.
-                        Viper.Control.hostLog(msg, "OS");
+                        WesterOS.Control.hostLog(msg, "OS");
                     }
                 } else {
-                    Viper.Control.hostLog(msg, "OS");
+                    WesterOS.Control.hostLog(msg, "OS");
                 }
             }
         };
 
         Kernel.prototype.krnTrapError = function (msg) {
-            Viper.Control.hostLog("OS ERROR - TRAP: " + msg);
+            WesterOS.Control.hostLog("OS ERROR - TRAP: " + msg);
 
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
             this.krnShutdown();
         };
         return Kernel;
     })();
-    Viper.Kernel = Kernel;
-})(Viper || (Viper = {}));
+    WesterOS.Kernel = Kernel;
+})(WesterOS || (WesterOS = {}));

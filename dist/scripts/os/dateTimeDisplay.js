@@ -3,8 +3,8 @@ time-display.ts
 Handles updating the date and time display
 By: Kevin Pietrow
 ------------ */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var dateTimeDisplay = (function () {
         function dateTimeDisplay() {
         }
@@ -21,5 +21,5 @@ var Viper;
         };
         return dateTimeDisplay;
     })();
-    Viper.dateTimeDisplay = dateTimeDisplay;
-})(Viper || (Viper = {}));
+    WesterOS.dateTimeDisplay = dateTimeDisplay;
+})(WesterOS || (WesterOS = {}));

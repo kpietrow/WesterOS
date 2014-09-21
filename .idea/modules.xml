@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Viper-OS.iml" filepath="$PROJECT_DIR$/.idea/Viper-OS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WesterOS.iml" filepath="$PROJECT_DIR$/.idea/WesterOS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WesterOS.iml" filepath="$PROJECT_DIR$/.idea/WesterOS.iml" />
     </modules>
   </component>
 </project>

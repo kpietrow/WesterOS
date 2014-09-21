@@ -2,8 +2,8 @@
 Utils.ts
 Utility functions.
 -------- */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Utils = (function () {
         function Utils() {
         }
@@ -44,6 +44,6 @@ var Viper;
         };
         return Utils;
     })();
-    Viper.Utils = Utils;
-})(Viper || (Viper = {}));
+    WesterOS.Utils = Utils;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=utils.js.map

@@ -13,7 +13,7 @@
  * Port to TypeScript by Bob Nisco.
  * ----------------- */
 
-module Viper {
+module WesterOS {
 
     export class CanvasTextFunctions {
 

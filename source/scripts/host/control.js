@@ -17,8 +17,8 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 //
 // Control Services
 //
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Control = (function () {
         function Control() {
         }
@@ -30,7 +30,7 @@ var Viper;
             _DrawingContext = _Canvas.getContext('2d');
 
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
-            Viper.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
+            WesterOS.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
 
             // Clear the log text box.
             // Use the TypeScript cast to HTMLInputElement
@@ -111,6 +111,6 @@ var Viper;
         };
         return Control;
     })();
-    Viper.Control = Control;
-})(Viper || (Viper = {}));
+    WesterOS.Control = Control;
+})(WesterOS || (WesterOS = {}));
 //# sourceMappingURL=control.js.map

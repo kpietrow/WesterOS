@@ -17,8 +17,8 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 //
 // Control Services
 //
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     var Control = (function () {
         function Control() {
         }
@@ -30,7 +30,7 @@ var Viper;
             _DrawingContext = _Canvas.getContext('2d');
 
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
-            Viper.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
+            WesterOS.CanvasTextFunctions.enable(_DrawingContext); // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
 
             // Clear the log text box.
             // Use the TypeScript cast to HTMLInputElement
@@ -79,14 +79,14 @@ var Viper;
             document.getElementById("display").focus();
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
-            _CPU = new Viper.Cpu();
+            _CPU = new WesterOS.Cpu();
             _CPU.init();
 
             // ... then set the host clock pulse ...
-            _hardwareClockID = setInterval(Viper.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
+            _hardwareClockID = setInterval(WesterOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
             // .. and call the OS Kernel Bootstrap routine.
-            _Kernel = new Viper.Kernel();
+            _Kernel = new WesterOS.Kernel();
             _Kernel.krnBootstrap();
         };
 
@@ -111,5 +111,5 @@ var Viper;
         };
         return Control;
     })();
-    Viper.Control = Control;
-})(Viper || (Viper = {}));
+    WesterOS.Control = Control;
+})(WesterOS || (WesterOS = {}));

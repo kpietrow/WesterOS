@@ -10,8 +10,8 @@ DeviceDriverKeyboard.ts
 Requires deviceDriver.ts
 The Kernel Keyboard Device Driver.
 ---------------------------------- */
-var Viper;
-(function (Viper) {
+var WesterOS;
+(function (WesterOS) {
     // Extends DeviceDriver
     var DeviceDriverKeyboard = (function (_super) {
         __extends(DeviceDriverKeyboard, _super);
@@ -48,9 +48,12 @@ var Viper;
             } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13)) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 8) {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
         };
         return DeviceDriverKeyboard;
-    })(Viper.DeviceDriver);
-    Viper.DeviceDriverKeyboard = DeviceDriverKeyboard;
-})(Viper || (Viper = {}));
+    })(WesterOS.DeviceDriver);
+    WesterOS.DeviceDriverKeyboard = DeviceDriverKeyboard;
+})(WesterOS || (WesterOS = {}));

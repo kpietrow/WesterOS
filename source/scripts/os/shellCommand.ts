@@ -1,4 +1,4 @@
-module Viper {
+module WesterOS {
     export class ShellCommand {
         constructor(public func: any,
                     public command = "",
