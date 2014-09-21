@@ -13,8 +13,8 @@ DOM manipulation and TypeScript/JavaScript event handling, and so on.  (Index.ht
 This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var Devices = (function () {
         function Devices() {
             _hardwareClockID = -1;
@@ -54,10 +54,10 @@ var TSOS;
                 var params = new Array(event.which, event.shiftKey);
 
                 // Enqueue this interrupt on the kernel interrupt queue so that it gets to the Interrupt handler.
-                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(KEYBOARD_IRQ, params));
+                _KernelInterruptQueue.enqueue(new Viper.Interrupt(KEYBOARD_IRQ, params));
             }
         };
         return Devices;
     })();
-    TSOS.Devices = Devices;
-})(TSOS || (TSOS = {}));
+    Viper.Devices = Devices;
+})(Viper || (Viper = {}));

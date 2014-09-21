@@ -1,4 +1,4 @@
-/* TSOS.css */
+/* Viper.css */
 
 body {
   background: #909193 url(../images/linen.png) repeat;
@@ -6,6 +6,14 @@ body {
   font-size: 12pt;
   font-weight: normal;
   font-style: normal;
+}
+
+#statusColumn {
+    width: 50%;
+}
+
+#dateColumn {
+    width: 50%;
 }
 
 h1 {
@@ -34,6 +42,13 @@ h3 {
   background-color:#DFDBC3;
   border: 2px solid red;
   cursor: default;
+}
+
+#divConsole {
+    height: 460px;
+    width: 515px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .normal_button {

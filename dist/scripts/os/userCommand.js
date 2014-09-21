@@ -1,5 +1,5 @@
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var UserCommand = (function () {
         function UserCommand(command, args) {
             if (typeof command === "undefined") { command = ""; }
@@ -9,5 +9,5 @@ var TSOS;
         }
         return UserCommand;
     })();
-    TSOS.UserCommand = UserCommand;
-})(TSOS || (TSOS = {}));
+    Viper.UserCommand = UserCommand;
+})(Viper || (Viper = {}));

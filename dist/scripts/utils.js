@@ -2,8 +2,8 @@
 Utils.ts
 Utility functions.
 -------- */
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var Utils = (function () {
         function Utils() {
         }
@@ -44,5 +44,5 @@ var TSOS;
         };
         return Utils;
     })();
-    TSOS.Utils = Utils;
-})(TSOS || (TSOS = {}));
+    Viper.Utils = Utils;
+})(Viper || (Viper = {}));

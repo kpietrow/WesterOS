@@ -12,8 +12,8 @@
 *
 * Port to TypeScript by Bob Nisco.
 * ----------------- */
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var CanvasTextFunctions = (function () {
         function CanvasTextFunctions() {
         }
@@ -201,5 +201,5 @@ var TSOS;
         };
         return CanvasTextFunctions;
     })();
-    TSOS.CanvasTextFunctions = CanvasTextFunctions;
-})(TSOS || (TSOS = {}));
+    Viper.CanvasTextFunctions = CanvasTextFunctions;
+})(Viper || (Viper = {}));

@@ -8,7 +8,7 @@
    The Kernel Keyboard Device Driver.
    ---------------------------------- */
 
-module TSOS {
+module Viper {
 
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {

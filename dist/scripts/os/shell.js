@@ -6,8 +6,8 @@ Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
 ------------ */
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-var TSOS;
-(function (TSOS) {
+var Viper;
+(function (Viper) {
     var Shell = (function () {
         function Shell() {
             // Properties
@@ -15,6 +15,10 @@ var TSOS;
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
+            this.locations = ["Winterfell", "Casterly Rock", "The Eyrie", "Sunspear", "Pyke", "Highgarden", "Storms End", "Dragonstone"];
+            this.date = new Date();
+            this.characters = ["Tyrion, of House Lannister", "Balon, of House Greyjoy", "Arya, of House Stark", "Daenarys, of House Targaryen", "Oberyn, of House Martell", "Stannis, of House Baratheon"];
+            this.statuses = ["It's showtime", "I lied", "No problemo", "Stick around", "You're fired", "He had to split", "Let off some steam Bennet", "Consider that a divorce", "I'll be back", "Do it now", "You have been terminated", "Talk to the hand", "Get to the chopper", "Enough talk", "Hasta la vista, baby"];
         }
         Shell.prototype.init = function () {
             var sc = null;
@@ -22,35 +26,51 @@ var TSOS;
             //
             // Load the command list.
             // ver
-            sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
+            sc = new Viper.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
+            this.commandList[this.commandList.length] = sc;
+
+            // whereami
+            sc = new Viper.ShellCommand(this.shellWhereAmI, "whereami", "- Gives a location from Westeros.");
+            this.commandList[this.commandList.length] = sc;
+
+            // date
+            sc = new Viper.ShellCommand(this.shellDate, "date", "- Gives the date.");
+            this.commandList[this.commandList.length] = sc;
+
+            // whoami
+            sc = new Viper.ShellCommand(this.shellWhoAmI, "whoami", "- Tells you your Westerosi identity.");
+            this.commandList[this.commandList.length] = sc;
+
+            // status
+            sc = new Viper.ShellCommand(this.shellStatus, "status", "- Update your status.");
             this.commandList[this.commandList.length] = sc;
 
             // help
-            sc = new TSOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
+            sc = new Viper.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
 
             // shutdown
-            sc = new TSOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying hardware simulation running.");
+            sc = new Viper.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
 
             // cls
-            sc = new TSOS.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
+            sc = new Viper.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
-            sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
+            sc = new Viper.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
 
             // trace <on | off>
-            sc = new TSOS.ShellCommand(this.shellTrace, "trace", "<on | off> - Turns the OS trace on or off.");
+            sc = new Viper.ShellCommand(this.shellTrace, "trace", "<on | off> - Turns the OS trace on or off.");
             this.commandList[this.commandList.length] = sc;
 
             // rot13 <string>
-            sc = new TSOS.ShellCommand(this.shellRot13, "rot13", "<string> - Does rot13 obfuscation on <string>.");
+            sc = new Viper.ShellCommand(this.shellRot13, "rot13", "<string> - Does rot13 obfuscation on <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // prompt <string>
-            sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+            sc = new Viper.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -70,7 +90,7 @@ var TSOS;
             //
             // Parse the input...
             //
-            var userCommand = new TSOS.UserCommand();
+            var userCommand = new Viper.UserCommand();
             userCommand = this.parseInput(buffer);
 
             // ... and assign the command and args to local variables.
@@ -97,7 +117,7 @@ var TSOS;
                 this.execute(fn, args);
             } else {
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) {
+                if (this.curses.indexOf("[" + Viper.Utils.rot13(cmd) + "]") >= 0) {
                     this.execute(this.shellCurse);
                 } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
                     this.execute(this.shellApology);
@@ -125,10 +145,10 @@ var TSOS;
         };
 
         Shell.prototype.parseInput = function (buffer) {
-            var retVal = new TSOS.UserCommand();
+            var retVal = new Viper.UserCommand();
 
             // 1. Remove leading and trailing spaces.
-            buffer = TSOS.Utils.trim(buffer);
+            buffer = Viper.Utils.trim(buffer);
 
             // 2. Lower-case it.
             buffer = buffer.toLowerCase();
@@ -140,13 +160,13 @@ var TSOS;
             var cmd = tempList.shift();
 
             // 4.1 Remove any left-over spaces.
-            cmd = TSOS.Utils.trim(cmd);
+            cmd = Viper.Utils.trim(cmd);
 
             // 4.2 Record it in the return value.
             retVal.command = cmd;
 
             for (var i in tempList) {
-                var arg = TSOS.Utils.trim(tempList[i]);
+                var arg = Viper.Utils.trim(tempList[i]);
                 if (arg != "") {
                     retVal.args[retVal.args.length] = tempList[i];
                 }
@@ -184,6 +204,30 @@ var TSOS;
 
         Shell.prototype.shellVer = function (args) {
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+        };
+
+        Shell.prototype.shellWhereAmI = function (args) {
+            _StdOut.putText("You are in " + _OsShell.locations[Math.floor(Math.random() * _OsShell.locations.length)] + ", my lord.");
+        };
+
+        Shell.prototype.shellWhoAmI = function (args) {
+            _StdOut.putText("You are " + _OsShell.characters[Math.floor(Math.random() * _OsShell.characters.length)] + ", my lord.");
+        };
+
+        Shell.prototype.shellDate = function (args) {
+            _StdOut.putText("The current date is " + _OsShell.date.toDateString());
+        };
+
+        Shell.prototype.shellStatus = function (args) {
+            if (args.length > 0) {
+                var status = "STATUS: ";
+                for (var i = 0; i < args.length; i++) {
+                    status += args[i] + " ";
+                }
+                document.getElementById("statusBar").innerHTML = status;
+            } else {
+                document.getElementById("statusBar").innerHTML = "STATUS: " + _OsShell.statuses[Math.floor(Math.random() * _OsShell.statuses.length)];
+            }
         };
 
         Shell.prototype.shellHelp = function (args) {
@@ -250,7 +294,7 @@ var TSOS;
         Shell.prototype.shellRot13 = function (args) {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.
-                _StdOut.putText(args.join(' ') + " = '" + TSOS.Utils.rot13(args.join(' ')) + "'");
+                _StdOut.putText(args.join(' ') + " = '" + Viper.Utils.rot13(args.join(' ')) + "'");
             } else {
                 _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
             }
@@ -265,5 +309,5 @@ var TSOS;
         };
         return Shell;
     })();
-    TSOS.Shell = Shell;
-})(TSOS || (TSOS = {}));
+    Viper.Shell = Shell;
+})(Viper || (Viper = {}));

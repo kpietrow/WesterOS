@@ -3,9 +3,9 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
    <meta name="author"             content="Alan G. Labouseur" />
-   <link rel="stylesheet" href="dist/styles/tsos.css" type="text/css" media="screen" />
+   <link rel="stylesheet" href="dist/styles/Viper.css" type="text/css" media="screen" />
    <title>
-      TSOS - a browser-based virtual Operating System in TypeScript
+      Viper - a browser-based virtual Operating System in TypeScript
    </title>
 
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
@@ -32,11 +32,37 @@
    <script type="text/javascript" src="dist/scripts/utils.js"></script>
    <!-- Uncomment this line below to enable Glados testing -->
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
+
+    <script type="text/javascript">
+        function updateDateTime() {
+            var dateTime= new Date();
+            var dateString = dateTime.toDateString();
+            dateString += dateTime.getTime();
+            document.getElementById("dateTime").innerHTML = dateString;
+
+        }
+    </script>
+
 </head>
 
 <body onload="onDocumentLoad();">
 
 <div id="divMain" style="width:100%;">
+
+   <table id="dateTime" border="0">
+       <tr>
+           <td id="statusColumn" align="left">
+               <div id="statusBar">
+                   STATUS: Ready and waiting
+               </div>
+           </td>
+           <td id="dateColumn" align="right">
+               <div id="dateTime" onload="dateTime()">
+               </div>
+           </td>
+       </tr>
+   </table>
+
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
@@ -45,7 +71,7 @@
              class="normal_button"
              value="Start"
              tabindex="0"
-             onclick="TSOS.Control.hostBtnStartOS_click(this);">
+             onclick="Viper.Control.hostBtnStartOS_click(this);">
 
       <input type="button"
              id = "btnHaltOS"
@@ -54,7 +80,7 @@
              disabled="disabled"
              value="Halt"
              tabindex="1"
-             onclick="TSOS.Control.hostBtnHaltOS_click(this);">
+             onclick="Viper.Control.hostBtnHaltOS_click(this);">
 
       <input type="button"
              id = "btnReset"
@@ -63,15 +89,17 @@
              disabled="disabled"
              value="Reset"
              tabindex="2"
-             onclick="TSOS.Control.hostBtnReset_click(this);">
+             onclick="Viper.Control.hostBtnReset_click(this);">
    </div>
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
-      <canvas id="display"
+   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;" class="col-xs-7">
+       <ScrollViewer Height="500px" Width="500px" VerticalScrollBarVisibility="Visible" cancontentsscroll="True">
+       <canvas id="display"
               width="500px"
               height="500px"
               tabindex="3">
       </canvas>
+      </ScrollViewer>
    </div>
 
    <div id="divLog" style="margin-left:520px;">

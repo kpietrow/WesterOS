@@ -23,7 +23,7 @@
 //
 // Control Services
 //
-module TSOS {
+module Viper {
 
     export class Control {
 
