@@ -2,6 +2,7 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+<<<<<<< HEAD
         <item url="file://$PROJECT_DIR$/source/scripts/host/control.js" />
         <item url="file://$PROJECT_DIR$/source/scripts/os/shell.js" />
         <item url="file://$PROJECT_DIR$/source/scripts/host/cpu.js" />
@@ -18,10 +19,28 @@
         <item url="file://$PROJECT_DIR$/source/scripts/os/canvastext.js" />
         <item url="file://$PROJECT_DIR$/source/scripts/os/deviceDriver.js" />
         <item url="file://$PROJECT_DIR$/source/scripts/os/deviceDriverKeyboard.js" />
+=======
+        <item url="file://$PROJECT_DIR$/source/scripts/os/queue.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/globals.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/utils.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/shell.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/kernel.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/canvastext.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/userCommand.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/deviceDriver.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/interrupt.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/console.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/host/control.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/host/devices.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/deviceDriverKeyboard.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/host/cpu.js" />
+        <item url="file://$PROJECT_DIR$/source/scripts/os/shellCommand.js" />
+>>>>>>> fd4736db0abd9f5ba343f3e01038f8a06e576e0a
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/dist/scripts/os/test.js.js" />
+<<<<<<< HEAD
       <root url="file://$PROJECT_DIR$/source/scripts/host/control.js" />
       <root url="file://$PROJECT_DIR$/source/scripts/host/cpu.js" />
       <root url="file://$PROJECT_DIR$/source/scripts/os/shell.js" />
@@ -38,6 +57,23 @@
       <root url="file://$PROJECT_DIR$/source/scripts/os/canvastext.js" />
       <root url="file://$PROJECT_DIR$/source/scripts/os/deviceDriver.js" />
       <root url="file://$PROJECT_DIR$/source/scripts/os/deviceDriverKeyboard.js" />
+=======
+      <root url="file://$PROJECT_DIR$/source/scripts/os/queue.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/utils.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/globals.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/shell.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/kernel.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/canvastext.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/deviceDriver.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/userCommand.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/interrupt.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/console.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/host/control.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/host/devices.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/deviceDriverKeyboard.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/host/cpu.js" />
+      <root url="file://$PROJECT_DIR$/source/scripts/os/shellCommand.js" />
+>>>>>>> fd4736db0abd9f5ba343f3e01038f8a06e576e0a
     </CLASSES>
     <SOURCES />
   </library>

@@ -43,6 +43,7 @@ var Viper;
 
             // status
             sc = new Viper.ShellCommand(this.shellStatus, "status", "- Update your status.");
+
             this.commandList[this.commandList.length] = sc;
 
             // help
