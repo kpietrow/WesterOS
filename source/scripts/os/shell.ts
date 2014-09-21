@@ -21,6 +21,7 @@ module WesterOS {
         public date = new Date();
         public characters = ["Tyrion, of House Lannister", "Balon, of House Greyjoy", "Arya, of House Stark", "Daenarys, of House Targaryen", "Oberyn, of House Martell", "Stannis, of House Baratheon"]
         public statuses = ["It's showtime", "I lied", "No problemo", "Stick around", "You're fired", "He had to split", "Let off some steam Bennet", "Consider that a divorce", "I'll be back", "Do it now", "You have been terminated", "Talk to the hand", "Get to the chopper", "Enough talk", "Hasta la vista, baby", "Put that cookie down", "I am Turboman"];
+        public commandHistory = new CommandHistory();
 
         constructor() {
 
@@ -125,6 +126,10 @@ module WesterOS {
             // ... and assign the command and args to local variables.
             var cmd = userCommand.command;
             var args = userCommand.args;
+
+            // Add input to the command history. Invalid commands are accepted as well
+            this.commandHistory.add(userCommand);
+
             //
             // Determine the command and execute it.
             //
@@ -196,6 +201,17 @@ module WesterOS {
                 }
             }
             return retVal;
+        }
+
+        // Handles traversing through the command history
+        public accessHistory(chr) {
+            if (chr === String.fromCharCode(38)) {
+                this.commandHistory.backward();
+            } else {
+                this.commandHistory.forward();
+            }
+
+            return this.commandHistory.getCommand();
         }
 
         //
@@ -332,5 +348,36 @@ module WesterOS {
             }
         }
 
+    }
+
+    export class CommandHistory {
+        // Properties
+        public history = [];
+        public position = -1;
+
+        // Goes to previous command, if one exists
+        public backward() {
+            if (this.position < this.history.length - 1) {
+                this.position = this.position + 1;
+            }
+        }
+
+        // Goes to more recent command, if one exists
+        public forward() {
+            if (this.position > -1) {
+                this.position = this.position - 1;
+            }
+        }
+
+        public add(userCommand) {
+            console.debug(userCommand.command);
+            var newCommand = userCommand.command + userCommand.args;
+            this.history.unshift(newCommand);
+            this.position = -1;
+        }
+
+        public getCommand() {
+            return (this.position === -1) ? "" : this.history[this.position];
+        }
     }
 }

@@ -38,7 +38,6 @@ module WesterOS {
         public handleInput(): void {
             while (_KernelInputQueue.getSize() > 0) {
                 console.debug("handle input");
-                console.debug("shit on a stick");
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
@@ -56,8 +55,12 @@ module WesterOS {
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
                 // Revert to previous command
                 } else if ((chr === String.fromCharCode(38)) || (chr === String.fromCharCode(40))) {
-                    console.debug("up or down");
+                    console.debug(chr);
                     this.removeChar(this.buffer);
+
+                    var newCommand = _OsShell.accessHistory(chr);
+                    this.buffer = newCommand;
+                    this.putText(this.buffer);
                 } else {
                     console.debug("normal char");
                     // This is a "normal" character, so ...

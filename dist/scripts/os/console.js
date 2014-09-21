@@ -58,8 +58,12 @@ var WesterOS;
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
                     // Revert to previous command
                 } else if ((chr === String.fromCharCode(38)) || (chr === String.fromCharCode(40))) {
-                    console.debug("up or down");
+                    console.debug(chr);
                     this.removeChar(this.buffer);
+
+                    var newCommand = _OsShell.accessHistory(chr);
+                    this.buffer = newCommand;
+                    this.putText(this.buffer);
                 } else {
                     console.debug("normal char");
 
