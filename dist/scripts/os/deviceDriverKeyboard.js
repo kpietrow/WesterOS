@@ -49,7 +49,7 @@ var WesterOS;
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
                 // Grabs backspaces, arrow key presses, and tabs
-            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40 || keyCode == 8) {
+            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40 || keyCode == 9) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

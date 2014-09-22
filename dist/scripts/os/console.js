@@ -116,29 +116,20 @@ var WesterOS;
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
 
             this.handleScrolling();
-            // TODO: Handle scrolling. (Project 1)
         };
 
         // Handles if there is more text than space on the canvas
         Console.prototype.handleScrolling = function () {
-            if (this.currentYPosition > _Canvas.height - _FontHeightMargin) {
-                var buffer = document.getElementById('storageCanvas');
-                var display = document.getElementById('display');
-                var displayContainer = document.getElementById('console-display');
-                buffer.width = _Canvas.width;
-                buffer.height = _Canvas.height;
-                buffer.getContext('2d').drawImage(_Canvas, 0, 0);
+            if (this.currentYPosition >= _Canvas.height) {
+                var buffer = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
 
-                // Change height so you can scroll
-                var height = _DefaultFontSize + _DrawingContext.height + _FontHeightMargin;
-                console.debug(_Canvas.width);
-
+                // Adjust the height. For some reason, the + 6 is enough to keep the text "treading water",
+                // and not sink below the displayable area
+                _Canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin + 6;
+                var displayContainer = document.getElementById("console-display");
+                displayContainer.scrollTop = displayContainer.scrollHeight;
                 this.clearScreen();
-
-                _Canvas.getContext('2d').drawImage(buffer, 0, 0);
-
-                displayContainer.scrollTop;
-                //_Canvas.scrollIntoView();
+                _DrawingContext.putImageData(buffer, 0, 0);
             }
         };
         return Console;

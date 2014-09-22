@@ -44,13 +44,6 @@ h3 {
   cursor: default;
 }
 
-#console-display {
-    height: 415px;
-    width: 500px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
 .normal_button {
   width: 100px;
 }
