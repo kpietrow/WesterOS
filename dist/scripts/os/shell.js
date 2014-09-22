@@ -348,7 +348,17 @@ var WesterOS;
 
         CommandHistory.prototype.add = function (userCommand) {
             console.debug(userCommand.command);
-            var newCommand = userCommand.command + userCommand.args;
+            var arguments = "";
+
+            if (userCommand.args.length > 0) {
+                arguments = " ";
+                for (var i = 0; i < userCommand.args.length; i++) {
+                    var spaces = (i === userCommand.args.length - 1) ? "" : " ";
+                    arguments += userCommand.args[i] + spaces;
+                }
+            }
+
+            var newCommand = userCommand.command + arguments;
             this.history.unshift(newCommand);
             this.position = -1;
         };

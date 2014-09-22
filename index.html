@@ -19,6 +19,7 @@
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
    <script type="text/javascript" src="dist/scripts/os/canvastext.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/console-display.js"></script>
    <script type="text/javascript" src="dist/scripts/os/console.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriver.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriverKeyboard.js"></script>
@@ -92,10 +93,10 @@
              onclick="WesterOS.Control.hostBtnReset_click(this);">
    </div>
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;" class="col-xs-7">
+   <div id="console-display" style="margin:4px; width:415px; height:500px; float:left;" class="col-xs-7">
        <canvas id="display"
-              width="500px"
-              height="500px"
+              width="400px"
+              height="400px"
               tabindex="3">
       </canvas>
       <canvas id="storageCanvas"></canvas>

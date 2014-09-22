@@ -47,7 +47,8 @@ module WesterOS {
                         (keyCode == 13)) {                       // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
-            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40) {                           // backspace
+            // Grabs backspaces, arrow key presses, and tabs
+            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40 || keyCode == 9) {                           // backspace
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

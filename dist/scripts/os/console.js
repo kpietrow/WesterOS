@@ -114,26 +114,31 @@ var WesterOS;
             * Font height margin is extra spacing between the lines.
             */
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
+
+            this.handleScrolling();
             // TODO: Handle scrolling. (Project 1)
         };
 
         // Handles if there is more text than space on the canvas
         Console.prototype.handleScrolling = function () {
-            if (this.currentYPosition > _Canvas.height) {
+            if (this.currentYPosition > _Canvas.height - _FontHeightMargin) {
                 var buffer = document.getElementById('storageCanvas');
-                buffer.width = _DrawingContext.width;
-                buffer.height = _DrawingContext.height;
-                buffer.getContext('2d').drawImage(_DrawingContext, 0, 0);
+                var display = document.getElementById('display');
+                var displayContainer = document.getElementById('console-display');
+                buffer.width = _Canvas.width;
+                buffer.height = _Canvas.height;
+                buffer.getContext('2d').drawImage(_Canvas, 0, 0);
 
                 // Change height so you can scroll
-                var height = _DefaultFontSize + _DrawingContext.canvasElement.attr('height') + _FontHeightMargin;
-                _DrawingContext.canvasElement.attr('height', height);
+                var height = _DefaultFontSize + _DrawingContext.height + _FontHeightMargin;
+                console.debug(_Canvas.width);
 
                 this.clearScreen();
 
                 _Canvas.getContext('2d').drawImage(buffer, 0, 0);
 
-                _Canvas.scrollTop(_CcanvasElement.height());
+                displayContainer.scrollTop;
+                //_Canvas.scrollIntoView();
             }
         };
         return Console;

@@ -48,7 +48,8 @@ var WesterOS;
             } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13)) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
-            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40) {
+                // Grabs backspaces, arrow key presses, and tabs
+            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40 || keyCode == 9) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

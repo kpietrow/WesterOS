@@ -44,9 +44,9 @@ h3 {
   cursor: default;
 }
 
-#divConsole {
-    height: 460px;
-    width: 515px;
+#console-display {
+    height: 415px;
+    width: 500px;
     overflow-x: hidden;
     overflow-y: auto;
 }
