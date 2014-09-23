@@ -104,6 +104,12 @@ module WesterOS {
                 "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            // load command
+            sc = new ShellCommand(this.shellLoad,
+                "load",
+                "- Loads a user program");
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new ShellCommand(this.shellBSOD,
                 "bsod",
@@ -351,6 +357,27 @@ module WesterOS {
                 _OsShell.promptStr = args[0];
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
+            }
+        }
+
+        public shellLoad(args) {
+            var input = ((<HTMLInputElement> document.getElementById("taProgramInput")).value).toUpperCase();
+            var valid = false;
+
+            for (var index in input) {
+                if (input[index] <= "F" && input[index] >= "A" ) {
+                    valid = true;
+                } else if (input[index] >= "0" && input[index] <= "9") {
+                    valid = true;
+                } else if (input[index] == " ") {
+                    valid = true;
+                }
+            }
+
+            if (valid) {
+                _StdOut.putText("Program input accepted");
+            } else {
+                _StdOut.putText("ERROR: Input invalid.");
             }
         }
 
