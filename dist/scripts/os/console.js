@@ -23,6 +23,7 @@ var WesterOS;
         Console.prototype.init = function () {
             this.clearScreen();
             this.resetXY();
+            this.updateDateTime();
         };
 
         Console.prototype.clearScreen = function () {
@@ -176,10 +177,17 @@ var WesterOS;
 
         // bsod handled here. In the future the location of this function may have to be moved
         Console.prototype.bsod = function () {
-            var image = new Image();
-            image.src = "source/styles/bsod.jpg";
-            var display = document.getElementById("console-display");
-            display = image;
+            var display = document.getElementById("display");
+            display.style.background = "url('source/styles/bsod.jpg')";
+            display.style.backgroundSize = "500px 500px";
+            this.clearScreen();
+        };
+
+        Console.prototype.updateDateTime = function () {
+            var dateTime = new Date();
+            var dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + ((dateTime.getMinutes() < 10) ? "0" : "") + dateTime.getMinutes() + ":" + ((dateTime.getSeconds() < 10) ? "0" : "") + dateTime.getSeconds();
+            document.getElementById("dateTime").innerHTML = dateString;
+            setInterval(this.updateDateTime, 1000);
         };
         return Console;
     })();

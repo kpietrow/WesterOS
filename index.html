@@ -49,16 +49,6 @@
            </td>
            <td id="dateColumn" align="right">
                <div id="dateTime" onload="updateDateTime();">
-                   poop
-                   <script type="text/javascript">
-                       function updateDateTime() {
-                           var dateTime= new Date();
-                           dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + ((dateTime.getMinutes() < 10) ? "0" : "") + dateTime.getMinutes() + ":" + dateTime.getSeconds();
-                           document.getElementById("dateTime").innerHTML = dateString;
-                           setTimeout(updateDateTime, 1000);
-                       }
-                       updateDateTime();
-                   </script>
                </div>
            </td>
        </tr>
