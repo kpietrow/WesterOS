@@ -61,6 +61,8 @@ module WesterOS {
                     var newCommand = _OsShell.accessHistory(chr);
                     this.buffer = newCommand;
                     this.putText(this.buffer);
+                } else if (chr === String.fromCharCode(9)) {
+                    this.tabComplete();
                 } else {
                     console.debug("normal char");
                     // This is a "normal" character, so ...
@@ -73,6 +75,7 @@ module WesterOS {
             }
         }
 
+        // Removes charecter(s) from the console display
         private removeChar(text): void {
             console.debug("we've reached removeChar");
             if (text !== "") {
@@ -113,10 +116,54 @@ module WesterOS {
             this.handleScrolling();
         }
 
+        // Tab completion
+        public tabComplete(): void {
+            console.debug("tab complete time");
+            var candidate;
+            var found = false;
+            var possibleCommands = [];
+
+            // Search list of commands for possible values
+            for (candidate in _OsShell.commandList) {
+                if (_OsShell.commandList[candidate].command.lastIndexOf(this.buffer, 0) === 0) {
+                    found = true;
+                    possibleCommands.unshift(_OsShell.commandList[candidate].command);
+                }
+            }
+
+            // If suitable candidate is found
+            if (found) {
+
+                // Single possibility, so fill prompt with the command
+                if (possibleCommands.length === 1) {
+                    this.removeChar(this.buffer);
+                    this.buffer = possibleCommands[0];
+                    this.putText(this.buffer);
+
+                // List possibilities, then redisplay prompt with the buffer from before
+                // Unix style, yeah
+                } else {
+                    this.advanceLine();
+
+                    // List out commands
+                    for (var command in possibleCommands) {
+                        _StdOut.putText(possibleCommands[command] + " ");
+                    }
+
+                    this.advanceLine();
+                    _OsShell.putPrompt();
+                    this.putText(this.buffer);
+
+                }
+                found = false;
+            }
+
+        }
+
         // Handles if there is more text than space on the canvas
         public handleScrolling(): void {
             if (this.currentYPosition >= _Canvas.height) {
-                
+
                 var buffer = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
 
                 // Adjust the height. For some reason, the + 6 is enough to keep the text "treading water",
@@ -128,6 +175,14 @@ module WesterOS {
                 this.clearScreen();
                 _DrawingContext.putImageData(buffer, 0, 0);
             }
+        }
+
+        // bsod handled here. In the future the location of this function may have to be moved
+        public bsod(): void {
+            var image = new Image();
+            image.src = "source/styles/bsod.jpg";
+            var display = document.getElementById("console-display");
+            display = image;
         }
     }
  }

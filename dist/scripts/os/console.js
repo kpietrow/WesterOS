@@ -64,6 +64,8 @@ var WesterOS;
                     var newCommand = _OsShell.accessHistory(chr);
                     this.buffer = newCommand;
                     this.putText(this.buffer);
+                } else if (chr === String.fromCharCode(9)) {
+                    this.tabComplete();
                 } else {
                     console.debug("normal char");
 
@@ -78,6 +80,7 @@ var WesterOS;
             }
         };
 
+        // Removes charecter(s) from the console display
         Console.prototype.removeChar = function (text) {
             console.debug("we've reached removeChar");
             if (text !== "") {
@@ -118,6 +121,44 @@ var WesterOS;
             this.handleScrolling();
         };
 
+        // Tab completion
+        Console.prototype.tabComplete = function () {
+            console.debug("tab complete time");
+            var candidate;
+            var found = false;
+            var possibleCommands = [];
+
+            for (candidate in _OsShell.commandList) {
+                if (_OsShell.commandList[candidate].command.lastIndexOf(this.buffer, 0) === 0) {
+                    found = true;
+                    possibleCommands.unshift(_OsShell.commandList[candidate].command);
+                }
+            }
+
+            // If suitable candidate is found
+            if (found) {
+                // Single possibility, so fill prompt with the command
+                if (possibleCommands.length === 1) {
+                    this.removeChar(this.buffer);
+                    this.buffer = possibleCommands[0];
+                    this.putText(this.buffer);
+                    // List possibilities, then redisplay prompt with the buffer from before
+                    // Unix style, yeah
+                } else {
+                    this.advanceLine();
+
+                    for (var command in possibleCommands) {
+                        _StdOut.putText(possibleCommands[command] + " ");
+                    }
+
+                    this.advanceLine();
+                    _OsShell.putPrompt();
+                    this.putText(this.buffer);
+                }
+                found = false;
+            }
+        };
+
         // Handles if there is more text than space on the canvas
         Console.prototype.handleScrolling = function () {
             if (this.currentYPosition >= _Canvas.height) {
@@ -131,6 +172,14 @@ var WesterOS;
                 this.clearScreen();
                 _DrawingContext.putImageData(buffer, 0, 0);
             }
+        };
+
+        // bsod handled here. In the future the location of this function may have to be moved
+        Console.prototype.bsod = function () {
+            var image = new Image();
+            image.src = "source/styles/bsod.jpg";
+            var display = document.getElementById("console-display");
+            display = image;
         };
         return Console;
     })();

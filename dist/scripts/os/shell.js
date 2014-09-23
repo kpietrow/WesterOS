@@ -74,6 +74,10 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            // bsod command
+            sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -322,10 +326,16 @@ var WesterOS;
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
         };
+
+        Shell.prototype.shellBSOD = function (args) {
+            _Kernel.krnTrapError("Enabled bsod, for fun and games.");
+        };
         return Shell;
     })();
     WesterOS.Shell = Shell;
 
+    // Class that handles the command history
+    // Necessary for up and down arrows in the console
     var CommandHistory = (function () {
         function CommandHistory() {
             // Properties
@@ -346,6 +356,7 @@ var WesterOS;
             }
         };
 
+        // Adds a command to past history
         CommandHistory.prototype.add = function (userCommand) {
             console.debug(userCommand.command);
             var arguments = "";

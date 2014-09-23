@@ -157,10 +157,12 @@ var WesterOS;
             }
         };
 
+        // Goes into a 'bsod'
         Kernel.prototype.krnTrapError = function (msg) {
             WesterOS.Control.hostLog("OS ERROR - TRAP: " + msg);
 
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
+            _Console.bsod();
             this.krnShutdown();
         };
         return Kernel;

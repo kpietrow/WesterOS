@@ -130,6 +130,7 @@ module WesterOS {
         public krnTimerISR() {
             // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
             // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
+
         }
 
         //
@@ -167,9 +168,11 @@ module WesterOS {
              }
         }
 
+        // Goes into a 'bsod'
         public krnTrapError(msg) {
             Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
+            _Console.bsod();
             this.krnShutdown();
         }
     }
