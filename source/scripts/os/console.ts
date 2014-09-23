@@ -200,6 +200,7 @@ module WesterOS {
             this.clearScreen();
         }
 
+        // Continuously updates the date and time on the top of the site
         public updateDateTime(): void {
             var dateTime= new Date();
             var dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + ((dateTime.getMinutes() < 10) ? "0" : "") + dateTime.getMinutes() + ":" + ((dateTime.getSeconds() < 10) ? "0" : "") + dateTime.getSeconds();
