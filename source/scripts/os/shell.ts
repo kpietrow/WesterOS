@@ -217,7 +217,7 @@ module WesterOS {
 
         // Handles traversing through the command history
         public accessHistory(chr) {
-            if (chr === String.fromCharCode(38)) {
+            if (chr === "UP") {
                 this.commandHistory.backward();
             } else {
                 this.commandHistory.forward();

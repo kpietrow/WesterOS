@@ -13,8 +13,8 @@ module WesterOS {
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {
 
-        private shiftSymbolKeys = [];
-        private symbolKeys = [];
+        public shiftSymbolKeys = [];
+        public symbolKeys = [];
 
 
         constructor() {
@@ -70,33 +70,67 @@ module WesterOS {
         }
 
         public krnKbdDispatchKeyPress(params) {
-            console.debug(params);
-            console.debug(this.symbolKeys);
             // Parse the params.    TODO: Check that they are valid and osTrapError if not.
             var keyCode = params[0];
             var isShifted = params[1];
+
+            // Throw an error if we receive bad parameters
+            if (keyCode === null || isShifted === null || typeof keyCode !== "number" || typeof isShifted !== "boolean") {
+                Kernel.trapError("Invalid user input to keyboard");
+                return;
+            }
+
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
+
             // Check to see if we even want to deal with the key that was pressed.
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
                 ((keyCode >= 97) && (keyCode <= 123))) {  // a..z {
                 // Determine the character we want to display.
                 // Assume it's lowercase...
                 chr = String.fromCharCode(keyCode + 32);
+
                 // ... then check the shift key and re-adjust if necessary.
                 if (isShifted) {
                     chr = String.fromCharCode(keyCode);
                 }
                 // TODO: Check for caps-lock and handle as shifted if so.
+
                 _KernelInputQueue.enqueue(chr);
+
             } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
                         (keyCode == 32)                     ||   // space
+                        (keyCode == 59)                     ||   // punctuation
+                        (keyCode == 61)                     ||   // punctuation
                         (keyCode == 13)) {                       // enter
+
+                chr = String.fromCharCode(keyCode);
+
+                if (isShifted) {
+                    chr = String.fromCharCode(this.shiftSymbolKeys[keyCode]);
+                }
+                _KernelInputQueue.enqueue(chr);
+
+            // Grabs backspaces, and tabs
+            } else if (keyCode == 8 || keyCode == 9) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
-            // Grabs backspaces, arrow key presses, and tabs
-            } else if (keyCode == 8 || keyCode == 38 || keyCode == 40 || keyCode == 9) {                           // backspace
-                chr = String.fromCharCode(keyCode);
+
+            } else if (!isShifted && (keyCode == 38 || keyCode == 40)) {
+                chr = (keyCode === 38) ? "UP" : "DOWN";
+                _KernelInputQueue.enqueue(chr);
+
+            // Punctuation
+            } else if ((keyCode == 173)                 ||
+                    (keyCode == 188)                    ||
+                    (keyCode >= 190 && keyCode <= 192)  ||
+                    (keyCode >= 219 && keyCode <= 222)) {
+
+                chr = String.fromCharCode(this.symbolKeys[keyCode]);
+                if (isShifted) {
+                    chr = String.fromCharCode(this.shiftSymbolKeys[keyCode]);
+                }
+
                 _KernelInputQueue.enqueue(chr);
             }
         }

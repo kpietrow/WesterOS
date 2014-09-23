@@ -49,21 +49,26 @@ module WesterOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
+
                 // Remove last character from the CLI, and decrease the buffer
                 } else if (chr === String.fromCharCode(8)) {
                     console.debug("backspace");
                     this.removeChar(this.buffer.charAt(this.buffer.length - 1));
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+
                 // Revert to previous command
-                } else if ((chr === String.fromCharCode(38)) || (chr === String.fromCharCode(40))) {
+                } else if ((chr === "UP") || (chr === "DOWN")) {
                     console.debug(chr);
                     this.removeChar(this.buffer);
 
                     var newCommand = _OsShell.accessHistory(chr);
                     this.buffer = newCommand;
                     this.putText(this.buffer);
+
+                // Tab complete
                 } else if (chr === String.fromCharCode(9)) {
                     this.tabComplete();
+
                 } else {
                     console.debug("normal char");
                     // This is a "normal" character, so ...
