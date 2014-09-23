@@ -58,13 +58,14 @@ var WesterOS;
                     this.removeChar(this.buffer.charAt(this.buffer.length - 1));
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
                     // Revert to previous command
-                } else if ((chr === String.fromCharCode(38)) || (chr === String.fromCharCode(40))) {
+                } else if ((chr === "UP") || (chr === "DOWN")) {
                     console.debug(chr);
                     this.removeChar(this.buffer);
 
                     var newCommand = _OsShell.accessHistory(chr);
                     this.buffer = newCommand;
                     this.putText(this.buffer);
+                    // Tab complete
                 } else if (chr === String.fromCharCode(9)) {
                     this.tabComplete();
                 } else {
@@ -100,12 +101,19 @@ var WesterOS;
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                for (var char in text) {
+                    // protect against overshooting
+                    if (this.currentXPosition > 490) {
+                        this.advanceLine();
+                    }
 
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
+                    // Draw the text at the current X and Y coordinates.
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text[char]);
+
+                    // Move the current X position.
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text[char]);
+                    this.currentXPosition = this.currentXPosition + offset;
+                }
             }
         };
 
@@ -183,6 +191,7 @@ var WesterOS;
             this.clearScreen();
         };
 
+        // Continuously updates the date and time on the top of the site
         Console.prototype.updateDateTime = function () {
             var dateTime = new Date();
             var dateString = dateTime.toDateString() + "  / " + ((dateTime.getHours() > 12) ? dateTime.getHours() - 12 : dateTime.getHours()) + ":" + ((dateTime.getMinutes() < 10) ? "0" : "") + dateTime.getMinutes() + ":" + ((dateTime.getSeconds() < 10) ? "0" : "") + dateTime.getSeconds();
