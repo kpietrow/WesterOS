@@ -186,7 +186,7 @@ var WesterOS;
         // bsod handled here. In the future the location of this function may have to be moved
         Console.prototype.bsod = function () {
             var display = document.getElementById("display");
-            display.style.background = "url('source/styles/bsod.jpg')";
+            display.style.background = "url('dist/images/bsod.jpg')";
             display.style.backgroundSize = "500px 500px";
             this.clearScreen();
         };

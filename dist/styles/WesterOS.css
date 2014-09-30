@@ -1,18 +1,19 @@
 /* WesterOS.css */
 
 body {
-  background: #909193 url(../images/linen.png) repeat;
+  /*background: #909193 url(../images/linen.png) repeat;*/
+  background: #e0e0e0 url(../images/oberyn.jpg) repeat;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   font-size: 12pt;
   font-weight: normal;
   font-style: normal;
 }
 
-#statusColumn {
+#statusBar {
     width: 50%;
 }
 
-#dateColumn {
+#dateTime {
     width: 50%;
 }
 
@@ -39,7 +40,7 @@ h3 {
 }
 
 #display {
-  background-color:#DFDBC3;
+  background-color:#DDDFDF;
   border: 2px solid red;
   cursor: default;
 }
