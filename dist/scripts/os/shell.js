@@ -332,23 +332,18 @@ var WesterOS;
         };
 
         Shell.prototype.shellLoad = function (args) {
-            var input = (document.getElementById("taProgramInput").value).toUpperCase();
-            var valid = false;
+            var input = (document.getElementById("taProgramInput").value.trim()).toUpperCase();
 
-            for (var index in input) {
-                if (input[index] <= "F" && input[index] >= "A") {
-                    valid = true;
-                } else if (input[index] >= "0" && input[index] <= "9") {
-                    valid = true;
-                } else if (input[index] == " ") {
-                    valid = true;
-                }
+            if (input.length <= 0) {
+                _StdOut.putText("ERROR: No input entered.");
+                return;
             }
 
-            if (valid) {
-                _StdOut.putText("Program input accepted");
-            } else {
-                _StdOut.putText("ERROR: Input invalid.");
+            for (var index in input) {
+                if (!input[index].match(/^[a-f0-9]+$/i)) {
+                    _StdOut.putText("ERROR: Input invalid.");
+                    return;
+                }
             }
         };
 
