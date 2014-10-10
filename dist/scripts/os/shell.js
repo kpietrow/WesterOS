@@ -332,7 +332,8 @@ var WesterOS;
         };
 
         Shell.prototype.shellLoad = function (args) {
-            var input = (document.getElementById("taProgramInput").value).toUpperCase().trim();
+            var input = document.getElementById("taProgramInput").value;
+            input = input.replace(/\s+/g, '').toUpperCase();
 
             // Check to see that there is a program
             if (input.length <= 0) {
@@ -340,18 +341,17 @@ var WesterOS;
                 return;
                 // Check that program's length
             } else if (input.length % 2 != 0) {
-                _StdOut.putText("ERROR: Incorrect number of characters in program" + input.length + "hi");
-                _StdOut.putText(input + "poop");
+                _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
                 return;
             }
 
-            for (var index in input) {
-                if (!input[index].match(/^[A-F0-9]+$/i)) {
-                    _StdOut.putText("ERROR: Program contains invalid characters.");
+            for (var index = 0; index < input.length; index++) {
+                if (!input[index].match(/^[0-9A-F]/i)) {
+                    _StdOut.putText("ERROR: Program contains invalid characters: " + input[index]);
                     return;
                 }
             }
-            _StdOut.putText("Test success");
+            _StdOut.putText(input);
         };
 
         Shell.prototype.shellBSOD = function (args) {
@@ -403,7 +403,7 @@ var WesterOS;
             this.position = -1;
         };
 
-        // Get the specified command
+        // Get the specified command, if available
         CommandHistory.prototype.getCommand = function () {
             return (this.position === -1) ? "" : this.history[this.position];
         };

@@ -19,10 +19,18 @@ var TIMER_IRQ = 0;
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
 
+// Setting some constants for program memory
+var NUMBER_OF_PROGRAMS = 7;
+var PROGRAM_SIZE = 256;
+
+// Following Bob's lead and making this dynamic
+var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;
+
 //
 // Global Variables
 //
 var _CPU;
+var _MemoryManager = null;
 
 var _OSclock = 0;
 

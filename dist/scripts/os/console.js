@@ -171,25 +171,14 @@ var WesterOS;
         // Handles if there is more text than space on the canvas
         Console.prototype.handleScrolling = function () {
             if (this.currentYPosition >= _Canvas.height) {
-                var textBuffer = document.createElement('canvas');
-                textBuffer.height = _Canvas.height;
-                textBuffer.width = _Canvas.width;
+                // Get the canvas data, calculate offset
+                var oldCanvasData = _DrawingContext.getImageData(0, this.currentFontSize + 8, _Canvas.width, _Canvas.height);
 
-                var line = _DefaultFontSize + _FontHeightMargin + 4.5;
-                var bufferDraw = textBuffer.getContext('2d');
+                // Redraw Canvas
+                _DrawingContext.putImageData(oldCanvasData, 0, 0);
 
-                bufferDraw.drawImage(_Canvas, 0, -line);
-
-                _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
-
-                _DrawingContext.drawImage(textBuffer, 0, 0);
-
-                var buffer = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
-                _DrawingContext.putImageData(buffer, 0, 0);
-
-                this.currentYPosition -= line;
-                var x = 1;
-                var y = 1;
+                // Move the current Y position
+                this.currentYPosition = _Canvas.height - this.currentFontSize;
             }
         };
 

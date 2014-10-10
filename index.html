@@ -15,11 +15,15 @@
    <script type="text/javascript" src="dist/scripts/host/control.js"></script>
    <script type="text/javascript" src="dist/scripts/host/devices.js"></script>
    <script type="text/javascript" src="dist/scripts/host/cpu.js"></script>
+   <script type="text/javascript" src="dist/scripts/host/memory.js"></script>
 
-   <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
+
+    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
    <script type="text/javascript" src="dist/scripts/os/canvastext.js"></script>
    <script type="text/javascript" src="dist/scripts/os/console.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/memoryManager.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriver.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriverKeyboard.js"></script>
    <script type="text/javascript" src="dist/scripts/os/queue.js"></script>
@@ -132,6 +136,8 @@
          ></textarea>
       </label>
    </div>
+
+   <div id="divMemory"></div>
 
 </div>
 

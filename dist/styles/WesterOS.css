@@ -2,7 +2,7 @@
 
 body {
   /*background: #909193 url(../images/linen.png) repeat;*/
-  background: #e0e0e0 url(../images/white-texture.jpg) repeat;
+  /*background: #e0e0e0 url(../images/white-texture.jpg) repeat;*/
   font-family: Helvetica, Verdana, Arial, sans-serif;
   font-size: 12pt;
   font-weight: normal;
@@ -43,6 +43,14 @@ h3 {
   background-color:#DDDFDF;
   border: 2px solid red;
   cursor: default;
+}
+
+#memory {
+    display:block;
+    max-height: 250px;
+    height: 250px;
+    width: 350px;
+    overflow: auto;
 }
 
 .normal_button {

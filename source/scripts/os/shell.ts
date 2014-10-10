@@ -377,7 +377,7 @@ module WesterOS {
             }
 
             // Check for invalid characters
-            for (var index in input) {
+            for (var index = 0; index < input.length; index++) {
                 if (!input[index].match(/^[0-9A-F]/i)) {
                     _StdOut.putText("ERROR: Program contains invalid characters: " + input[index]);
                     return;

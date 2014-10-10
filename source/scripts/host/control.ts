@@ -87,6 +87,10 @@ module WesterOS {
             _CPU = new Cpu();
             _CPU.init();
 
+            // ... Create and initialize memory
+            _MemoryManager = new MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.

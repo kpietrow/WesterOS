@@ -82,6 +82,10 @@ var WesterOS;
             _CPU = new WesterOS.Cpu();
             _CPU.init();
 
+            // ... Create and initialize memory
+            _MemoryManager = new WesterOS.MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(WesterOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
