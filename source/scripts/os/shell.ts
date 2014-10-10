@@ -361,19 +361,28 @@ module WesterOS {
         }
 
         public shellLoad(args) {
-            var input = ((<HTMLInputElement> document.getElementById("taProgramInput")).value.trim()).toUpperCase();
+            var input = ((<HTMLInputElement> document.getElementById("taProgramInput")).value).toUpperCase().trim();
 
+            // Check to see that there is a program
             if (input.length <= 0) {
-                _StdOut.putText("ERROR: No input entered.");
+                _StdOut.putText("ERROR: No program entered.");
+                return;
+
+            // Check that program's length
+            } else if (input.length % 2 != 0) {
+                _StdOut.putText("ERROR: Incorrect number of characters in program" + input.length + "hi");
+                _StdOut.putText(input + "poop");
                 return;
             }
 
+            // Check for invalid characters
             for (var index in input) {
-                if (!input[index].match(/^[a-f0-9]+$/i)) {
-                    _StdOut.putText("ERROR: Input invalid.");
+                if (!input[index].match(/^[A-F0-9]+$/i)) {
+                    _StdOut.putText("ERROR: Program contains invalid characters.");
                     return;
                 }
             }
+            _StdOut.putText("Test success");
         }
 
         public shellBSOD(args) {
@@ -408,6 +417,7 @@ module WesterOS {
             console.debug(userCommand.command);
             var arguments = "";
 
+            // If the new command has arguments...
             if (userCommand.args.length > 0) {
                 arguments = " ";
                 for (var i = 0; i < userCommand.args.length; i++) {
@@ -416,11 +426,13 @@ module WesterOS {
                 }
             }
 
+            // Attach arguments to new command. Add to list
             var newCommand = userCommand.command + arguments;
             this.history.unshift(newCommand);
             this.position = -1;
         }
 
+        // Get the specified command, if available
         public getCommand() {
             return (this.position === -1) ? "" : this.history[this.position];
         }
