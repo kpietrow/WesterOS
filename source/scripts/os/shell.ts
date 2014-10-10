@@ -361,7 +361,9 @@ module WesterOS {
         }
 
         public shellLoad(args) {
-            var input = ((<HTMLInputElement> document.getElementById("taProgramInput")).value).toUpperCase().trim();
+            var input = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
+            input = input.replace(/\s+/g, '').toUpperCase();
+
 
             // Check to see that there is a program
             if (input.length <= 0) {
@@ -370,19 +372,18 @@ module WesterOS {
 
             // Check that program's length
             } else if (input.length % 2 != 0) {
-                _StdOut.putText("ERROR: Incorrect number of characters in program" + input.length + "hi");
-                _StdOut.putText(input + "poop");
+                _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
                 return;
             }
 
             // Check for invalid characters
             for (var index in input) {
-                if (!input[index].match(/^[A-F0-9]+$/i)) {
-                    _StdOut.putText("ERROR: Program contains invalid characters.");
+                if (!input[index].match(/^[0-9A-F]/i)) {
+                    _StdOut.putText("ERROR: Program contains invalid characters: " + input[index]);
                     return;
                 }
             }
-            _StdOut.putText("Test success");
+            _StdOut.putText(input);
         }
 
         public shellBSOD(args) {
