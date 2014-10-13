@@ -45,7 +45,7 @@ h3 {
   cursor: default;
 }
 
-#memory {
+#memoryTable {
     display:block;
     max-height: 250px;
     height: 250px;

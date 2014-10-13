@@ -383,7 +383,13 @@ module WesterOS {
                     return;
                 }
             }
-            _StdOut.putText(input);
+
+            // Attempt to load the function into the Memory Manager
+            var pid = _MemoryManager.loadProgram(input);
+            if (pid !== null) {
+                _StdOut.putText("PID: " + pid);
+            }
+            _MemoryManager.displayMemory();
         }
 
         public shellBSOD(args) {
