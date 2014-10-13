@@ -20,7 +20,7 @@ var TIMER_IRQ = 0;
 var KEYBOARD_IRQ = 1;
 
 // Setting some constants for program memory
-var NUMBER_OF_PROGRAMS = 7;
+var NUMBER_OF_PROGRAMS = 3;
 var PROGRAM_SIZE = 256;
 
 // Following Bob's lead and making this dynamic

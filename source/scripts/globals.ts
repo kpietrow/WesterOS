@@ -22,7 +22,7 @@ var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interr
 var KEYBOARD_IRQ: number = 1;
 
 // Setting some constants for program memory
-var NUMBER_OF_PROGRAMS = 7;
+var NUMBER_OF_PROGRAMS = 3;
 var PROGRAM_SIZE = 256;
 // Following Bob's lead and making this dynamic
 var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;

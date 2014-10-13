@@ -5,7 +5,7 @@
 module WesterOS {
     export class Memory {
         public data = new Array();
-        public bytes : number;
+        public bytes = 0;
 
         constructor(bytes) {
             this.bytes = bytes;

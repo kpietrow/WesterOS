@@ -10,7 +10,7 @@ module WesterOS {
         public locations = new Array(NUMBER_OF_PROGRAMS);
 
         constructor() {
-            for (var i = 0; i < this.locations; i++) {
+            for (var i = 0; i < this.locations.length; i++) {
                 this.locations[i] = {
                     active: false,
                     base: i * PROGRAM_SIZE,
@@ -28,7 +28,8 @@ module WesterOS {
         public loadProgram(program) {
             var programLocation = this.getAvailableProgramLocation();
             if (programLocation === null) {
-                // will have to figure out something to do here
+                _StdOut.putText('There are too many programs already in memory');
+                return null;
             } else {
                 // Create PCB for process
                 var thisPcb = new Pcb();
@@ -38,7 +39,10 @@ module WesterOS {
                 // Determines the upper bound of the new program
                 thisPcb.limit = ((programLocation + 1) * PROGRAM_SIZE) - 1;
 
+                // Load the program into memory
+                this.loadProgramIntoMemory(program, programLocation);
 
+                return thisPcb.pid;
             }
         }
 
@@ -47,7 +51,7 @@ module WesterOS {
             var display = '';
             var hex = '';
 
-            for (var i = 0; i < PROGRAM_SIZE; i++) {
+            for (var i = 0; i < this.memory.bytes; i++) {
                 // If the location is divisible by 8, make a new row
                 if (i % 8 === 0) {
                     display += '</tr><tr><th>0x';
@@ -80,7 +84,6 @@ module WesterOS {
 
             // Make sure we label program as active
             this.locations[location].active = true;
-
         }
 
         // Gets the next available location for a program

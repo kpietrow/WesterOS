@@ -333,7 +333,7 @@ var WesterOS;
 
         Shell.prototype.shellLoad = function (args) {
             var input = document.getElementById("taProgramInput").value;
-            input = input.replace(/\s+/g, '').toUpperCase();
+            input = input.replace(/\s+/g, ' ').toUpperCase();
 
             // Check to see that there is a program
             if (input.length <= 0) {
@@ -346,8 +346,8 @@ var WesterOS;
             }
 
             for (var index = 0; index < input.length; index++) {
-                if (!input[index].match(/^[0-9A-F]/i)) {
-                    _StdOut.putText("ERROR: Program contains invalid characters: " + input[index]);
+                if (!input[index].match(/^[0-9A-F\s]/i)) {
+                    _StdOut.putText("ERROR: Program contains invalid character at location: " + (index + 1));
                     return;
                 }
             }
@@ -356,6 +356,7 @@ var WesterOS;
             var pid = _MemoryManager.loadProgram(input);
             if (pid !== null) {
                 _StdOut.putText("PID: " + pid);
+            } else {
             }
             _MemoryManager.displayMemory();
         };

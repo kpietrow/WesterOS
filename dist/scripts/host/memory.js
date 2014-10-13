@@ -6,6 +6,7 @@ var WesterOS;
     var Memory = (function () {
         function Memory(bytes) {
             this.data = new Array();
+            this.bytes = 0;
             this.bytes = bytes;
             this.init();
         }

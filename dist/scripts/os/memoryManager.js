@@ -8,7 +8,7 @@ var WesterOS;
             // Create the memory
             this.memory = new WesterOS.Memory(MEMORY_SIZE);
             this.locations = new Array(NUMBER_OF_PROGRAMS);
-            for (var i = 0; i < this.locations; i++) {
+            for (var i = 0; i < this.locations.length; i++) {
                 this.locations[i] = {
                     active: false,
                     base: i * PROGRAM_SIZE,
@@ -24,7 +24,8 @@ var WesterOS;
         MemoryManager.prototype.loadProgram = function (program) {
             var programLocation = this.getAvailableProgramLocation();
             if (programLocation === null) {
-                // will have to figure out something to do here
+                _StdOut.putText('There are too many programs already in memory');
+                return null;
             } else {
                 // Create PCB for process
                 var thisPcb = new WesterOS.Pcb();
@@ -34,6 +35,11 @@ var WesterOS;
 
                 // Determines the upper bound of the new program
                 thisPcb.limit = ((programLocation + 1) * PROGRAM_SIZE) - 1;
+
+                // Load the program into memory
+                this.loadProgramIntoMemory(program, programLocation);
+
+                return thisPcb.pid;
             }
         };
 
@@ -42,7 +48,7 @@ var WesterOS;
             var display = '';
             var hex = '';
 
-            for (var i = 0; i < PROGRAM_SIZE; i++) {
+            for (var i = 0; i < this.memory.bytes; i++) {
                 // If the location is divisible by 8, make a new row
                 if (i % 8 === 0) {
                     display += '</tr><tr><th>0x';
@@ -62,7 +68,7 @@ var WesterOS;
             document.getElementById("memoryTable").innerHTML = display;
         };
 
-        // Loads the program into the actual memory at t
+        // Loads the program into the actual memory at the provided location
         MemoryManager.prototype.loadProgramIntoMemory = function (programToLoad, location) {
             var program = programToLoad.split(' ');
             var offset = location * PROGRAM_SIZE;
