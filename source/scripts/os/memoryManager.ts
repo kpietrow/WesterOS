@@ -28,7 +28,7 @@ module WesterOS {
         public loadProgram(program) {
             var programLocation = this.getAvailableProgramLocation();
             if (programLocation === null) {
-                _StdOut.putText('There are too many programs already in memory');
+                _StdOut.putText('ERROR: There are too many programs already in memory');
                 return null;
             } else {
                 // Create PCB for process
@@ -39,15 +39,27 @@ module WesterOS {
                 // Determines the upper bound of the new program
                 thisPcb.limit = ((programLocation + 1) * PROGRAM_SIZE) - 1;
 
+                thisPcb.location = programLocation;
+
                 // Load the program into memory
                 this.loadProgramIntoMemory(program, programLocation);
+
+                // Have a process list with every loaded program
+                _ProcessList[thisPcb.pid] = { pcb: thisPcb,
+                    state: "NEW"
+                };
 
                 return thisPcb.pid;
             }
         }
 
+        // Grabs the memory at the base location of the current process
+        public getMemory() {
+            return this.memory.data[_ProcessList[_ProcessToRun].pcb.base];
+        }
+
         // Updates the memory display
-        private displayMemory(): void {
+        public displayMemory(): void {
             var display = '';
             var hex = '';
 
@@ -68,7 +80,7 @@ module WesterOS {
                 display += '<td data-id="' + i + '"> ' + this.memory.data[i] + '</td>';
             }
             display += '</table>';
-            document.getElementById("memoryTable").innerHTML = display;
+            WesterOS.Control.displayMemory(display);
 
         }
 
@@ -90,6 +102,12 @@ module WesterOS {
         private getAvailableProgramLocation() {
             for (var i = 0; i < this.locations.length; i++) {
                 if (this.locations[i].active === false) {
+
+                    // Makes sure that location is empty
+                    for (var x = this.locations[i].base; x < this.locations[i].limit; x++) {
+                        this.memory.data[x] = "00";
+                    }
+
                     return i;
                 }
             }

@@ -68,6 +68,10 @@ module WesterOS {
             // Optionally update a log database or some streaming service.
         }
 
+        public static displayMemory(display): void {
+            document.getElementById("memoryTable").innerHTML = display;
+        }
+
 
         //
         // Host Events

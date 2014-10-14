@@ -20,6 +20,7 @@ module WesterOS {
         // For memory locations
         public base = 0;
         public limit = 0;
+        public location = 0;
 
         constructor() {
         }

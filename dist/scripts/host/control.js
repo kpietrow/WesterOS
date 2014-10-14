@@ -64,6 +64,10 @@ var WesterOS;
             // Optionally update a log database or some streaming service.
         };
 
+        Control.displayMemory = function (display) {
+            document.getElementById("memoryTable").innerHTML = display;
+        };
+
         //
         // Host Events
         //

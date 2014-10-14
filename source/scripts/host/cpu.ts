@@ -24,6 +24,7 @@ module WesterOS {
                     public Xreg: number = 0,
                     public Yreg: number = 0,
                     public Zflag: number = 0,
+                    public IR: string= "",
                     public isExecuting: boolean = false) {
 
         }
@@ -41,6 +42,56 @@ module WesterOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            this.execute(this.fetch());
+
+            this.updateCpu();
+        }
+
+        public execute(instruction) {
+            instruction = String(instruction);
+            if (instruction === 'A9') {
+                this.loadAccumulatorConstant();
+            } else if (instruction === 'AD') {
+                this.loadAccumulatorFromMemory();
+            } else if (instruction === '8D') {
+                this.storeAccumulatorInMemory();
+            } else if (instruction === '6D') {
+                this.addWithCarry();
+            } else if (instruction === 'A2') {
+                this.loadXConstant();
+            } else if (instruction === 'AE') {
+                this.loadXFromMemory();
+            } else if (instruction === 'A0') {
+                this.loadYConstant();
+            } else if (instruction === 'AC') {
+                this.loadYFromMemory();
+            } else if (instruction === 'EA') {
+                this.noOperation();
+            } else if (instruction === '00') {
+                this.break();
+            } else if (instruction === 'EC') {
+                this.compareToX();
+            } else if (instruction === 'D0') {
+                this.branchNotEqual();
+            } else if (instruction === 'EE') {
+                this.increment();
+            } else if (instruction === 'FF') {
+                this.systemCall();
+            } else {
+                // Make a software interrupt to handle this unknown opcode
+                _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPCODE_IRQ));
+            }
+            // Onwards and upwards!
+            this.PC++;
+
+        }
+
+        public updateCpu(): void {
+
+        }
+
+        private fetch() {
+            return _MemoryManager.getMemory();
         }
     }
 }

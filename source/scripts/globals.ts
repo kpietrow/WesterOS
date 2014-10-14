@@ -17,9 +17,13 @@ var APP_VERSION: string = "0.117";   // What did you expect?
 
 var CPU_CLOCK_INTERVAL: number = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
+
+// Interupts
 var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
                             // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
+var PROCESS_EXECUTION_IRQ: number = 2;
+var UNKNOWN_OPCODE_IRQ: number = 3;
 
 // Setting some constants for program memory
 var NUMBER_OF_PROGRAMS = 3;
@@ -33,6 +37,9 @@ var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;
 //
 var _CPU: WesterOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _MemoryManager = null;
+
+var _ProcessList = null; // Will be storing processes here until I can think of something better
+var _ProcessToRun = null;
 
 var _OSclock: number = 0;  // Page 23.
 

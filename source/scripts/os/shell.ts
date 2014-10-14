@@ -59,7 +59,7 @@ module WesterOS {
             // status
             sc = new ShellCommand(this.shellStatus,
                 "status",
-                "[args\] - Update your status.");
+                "<string> - Update your status.");
             this.commandList[this.commandList.length] = sc;
 
             // help
@@ -107,7 +107,13 @@ module WesterOS {
             // load command
             sc = new ShellCommand(this.shellLoad,
                 "load",
-                "- Loads a user program");
+                "[priority] - Loads a user program");
+            this.commandList[this.commandList.length] = sc;
+
+            // run command
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<PID> - Runs a user program from memory");
             this.commandList[this.commandList.length] = sc;
 
             // bsod command
@@ -363,13 +369,13 @@ module WesterOS {
         public shellLoad(args) {
             var input = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
             input = input.replace(/\s+/g, ' ').toUpperCase();
+            var priority = 10;
 
 
             // Check to see that there is a program
             if (input.length <= 0) {
                 _StdOut.putText("ERROR: No program entered.");
                 return;
-
             // Check that program's length
             } else if (input.length % 2 != 0) {
                 _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
@@ -392,6 +398,27 @@ module WesterOS {
 
             }
             _MemoryManager.displayMemory();
+        }
+
+        public shellRun(args) {
+            // Check to see if there is PID
+            if (args.length <= 0) {
+                _StdOut.putText("ERROR: Please specify a PID");
+            } else if (!_ProcessList[args[0]]) {
+                _StdOut.putText("ERROR: Invalid PID");
+            } else {
+                // Get requested program
+                var requestedProgram = _ProcessList[args[0]];
+                // Check programs state
+                if (requestedProgram.state === "NEW") {
+                    requestedProgram.state = "READY";
+                    _ProcessToRun = _ProcessList[args[0]];
+                    _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ));
+                } else {
+                    _StdOut.putText("ERROR: Kernel is already handling that process");
+                }
+
+            }
         }
 
         public shellBSOD(args) {

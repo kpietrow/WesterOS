@@ -14,10 +14,13 @@ var APP_VERSION = "0.117";
 
 var CPU_CLOCK_INTERVAL = 100;
 
+// Interupts
 var TIMER_IRQ = 0;
 
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
+var PROCESS_EXECUTION_IRQ = 2;
+var UNKNOWN_OPCODE_IRQ = 3;
 
 // Setting some constants for program memory
 var NUMBER_OF_PROGRAMS = 3;
@@ -31,6 +34,9 @@ var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;
 //
 var _CPU;
 var _MemoryManager = null;
+
+var _ProcessList = null;
+var _ProcessToRun = null;
 
 var _OSclock = 0;
 

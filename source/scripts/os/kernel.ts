@@ -41,6 +41,8 @@ module WesterOS {
             // ... more?
             //
 
+            _ProcessList = new Array();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -122,6 +124,11 @@ module WesterOS {
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
+                case PROCESS_EXECUTION_IRQ:
+                    _CPU.isExecuting = true;
+                    break;
+                case UNKNOWN_OPCODE_IRQ:
+                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CPU.PC - 1));
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

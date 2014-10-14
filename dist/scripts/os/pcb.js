@@ -16,6 +16,7 @@ var WesterOS;
             // For memory locations
             this.base = 0;
             this.limit = 0;
+            this.location = 0;
         }
         Pcb.globalPid = 0;
         return Pcb;
