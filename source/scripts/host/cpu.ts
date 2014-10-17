@@ -128,7 +128,7 @@ module WesterOS {
         // LDX - Load x register with a constant
         private loadXConstant(): void {
             // Get the data, then translate it
-            this.Xreg = parseInt(_MemoryManager.getMemory(++this.PC));
+            this.Xreg = parseInt(_MemoryManager.getMemory(++this.PC), 16);
         }
 
         // LDX - Load x register from memory
@@ -139,7 +139,7 @@ module WesterOS {
         // LDY - Load y register with constant
         private loadYConstant(): void {
             // Get the data, then translate it
-            this.Yreg = parseInt(_MemoryManager.getMemory(++this.PC));
+            this.Yreg = parseInt(_MemoryManager.getMemory(++this.PC), 16);
         }
 
         // LDY - Load y register from memory
@@ -158,6 +158,55 @@ module WesterOS {
             // Then get the hell out of Dodge!
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ));
         }
+
+        // CPX - Compare a byte in memory to the x flag, set's the Z flag if equal
+        private compareToX(): void {
+            var byte = this.getNextTwoBytes();
+
+            if (parseInt(this.Xreg) === parseInt(byte)) {
+                this.Zflag = 1;
+            } else {
+                this.Zflag = 0;
+            }
+        }
+
+        // BNE - Branch x bytes if z flag === 0
+        private branchNotEqual(): void {
+            if (this.Zflag === 0) {
+                this.PC += parseInt(_MemoryManager.getMemory(++this.PC), 16) + 1;
+
+                // Check memory limit
+                if (this.PC >= PROGRAM_SIZE) {
+                    // Then we've got to fix it
+                    this.PC -= PROGRAM_SIZE;
+                    this.PC -= PROGRAM_SIZE;
+                }
+            // Don't evaluate next byte is zflag is not 0
+            } else {
+                ++this.PC;
+            }
+        }
+
+        // INC - Increment byte's value
+        private increment(): void {
+            // Get location of data at that location
+            var byte = this.getNextTwoBytes();
+            var data = _MemoryManager.getMemory(byte);
+
+            // Convert to increment
+            data = parseInt(data, 16);
+            // Increment. DO IT, DO IT NOW!
+            data++;
+
+            // Store data as hex
+            _MemoryManager.storeData(data.toString(16), location);
+        }
+
+        // SYS - System Call
+        private systemCall(): void {
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ));
+        }
+
 
 
 

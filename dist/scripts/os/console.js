@@ -182,6 +182,26 @@ var WesterOS;
             }
         };
 
+        // Handler for SYS software interrupt, from the CPU
+        Console.prototype.handleSysOpCode = function () {
+            if (_CPU.Xreg === 1) {
+                // Print contents of Y reg
+                this.putText(parseInt(_CPU.Yreg).toString());
+                this.advanceLine();
+                _OsShell.putPrompt();
+            } else if (_CPU.Xreg === 2) {
+                // Print the 00 terminated string. Address is in the y register
+                var output = "";
+
+                // Location in memory
+                var curPointer = _CPU.Yreg;
+
+                // Current data in memory, at that location
+                var curData = _MemoryManager.getMemory(curPointer);
+                // Find that 00 termination code lk
+            }
+        };
+
         // bsod handled here. In the future the location of this function may have to be moved
         Console.prototype.bsod = function () {
             var display = document.getElementById("display");

@@ -129,6 +129,8 @@ var WesterOS;
                 case MEMORY_ACCESS_VIOLATION_IRQ:
                     // Shut it down Liz Lemon!
                     _CurrentProcess.state = "TERMINATED";
+
+                    // Remove it from the list. SHAME.
                     _MemoryManager.removeProcessFromList();
                     this.krnTrace("PID " + _CurrentProcess.pcb.pid + " killed");
                     this.krnTrace("Memory access violation. PID " + _CurrentProcess.pcb.pid + " attempted to access memory location " + params[0]);
@@ -145,8 +147,13 @@ var WesterOS;
                     _CPU.init();
                     break;
 
+                case SYS_OPCODE_IRQ:
+                    _StdIn.handleSysOpCode();
+                    break;
+
                 case UNKNOWN_OPCODE_IRQ:
                     this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_MemoryManager.getMemory(_CPU.PC - 1)));
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

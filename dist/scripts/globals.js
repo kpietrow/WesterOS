@@ -23,6 +23,7 @@ var PROCESS_EXECUTION_IRQ = 2;
 var UNKNOWN_OPCODE_IRQ = 3;
 var MEMORY_ACCESS_VIOLATION_IRQ = 4;
 var CPU_BREAK_IRQ = 5;
+var SYS_OPCODE_IRQ = 6;
 
 // Setting some constants for program memory
 var NUMBER_OF_PROGRAMS = 3;
