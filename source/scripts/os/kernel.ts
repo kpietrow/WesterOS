@@ -136,10 +136,26 @@ module WesterOS {
                     }
                     break;
                 case MEMORY_ACCESS_VIOLATION_IRQ:
-                    // Shut it down!
+                    // Shut it down Liz Lemon!
+                    _CurrentProcess.state = "TERMINATED";
+                    _MemoryManager.removeProcessFromList();
+                    this.krnTrace("PID " + _CurrentProcess.pcb.pid + " killed");
+                    this.krnTrace("Memory access violation. PID " + _CurrentProcess.pcb.pid +
+                        " attempted to access memory location " + params[0]);
+
+                    // Reset CPU
+                    _CPU.init();
+                    break;
+
+                case CPU_BREAK_IRQ:
+                    // Terminate the program
+                    _CurrentProcess.pcb.state = "TERMINATED";
+                    // Reset CPU
+                    _CPU.init();
+                    break;
 
                 case UNKNOWN_OPCODE_IRQ:
-                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CurrentProcess.pcb.base));
+                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_MemoryManager.getMemory(_CPU.PC - 1)));
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

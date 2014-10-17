@@ -66,6 +66,15 @@ module WesterOS {
             return this.memory.data[address];
         }
 
+        // Stores data into a specified address
+        public storeData(data, address) {
+            address += _CurrentProcess.pcb.base;
+
+            if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base){
+                _KernelInterruptQueue.enqueue(new Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
+            }
+        }
+
         // Updates the memory display
         public displayMemory(): void {
             var display = '';
@@ -111,16 +120,29 @@ module WesterOS {
             for (var i = 0; i < this.locations.length; i++) {
                 if (this.locations[i].active === false) {
 
-                    // Makes sure that location is empty
-                    for (var x = this.locations[i].base; x < this.locations[i].limit; x++) {
-                        this.memory.data[x] = "00";
-                    }
+                    this.clearMemorySegment(i);
 
                     return i;
                 }
             }
 
             return null;
+        }
+
+        // Clears a segment of memory
+        private clearMemorySegment(location): void {
+            // Makes sure that location is empty
+            for (var x = this.locations[location].base; x < this.locations[location].limit; x++) {
+                this.memory.data[x] = "00";
+            }
+        }
+
+        // Removes a process from the _ProcessList, and deletes its contents in memory
+        public removeProcessFromList() {
+
+            this.locations[_CurrentProcess.pcb.location].active = false;
+            this.clearMemorySegment(_CurrentProcess.pcb.location);
+
         }
     }
 }

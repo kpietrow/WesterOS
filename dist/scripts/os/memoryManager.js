@@ -63,6 +63,15 @@ var WesterOS;
             return this.memory.data[address];
         };
 
+        // Stores data into a specified address
+        MemoryManager.prototype.storeData = function (data, address) {
+            address += _CurrentProcess.pcb.base;
+
+            if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base) {
+                _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
+            }
+        };
+
         // Updates the memory display
         MemoryManager.prototype.displayMemory = function () {
             var display = '';
@@ -105,15 +114,26 @@ var WesterOS;
         MemoryManager.prototype.getAvailableProgramLocation = function () {
             for (var i = 0; i < this.locations.length; i++) {
                 if (this.locations[i].active === false) {
-                    for (var x = this.locations[i].base; x < this.locations[i].limit; x++) {
-                        this.memory.data[x] = "00";
-                    }
+                    this.clearMemorySegment(i);
 
                     return i;
                 }
             }
 
             return null;
+        };
+
+        // Clears a segment of memory
+        MemoryManager.prototype.clearMemorySegment = function (location) {
+            for (var x = this.locations[location].base; x < this.locations[location].limit; x++) {
+                this.memory.data[x] = "00";
+            }
+        };
+
+        // Removes a process from the _ProcessList, and deletes its contents in memory
+        MemoryManager.prototype.removeProcessFromList = function () {
+            this.locations[_CurrentProcess.pcb.location].active = false;
+            this.clearMemorySegment(_CurrentProcess.pcb.location);
         };
         return MemoryManager;
     })();
