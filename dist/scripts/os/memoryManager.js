@@ -53,6 +53,13 @@ var WesterOS;
 
         // Grabs the memory at the base location of the current process
         MemoryManager.prototype.getMemory = function (address) {
+            // We're going to check that the memory call is legal
+            address += _CurrentProcess.pcb.base;
+
+            if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base) {
+                _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
+            }
+
             return this.memory.data[address];
         };
 

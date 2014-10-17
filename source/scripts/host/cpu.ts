@@ -104,5 +104,28 @@ module WesterOS {
             this.PC++;
 
         }
+
+        // LDA - Load the accumulator with a constant value
+        private loadAccumulatorConstant(): void {
+            this.Acc = parseInt(_MemoryManager.getMemory(++this.PC), 16);
+        }
+
+        // LDA - Load the accumulator from memory
+        private loadAccumulatorFromMemory(): void {
+            this.Acc = this.getNextTwoBytes();
+        }
+
+        // STA - Store the accumulator in memory
+        private storeAccumulatorInMemory(): void {
+
+        }
+
+        private getNextTwoBytes() {
+            var firstByte = _MemoryManager.getMemory(++this.PC);
+            var secondByte = _MemoryManager.getMemory(++this.PC);
+            var hex = secondByte + firstByte;
+            var decimal = parseInt(hex, 16);
+            return _MemoryManager.getMemory(decimal);
+        }
     }
 }

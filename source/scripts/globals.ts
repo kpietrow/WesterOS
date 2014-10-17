@@ -24,6 +24,7 @@ var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interr
 var KEYBOARD_IRQ: number = 1;
 var PROCESS_EXECUTION_IRQ: number = 2;
 var UNKNOWN_OPCODE_IRQ: number = 3;
+var MEMORY_ACCESS_VIOLATION_IRQ: number = 4;
 
 // Setting some constants for program memory
 var NUMBER_OF_PROGRAMS = 3;

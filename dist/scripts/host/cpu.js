@@ -100,8 +100,30 @@ var WesterOS;
                 _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(UNKNOWN_OPCODE_IRQ));
             }
 
-            // Increment
+            // Increment and continue
             this.PC++;
+        };
+
+        // LDA - Load the accumulator with a constant value
+        Cpu.prototype.loadAccumulatorConstant = function () {
+            this.Acc = parseInt(_MemoryManager.getMemory(++this.PC), 16);
+        };
+
+        // LDA - Load the accumulator from memory
+        Cpu.prototype.loadAccumulatorFromMemory = function () {
+            this.Acc = this.getNextTwoBytes();
+        };
+
+        // STA - Store the accumulator in memory
+        Cpu.prototype.storeAccumulatorInMemory = function () {
+        };
+
+        Cpu.prototype.getNextTwoBytes = function () {
+            var firstByte = _MemoryManager.getMemory(++this.PC);
+            var secondByte = _MemoryManager.getMemory(++this.PC);
+            var hex = secondByte + firstByte;
+            var decimal = parseInt(hex, 16);
+            return _MemoryManager.getMemory(decimal);
         };
         return Cpu;
     })();

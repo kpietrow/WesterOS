@@ -125,13 +125,19 @@ module WesterOS {
                     _StdIn.handleInput();
                     break;
                 case PROCESS_EXECUTION_IRQ:
+                    // If a process isn't already being handled...
                     if (!_CPU.isExecuting) {
                         _CurrentProcess = _ProcessList[params[0]];
                         _CPU.setCpu(_CurrentProcess);
+
+                    // Otherwise forget about it! (We'll add in multiple process execs later)
                     } else {
                         _StdOut.putText("ERROR: There is a program already in execution.");
                     }
                     break;
+                case MEMORY_ACCESS_VIOLATION_IRQ:
+                    // Shut it down!
+
                 case UNKNOWN_OPCODE_IRQ:
                     this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CurrentProcess.pcb.base));
                 default:
