@@ -36,7 +36,7 @@ var _CPU;
 var _MemoryManager = null;
 
 var _ProcessList = null;
-var _ProcessToRun = null;
+var _CurrentProcess = null;
 
 var _OSclock = 0;
 

@@ -52,8 +52,8 @@ var WesterOS;
         };
 
         // Grabs the memory at the base location of the current process
-        MemoryManager.prototype.getMemory = function () {
-            return this.memory.data[_ProcessList[_ProcessToRun].pcb.base];
+        MemoryManager.prototype.getMemory = function (address) {
+            return this.memory.data[address];
         };
 
         // Updates the memory display

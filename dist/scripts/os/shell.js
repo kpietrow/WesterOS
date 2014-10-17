@@ -379,8 +379,7 @@ var WesterOS;
                 // Check programs state
                 if (requestedProgram.state === "NEW") {
                     requestedProgram.state = "READY";
-                    _ProcessToRun = _ProcessList[args[0]];
-                    _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
+                    _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
                 } else {
                     _StdOut.putText("ERROR: Kernel is already handling that process");
                 }

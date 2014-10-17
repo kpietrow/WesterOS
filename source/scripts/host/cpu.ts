@@ -38,6 +38,16 @@ module WesterOS {
             this.isExecuting = false;
         }
 
+
+        public setCpu(process): void {
+            this.PC = process.pcb.pc;
+            this.Acc = process.pcb.acc;
+            this.Xreg = process.pcb.xReg;
+            this.Yreg = process.pcb.yReg;
+            this.Zflag = process.pcb.zFlag;
+            this.isExecuting = true;
+        }
+
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -47,7 +57,16 @@ module WesterOS {
             this.updateCpu();
         }
 
+        public updateCpu(): void {
+
+        }
+
+        private fetch() {
+            return _MemoryManager.getMemory(this.PC);
+        }
+
         public execute(instruction) {
+            console.debug(instruction);
             instruction = String(instruction);
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
@@ -78,20 +97,12 @@ module WesterOS {
             } else if (instruction === 'FF') {
                 this.systemCall();
             } else {
-                // Make a software interrupt to handle this unknown opcode
+                // Interrupt to handle unknown code
                 _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPCODE_IRQ));
             }
-            // Onwards and upwards!
+            // Increment and continue
             this.PC++;
 
-        }
-
-        public updateCpu(): void {
-
-        }
-
-        private fetch() {
-            return _MemoryManager.getMemory();
         }
     }
 }

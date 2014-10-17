@@ -39,7 +39,7 @@ var _CPU: WesterOS.Cpu;  // Utilize TypeScript's type annotation system to ensur
 var _MemoryManager = null;
 
 var _ProcessList = null; // Will be storing processes here until I can think of something better
-var _ProcessToRun = null;
+var _CurrentProcess = null;
 
 var _OSclock: number = 0;  // Page 23.
 

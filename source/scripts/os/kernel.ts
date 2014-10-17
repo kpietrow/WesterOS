@@ -125,10 +125,15 @@ module WesterOS {
                     _StdIn.handleInput();
                     break;
                 case PROCESS_EXECUTION_IRQ:
-                    _CPU.isExecuting = true;
+                    if (!_CPU.isExecuting) {
+                        _CurrentProcess = _ProcessList[params[0]];
+                        _CPU.setCpu(_CurrentProcess);
+                    } else {
+                        _StdOut.putText("ERROR: There is a program already in execution.");
+                    }
                     break;
                 case UNKNOWN_OPCODE_IRQ:
-                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CPU.PC - 1));
+                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CurrentProcess.pcb.base));
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

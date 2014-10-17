@@ -54,8 +54,8 @@ module WesterOS {
         }
 
         // Grabs the memory at the base location of the current process
-        public getMemory() {
-            return this.memory.data[_ProcessList[_ProcessToRun].pcb.base];
+        public getMemory(address) {
+            return this.memory.data[address];
         }
 
         // Updates the memory display

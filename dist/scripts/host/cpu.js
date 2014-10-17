@@ -38,6 +38,15 @@ var WesterOS;
             this.isExecuting = false;
         };
 
+        Cpu.prototype.setCpu = function (process) {
+            this.PC = process.pcb.pc;
+            this.Acc = process.pcb.acc;
+            this.Xreg = process.pcb.xReg;
+            this.Yreg = process.pcb.yReg;
+            this.Zflag = process.pcb.zFlag;
+            this.isExecuting = true;
+        };
+
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
 
@@ -48,7 +57,15 @@ var WesterOS;
             this.updateCpu();
         };
 
+        Cpu.prototype.updateCpu = function () {
+        };
+
+        Cpu.prototype.fetch = function () {
+            return _MemoryManager.getMemory(this.PC);
+        };
+
         Cpu.prototype.execute = function (instruction) {
+            console.debug(instruction);
             instruction = String(instruction);
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
@@ -79,19 +96,12 @@ var WesterOS;
             } else if (instruction === 'FF') {
                 this.systemCall();
             } else {
-                // Make a software interrupt to handle this unknown opcode
+                // Interrupt to handle unknown code
                 _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(UNKNOWN_OPCODE_IRQ));
             }
 
-            // Onwards and upwards!
+            // Increment
             this.PC++;
-        };
-
-        Cpu.prototype.updateCpu = function () {
-        };
-
-        Cpu.prototype.fetch = function () {
-            return _MemoryManager.getMemory();
         };
         return Cpu;
     })();
