@@ -68,11 +68,23 @@ module WesterOS {
 
         // Stores data into a specified address
         public storeData(data, address) {
-            address += _CurrentProcess.pcb.base;
+            address = parseInt(address, 16) + _CurrentProcess.pcb.base;
 
             if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base){
                 _KernelInterruptQueue.enqueue(new Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
             }
+
+            // The bytes need some formatting
+            if (data.length < 2) {
+                data = ('00' + data).slice(-2);
+            }
+
+            this.memory.data[address] = data.toUpperCase();
+            this.updateByteOutput(address);
+        }
+
+        private updateByteOutput(address): void {
+            document.getElementById('addr' + parseInt(address, 16)).innerHTML = this.memory.data[address];
         }
 
         // Updates the memory display
@@ -94,7 +106,7 @@ module WesterOS {
                 }
 
                 // then add the next column in the row
-                display += '<td data-id="' + i + '"> ' + this.memory.data[i] + '</td>';
+                display += '<td id="addr' + i + '"> ' + this.memory.data[i] + '</td>';
             }
             display += '</table>';
             WesterOS.Control.displayMemory(display);

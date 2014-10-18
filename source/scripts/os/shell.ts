@@ -376,11 +376,12 @@ module WesterOS {
             if (input.length <= 0) {
                 _StdOut.putText("ERROR: No program entered.");
                 return;
+            }
             // Check that program's length
-            } else if (input.length % 2 != 0) {
+            /*} else if (input.length % 2 != 0) {
                 _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
                 return;
-            }
+            }*/
 
             // Check for invalid characters
             for (var index = 0; index < input.length; index++) {
@@ -410,7 +411,7 @@ module WesterOS {
                 // Get requested program
                 var requestedProgram = _ProcessList[args[0]];
                 // Check programs state
-                if (requestedProgram.state === "NEW") {
+                if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
                     _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
                 } else {
@@ -449,7 +450,6 @@ module WesterOS {
 
         // Adds a command to past history
         public add(userCommand) {
-            console.debug(userCommand.command);
             var arguments = "";
 
             // If the new command has arguments...

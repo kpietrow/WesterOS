@@ -58,6 +58,22 @@ var WesterOS;
         };
 
         Cpu.prototype.updateCpu = function () {
+            if (this.isExecuting) {
+                this.updatePcb();
+            }
+
+            WesterOS.Control.displayCpu();
+            WesterOS.Control.displayPcb();
+            _MemoryManager.displayMemory();
+        };
+
+        // Keeps the PCB up to date
+        Cpu.prototype.updatePcb = function () {
+            _CurrentProcess.pcb.pc = _CPU.PC;
+            _CurrentProcess.pcb.acc = _CPU.Acc;
+            _CurrentProcess.pcb.xReg = _CPU.Xreg;
+            _CurrentProcess.pcb.yReg = _CPU.Yreg;
+            _CurrentProcess.pcb.zFlag = _CPU.Zflag;
         };
 
         Cpu.prototype.fetch = function () {
@@ -163,7 +179,7 @@ var WesterOS;
         Cpu.prototype.compareToX = function () {
             var byte = this.getNextTwoBytes();
 
-            if (parseInt(this.Xreg) === parseInt(byte)) {
+            if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;
             } else {
                 this.Zflag = 0;

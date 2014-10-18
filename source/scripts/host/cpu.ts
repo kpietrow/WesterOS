@@ -59,6 +59,24 @@ module WesterOS {
 
         public updateCpu(): void {
 
+            if (this.isExecuting) {
+                this.updatePcb();
+            }
+
+            WesterOS.Control.displayCpu();
+            WesterOS.Control.displayPcb();
+            _MemoryManager.displayMemory();
+
+        }
+
+        // Keeps the PCB up to date
+        private updatePcb(): void {
+            _CurrentProcess.pcb.pc = _CPU.PC;
+            _CurrentProcess.pcb.acc = _CPU.Acc;
+            _CurrentProcess.pcb.xReg = _CPU.Xreg;
+            _CurrentProcess.pcb.yReg = _CPU.Yreg;
+            _CurrentProcess.pcb.zFlag = _CPU.Zflag;
+
         }
 
         private fetch() {
@@ -163,7 +181,7 @@ module WesterOS {
         private compareToX(): void {
             var byte = this.getNextTwoBytes();
 
-            if (parseInt(this.Xreg) === parseInt(byte)) {
+            if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;
             } else {
                 this.Zflag = 0;

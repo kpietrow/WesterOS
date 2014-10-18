@@ -344,10 +344,6 @@ var WesterOS;
             if (input.length <= 0) {
                 _StdOut.putText("ERROR: No program entered.");
                 return;
-                // Check that program's length
-            } else if (input.length % 2 != 0) {
-                _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
-                return;
             }
 
             for (var index = 0; index < input.length; index++) {
@@ -377,7 +373,7 @@ var WesterOS;
                 var requestedProgram = _ProcessList[args[0]];
 
                 // Check programs state
-                if (requestedProgram.state === "NEW") {
+                if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
                     _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
                 } else {
@@ -417,7 +413,6 @@ var WesterOS;
 
         // Adds a command to past history
         CommandHistory.prototype.add = function (userCommand) {
-            console.debug(userCommand.command);
             var arguments = "";
 
             // If the new command has arguments...

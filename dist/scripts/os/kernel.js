@@ -119,7 +119,13 @@ var WesterOS;
                 case PROCESS_EXECUTION_IRQ:
                     // If a process isn't already being handled...
                     if (!_CPU.isExecuting) {
+                        // Get a current process
                         _CurrentProcess = _ProcessList[params[0]];
+
+                        // Update the process to show a correct state
+                        _ProcessList[params[0]].pcb.state, _CurrentProcess.pcb.state = "RUNNING'";
+
+                        // Set up the CPU
                         _CPU.setCpu(_CurrentProcess);
                         // Otherwise forget about it! (We'll add in multiple process execs later)
                     } else {

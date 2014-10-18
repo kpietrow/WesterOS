@@ -37,15 +37,11 @@ var WesterOS;
 
         Console.prototype.handleInput = function () {
             while (_KernelInputQueue.getSize() > 0) {
-                console.debug("handle input");
-
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
 
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
                 if (chr === String.fromCharCode(13)) {
-                    console.debug("enter");
-
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
@@ -54,12 +50,10 @@ var WesterOS;
                     this.buffer = "";
                     // Remove last character from the CLI, and decrease the buffer
                 } else if (chr === String.fromCharCode(8)) {
-                    console.debug("backspace");
                     this.removeChar(this.buffer.charAt(this.buffer.length - 1));
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
                     // Revert to previous command
                 } else if ((chr === "UP") || (chr === "DOWN")) {
-                    console.debug(chr);
                     this.removeChar(this.buffer);
 
                     var newCommand = _OsShell.accessHistory(chr);
@@ -69,8 +63,6 @@ var WesterOS;
                 } else if (chr === String.fromCharCode(9)) {
                     this.tabComplete();
                 } else {
-                    console.debug("normal char");
-
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -84,7 +76,6 @@ var WesterOS;
 
         // Removes charecter(s) from the console display
         Console.prototype.removeChar = function (text) {
-            console.debug("we've reached removeChar");
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition - offset;
@@ -132,7 +123,6 @@ var WesterOS;
 
         // Tab completion
         Console.prototype.tabComplete = function () {
-            console.debug("tab complete time");
             var candidate;
             var found = false;
             var possibleCommands = [];
@@ -194,11 +184,20 @@ var WesterOS;
                 var output = "";
 
                 // Location in memory
-                var curPointer = _CPU.Yreg;
+                var pointer = _CPU.Yreg;
 
                 // Current data in memory, at that location
-                var curData = _MemoryManager.getMemory(curPointer);
-                // Find that 00 termination code lk
+                var data = _MemoryManager.getMemory(pointer);
+
+                while (data !== "00") {
+                    // Convert into char form
+                    output += String.fromCharCode(parseInt(data, 16));
+                    data = _MemoryManager.getMemory(++pointer);
+                }
+
+                this.putText(output);
+                this.advanceLine();
+                _OsShell.putPrompt();
             }
         };
 
