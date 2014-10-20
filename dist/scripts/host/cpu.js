@@ -65,6 +65,7 @@ var WesterOS;
             WesterOS.Control.displayCpu();
             WesterOS.Control.displayPcb();
             _MemoryManager.displayMemory();
+            this.printCPU();
         };
 
         // Keeps the PCB up to date
@@ -127,7 +128,7 @@ var WesterOS;
 
         // LDA - Load the accumulator from memory
         Cpu.prototype.loadAccumulatorFromMemory = function () {
-            this.Acc = this.getNextTwoBytes();
+            this.Acc = this.getDataFromNextTwoBytes();
         };
 
         // STA - Store the accumulator in memory
@@ -137,7 +138,7 @@ var WesterOS;
 
         // ADC - Add with carry. Adds to the accumulator
         Cpu.prototype.addWithCarry = function () {
-            this.Acc += parseInt(this.getNextTwoBytes(), 16);
+            this.Acc += parseInt(this.getDataFromNextTwoBytes(), 16);
         };
 
         // LDX - Load x register with a constant
@@ -148,7 +149,7 @@ var WesterOS;
 
         // LDX - Load x register from memory
         Cpu.prototype.loadXFromMemory = function () {
-            this.Xreg = this.getNextTwoBytes();
+            this.Xreg = this.getDataFromNextTwoBytes();
         };
 
         // LDY - Load y register with constant
@@ -159,7 +160,7 @@ var WesterOS;
 
         // LDY - Load y register from memory
         Cpu.prototype.loadYFromMemory = function () {
-            this.Yreg = this.getNextTwoBytes();
+            this.Yreg = this.getDataFromNextTwoBytes();
         };
 
         // BRK - Break!
@@ -177,7 +178,7 @@ var WesterOS;
 
         // CPX - Compare a byte in memory to the x flag, set's the Z flag if equal
         Cpu.prototype.compareToX = function () {
-            var byte = this.getNextTwoBytes();
+            var byte = this.getDataFromNextTwoBytes();
 
             if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;
@@ -195,7 +196,6 @@ var WesterOS;
                 if (this.PC >= PROGRAM_SIZE) {
                     // Then we've got to fix it
                     this.PC -= PROGRAM_SIZE;
-                    this.PC -= PROGRAM_SIZE;
                 }
                 // Don't evaluate next byte is zflag is not 0
             } else {
@@ -206,8 +206,8 @@ var WesterOS;
         // INC - Increment byte's value
         Cpu.prototype.increment = function () {
             // Get location of data at that location
-            var byte = this.getNextTwoBytes();
-            var data = _MemoryManager.getMemory(byte);
+            var location = this.getNextTwoBytes();
+            var data = _MemoryManager.getMemory(location);
 
             // Convert to increment
             data = parseInt(data, 16);
@@ -224,12 +224,20 @@ var WesterOS;
             _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(SYS_OPCODE_IRQ));
         };
 
+        Cpu.prototype.printCPU = function () {
+            console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
+        };
+
         Cpu.prototype.getNextTwoBytes = function () {
             var firstByte = _MemoryManager.getMemory(++this.PC);
             var secondByte = _MemoryManager.getMemory(++this.PC);
             var hex = secondByte + firstByte;
             var decimal = parseInt(hex, 16);
-            return _MemoryManager.getMemory(decimal);
+            return decimal;
+        };
+
+        Cpu.prototype.getDataFromNextTwoBytes = function () {
+            return _MemoryManager.getMemory(this.getNextTwoBytes());
         };
         return Cpu;
     })();

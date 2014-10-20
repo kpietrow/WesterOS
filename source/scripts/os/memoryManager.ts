@@ -68,7 +68,7 @@ module WesterOS {
 
         // Stores data into a specified address
         public storeData(data, address) {
-            address = parseInt(address, 16) + _CurrentProcess.pcb.base;
+            address += _CurrentProcess.pcb.base;
 
             if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base){
                 _KernelInterruptQueue.enqueue(new Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
@@ -84,7 +84,7 @@ module WesterOS {
         }
 
         private updateByteOutput(address): void {
-            document.getElementById('addr' + parseInt(address, 16)).innerHTML = this.memory.data[address];
+            document.getElementById('addr' + address).innerHTML = this.memory.data[address];
         }
 
         // Updates the memory display

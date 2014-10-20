@@ -66,6 +66,7 @@ module WesterOS {
             WesterOS.Control.displayCpu();
             WesterOS.Control.displayPcb();
             _MemoryManager.displayMemory();
+            this.printCPU();
 
         }
 
@@ -130,7 +131,7 @@ module WesterOS {
 
         // LDA - Load the accumulator from memory
         private loadAccumulatorFromMemory(): void {
-            this.Acc = this.getNextTwoBytes();
+            this.Acc = this.getDataFromNextTwoBytes();
         }
 
         // STA - Store the accumulator in memory
@@ -140,7 +141,7 @@ module WesterOS {
 
         // ADC - Add with carry. Adds to the accumulator
         private addWithCarry(): void {
-            this.Acc += parseInt(this.getNextTwoBytes(), 16);
+            this.Acc += parseInt(this.getDataFromNextTwoBytes(), 16);
         }
 
         // LDX - Load x register with a constant
@@ -151,7 +152,7 @@ module WesterOS {
 
         // LDX - Load x register from memory
         private loadXFromMemory(): void {
-            this.Xreg = this.getNextTwoBytes();
+            this.Xreg = this.getDataFromNextTwoBytes();
         }
 
         // LDY - Load y register with constant
@@ -162,7 +163,7 @@ module WesterOS {
 
         // LDY - Load y register from memory
         private loadYFromMemory(): void {
-            this.Yreg = this.getNextTwoBytes();
+            this.Yreg = this.getDataFromNextTwoBytes();
         }
 
         // BRK - Break!
@@ -179,7 +180,7 @@ module WesterOS {
 
         // CPX - Compare a byte in memory to the x flag, set's the Z flag if equal
         private compareToX(): void {
-            var byte = this.getNextTwoBytes();
+            var byte = this.getDataFromNextTwoBytes();
 
             if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;
@@ -197,7 +198,6 @@ module WesterOS {
                 if (this.PC >= PROGRAM_SIZE) {
                     // Then we've got to fix it
                     this.PC -= PROGRAM_SIZE;
-                    this.PC -= PROGRAM_SIZE;
                 }
             // Don't evaluate next byte is zflag is not 0
             } else {
@@ -208,8 +208,8 @@ module WesterOS {
         // INC - Increment byte's value
         private increment(): void {
             // Get location of data at that location
-            var byte = this.getNextTwoBytes();
-            var data = _MemoryManager.getMemory(byte);
+            var location = this.getNextTwoBytes();
+            var data = _MemoryManager.getMemory(location);
 
             // Convert to increment
             data = parseInt(data, 16);
@@ -225,6 +225,10 @@ module WesterOS {
             _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ));
         }
 
+        private printCPU(): void {
+            console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
+        }
+
 
 
 
@@ -233,7 +237,11 @@ module WesterOS {
             var secondByte = _MemoryManager.getMemory(++this.PC);
             var hex = secondByte + firstByte;
             var decimal = parseInt(hex, 16);
-            return _MemoryManager.getMemory(decimal);
+            return decimal;
+        }
+
+        private getDataFromNextTwoBytes() {
+            return _MemoryManager.getMemory(this.getNextTwoBytes());
         }
     }
 }

@@ -26,6 +26,7 @@ module WesterOS {
 
             // Initialize the console.
             _Console.init();
+            _CPU.init();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -155,6 +156,7 @@ module WesterOS {
                 case CPU_BREAK_IRQ:
                     // Terminate the program
                     _CurrentProcess.pcb.state = "TERMINATED";
+                    _CPU.updateCpu();
                     // Reset CPU
                     _CPU.init();
                     break;
@@ -164,6 +166,7 @@ module WesterOS {
                     break;
 
                 case UNKNOWN_OPCODE_IRQ:
+                    _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_MemoryManager.getMemory(_CPU.PC - 1)));
                     break;
                 default:
