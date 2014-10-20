@@ -15,12 +15,15 @@
    <script type="text/javascript" src="dist/scripts/host/control.js"></script>
    <script type="text/javascript" src="dist/scripts/host/devices.js"></script>
    <script type="text/javascript" src="dist/scripts/host/cpu.js"></script>
+   <script type="text/javascript" src="dist/scripts/host/memory.js"></script>
 
-   <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
+
+    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
    <script type="text/javascript" src="dist/scripts/os/canvastext.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/console-display.js"></script>
    <script type="text/javascript" src="dist/scripts/os/console.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/memoryManager.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriver.js"></script>
    <script type="text/javascript" src="dist/scripts/os/deviceDriverKeyboard.js"></script>
    <script type="text/javascript" src="dist/scripts/os/queue.js"></script>
@@ -31,13 +34,22 @@
 
    <!-- Other Routines -->
    <script type="text/javascript" src="dist/scripts/utils.js"></script>
-   <style type="text/css">
+   <!--<style type="text/css">
        .statusDateTimeTable {
            background-image: url(source/styles/white-design.jpg);
            height: 20px;
            width: 800px;
        }
-   </style>
+   </style>-->
+
+    <!-- Bootstrap -->
+    <link href="source/styles/bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="source/styles/bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+
+
    <!-- Uncomment this line below to enable Glados testing -->
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 
@@ -50,23 +62,25 @@
    <table id="statusDateTimeTable" class="statusDateTimeTable" border="0">
        <tr>
            <td id="statusColumn" align="left">
-               <div id="statusBar">
+               <div id="statusBar" class="label label-primary">
                    STATUS: Ready and waiting
                </div>
            </td>
            <td id="dateColumn" align="right">
-               <div id="dateTime" onload="updateDateTime();">
+               <div id="dateTime" class="label label-success" onload="updateDateTime();">
+                   Time will be activated with WesterOS startup
                </div>
            </td>
        </tr>
    </table>
+    <br>
 
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
              id = "btnStartOS"
              name="brnStartOS"
-             class="normal_button"
+             class="btn btn-success"
              value="Start"
              tabindex="0"
              onclick="WesterOS.Control.hostBtnStartOS_click(this);">
@@ -74,7 +88,7 @@
       <input type="button"
              id = "btnHaltOS"
              name="brnHaltOS"
-             class="normal_button"
+             class="btn btn-danger"
              disabled="disabled"
              value="Halt"
              tabindex="1"
@@ -83,11 +97,12 @@
       <input type="button"
              id = "btnReset"
              name="brnReset"
-             class="normal_button"
+             class="btn btn-warning"
              disabled="disabled"
              value="Reset"
              tabindex="2"
              onclick="WesterOS.Control.hostBtnReset_click(this);">
+
    </div>
 
    <div id="console-display" style="margin-left:4px; width:521px; height:520px; float:left; overflow-y:auto;">
@@ -96,7 +111,6 @@
               height="500px"
               tabindex="3">
       </canvas>
-      <!--<canvas id="storageCanvas"></canvas> -->
    </div>
 
    <div id="divLog" style="margin-left:520px;">
@@ -122,6 +136,58 @@
          ></textarea>
       </label>
    </div>
+
+   <div id="divMemory"><h4>Memory</h4>
+      <table id="memoryTable" class="table table-bordered"></table>
+   </div>
+
+   <div id="cpu"><h4>CPU</h4>
+      <table id="cpuTable" class="table table-bordered">
+          <thead>
+             <tr>
+                 <th>PC</th>
+                 <th>Acc</th>
+                 <th>X-Reg</th>
+                 <th>Y-Reg</th>
+                 <th>Z-Reg</th>
+             </tr>
+          </thead>
+          <tbody>
+             <tr>
+                 <td id="pcValue"></td>
+                 <td id="accValue"></td>
+                 <td id="xRegValue"></td>
+                 <td id="yRegValue"></td>
+                 <td id="zRegValue"></td>
+             </tr>
+          </tbody>
+      </table>
+   </div>
+
+    <div id="pcb"><h4>PCB</h4>
+        <table id="pcbTable" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>PID</th>
+                <th>PC</th>
+                <th>Acc</th>
+                <th>X-Reg</th>
+                <th>Y-Reg</th>
+                <th>Z-Reg</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="pcbPidValue"></td>
+                <td id="pcbPcValue"></td>
+                <td id="pcbAccValue"></td>
+                <td id="pcbXRegValue"></td>
+                <td id="pcbYRegValue"></td>
+                <td id="pcbZRegValue"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 

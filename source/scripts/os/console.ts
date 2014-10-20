@@ -38,12 +38,10 @@ module WesterOS {
 
         public handleInput(): void {
             while (_KernelInputQueue.getSize() > 0) {
-                console.debug("handle input");
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
                 if (chr === String.fromCharCode(13)) { //     Enter key
-                    console.debug("enter");
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
@@ -52,13 +50,11 @@ module WesterOS {
 
                 // Remove last character from the CLI, and decrease the buffer
                 } else if (chr === String.fromCharCode(8)) {
-                    console.debug("backspace");
                     this.removeChar(this.buffer.charAt(this.buffer.length - 1));
                     this.buffer = this.buffer.substring(0, this.buffer.length - 1);
 
                 // Revert to previous command
                 } else if ((chr === "UP") || (chr === "DOWN")) {
-                    console.debug(chr);
                     this.removeChar(this.buffer);
 
                     var newCommand = _OsShell.accessHistory(chr);
@@ -70,7 +66,6 @@ module WesterOS {
                     this.tabComplete();
 
                 } else {
-                    console.debug("normal char");
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -83,7 +78,6 @@ module WesterOS {
 
         // Removes charecter(s) from the console display
         private removeChar(text): void {
-            console.debug("we've reached removeChar");
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition - offset;
@@ -133,7 +127,6 @@ module WesterOS {
 
         // Tab completion
         public tabComplete(): void {
-            console.debug("tab complete time");
             var candidate;
             var found = false;
             var possibleCommands = [];
@@ -179,26 +172,53 @@ module WesterOS {
         public handleScrolling(): void {
             if (this.currentYPosition >= _Canvas.height) {
 
-                var buffer = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
-
-                // Adjust the height. For some reason, the + 6 is enough to keep the text "treading water",
-                // and not sink below the displayable area
-                _Canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                    _FontHeightMargin + 6;
-                var displayContainer = document.getElementById("console-display");
-                displayContainer.scrollTop = displayContainer.scrollHeight;
-                this.clearScreen();
-                _DrawingContext.putImageData(buffer, 0, 0);
+                // Get the canvas data, calculate offset
+                var oldCanvasData = _DrawingContext.getImageData(0, this.currentFontSize + 8, _Canvas.width, _Canvas.height);
+                // Redraw Canvas
+                _DrawingContext.putImageData(oldCanvasData, 0, 0);
+                // Move the current Y position
+                this.currentYPosition = _Canvas.height - this.currentFontSize;
             }
         }
+
+        // Handler for SYS software interrupt, from the CPU
+        public handleSysOpCode(): void {
+            if (_CPU.Xreg === 1) {
+                // Print contents of Y reg
+                this.putText(parseInt(_CPU.Yreg).toString());
+                this.advanceLine();
+                _OsShell.putPrompt();
+            } else if (_CPU.Xreg === 2) {
+                // Print the 00 terminated string. Address is in the y register
+                var output = "";
+                // Location in memory
+                var pointer = _CPU.Yreg;
+                // Current data in memory, at that location
+                var data = _MemoryManager.getMemory(pointer);
+
+                // Find that 00 termination code! AND PUT THAT COOKIE DOWN!
+                while (data !== "00") {
+                    // Convert into char form
+                    output += String.fromCharCode(parseInt(data, 16));
+                    data = _MemoryManager.getMemory(++pointer);
+                }
+
+                this.putText(output);
+                this.advanceLine();
+                _OsShell.putPrompt();
+            }
+        }
+
+
 
         // bsod handled here. In the future the location of this function may have to be moved
         public bsod(): void {
             var display = document.getElementById("display");
-            display.style.background = "url('source/styles/bsod.jpg')";
+            display.style.background = "url('dist/images/bsod.jpg')";
             display.style.backgroundSize = "500px 500px";
             this.clearScreen();
         }
+
 
         // Continuously updates the date and time on the top of the site
         public updateDateTime(): void {

@@ -17,15 +17,32 @@ var APP_VERSION: string = "0.117";   // What did you expect?
 
 var CPU_CLOCK_INTERVAL: number = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
+
+// Interupts
 var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
                             // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
+var PROCESS_EXECUTION_IRQ: number = 2;
+var UNKNOWN_OPCODE_IRQ: number = 3;
+var MEMORY_ACCESS_VIOLATION_IRQ: number = 4;
+var CPU_BREAK_IRQ: number = 5;
+var SYS_OPCODE_IRQ: number = 6;
+
+// Setting some constants for program memory
+var NUMBER_OF_PROGRAMS = 3;
+var PROGRAM_SIZE = 256;
+// Following Bob's lead and making this dynamic
+var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;
 
 
 //
 // Global Variables
 //
 var _CPU: WesterOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
+var _MemoryManager = null;
+
+var _ProcessList = null; // Will be storing processes here until I can think of something better
+var _CurrentProcess = null;
 
 var _OSclock: number = 0;  // Page 23.
 
@@ -36,6 +53,7 @@ var _DrawingContext = null;             // Initialized in hostInit().
 var _DefaultFontFamily = "sans";        // Ignored, I think. The was just a place-holder in 2008, but the HTML canvas may have use for it.
 var _DefaultFontSize = 13;
 var _FontHeightMargin = 4;              // Additional space added to font size when advancing a line.
+
 
 
 var _Trace: boolean = true;  // Default the OS trace to be on.

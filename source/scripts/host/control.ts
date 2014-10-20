@@ -68,6 +68,27 @@ module WesterOS {
             // Optionally update a log database or some streaming service.
         }
 
+        public static displayMemory(display): void {
+            document.getElementById("memoryTable").innerHTML = display;
+        }
+
+        public static displayCpu(): void {
+            document.getElementById("pcValue").innerHTML = String(_CPU.PC);
+            document.getElementById("accValue").innerHTML = String(_CPU.Acc);
+            document.getElementById("xRegValue").innerHTML = String(_CPU.Xreg);
+            document.getElementById("yRegValue").innerHTML = String(_CPU.Yreg);
+            document.getElementById("zRegValue").innerHTML = String(_CPU.Zflag);
+        }
+
+        public static displayPcb(): void {
+            document.getElementById("pcbPidValue").innerHTML = String(_CurrentProcess.pcb.pid);
+            document.getElementById("pcbPcValue").innerHTML = String(_CurrentProcess.pcb.pc);
+            document.getElementById("pcbAccValue").innerHTML = String(_CurrentProcess.pcb.acc);
+            document.getElementById("pcbXRegValue").innerHTML = String(_CurrentProcess.pcb.xReg);
+            document.getElementById("pcbYRegValue").innerHTML = String(_CurrentProcess.pcb.yReg);
+            document.getElementById("pcbZRegValue").innerHTML = String(_CurrentProcess.pcb.zFlag);
+        }
+
 
         //
         // Host Events
@@ -86,6 +107,10 @@ module WesterOS {
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();
             _CPU.init();
+
+            // ... Create and initialize memory
+            _MemoryManager = new MemoryManager();
+            _MemoryManager.init();
 
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);

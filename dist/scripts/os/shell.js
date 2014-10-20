@@ -43,7 +43,7 @@ var WesterOS;
             this.commandList[this.commandList.length] = sc;
 
             // status
-            sc = new WesterOS.ShellCommand(this.shellStatus, "status", "[args\] - Update your status.");
+            sc = new WesterOS.ShellCommand(this.shellStatus, "status", "<string> - Update your status.");
             this.commandList[this.commandList.length] = sc;
 
             // help
@@ -75,7 +75,11 @@ var WesterOS;
             this.commandList[this.commandList.length] = sc;
 
             // load command
-            sc = new WesterOS.ShellCommand(this.shellLoad, "load", "- Loads a user program");
+            sc = new WesterOS.ShellCommand(this.shellLoad, "load", "[priority] - Loads a user program");
+            this.commandList[this.commandList.length] = sc;
+
+            // run command
+            sc = new WesterOS.ShellCommand(this.shellRun, "run", "<PID> - Runs a user program from memory");
             this.commandList[this.commandList.length] = sc;
 
             // bsod command
@@ -332,23 +336,49 @@ var WesterOS;
         };
 
         Shell.prototype.shellLoad = function (args) {
-            var input = (document.getElementById("taProgramInput").value).toUpperCase();
-            var valid = false;
+            var input = document.getElementById("taProgramInput").value;
+            input = input.replace(/\s+/g, ' ').toUpperCase();
+            var priority = 10;
 
-            for (var index in input) {
-                if (input[index] <= "F" && input[index] >= "A") {
-                    valid = true;
-                } else if (input[index] >= "0" && input[index] <= "9") {
-                    valid = true;
-                } else if (input[index] == " ") {
-                    valid = true;
+            // Check to see that there is a program
+            if (input.length <= 0) {
+                _StdOut.putText("ERROR: No program entered.");
+                return;
+            }
+
+            for (var index = 0; index < input.length; index++) {
+                if (!input[index].match(/^[0-9A-F\s]/i)) {
+                    _StdOut.putText("ERROR: Program contains invalid character at location: " + (index + 1));
+                    return;
                 }
             }
 
-            if (valid) {
-                _StdOut.putText("Program input accepted");
+            // Attempt to load the function into the Memory Manager
+            var pid = _MemoryManager.loadProgram(input);
+            if (pid !== null) {
+                _StdOut.putText("PID: " + pid);
             } else {
-                _StdOut.putText("ERROR: Input invalid.");
+            }
+            _MemoryManager.displayMemory();
+        };
+
+        Shell.prototype.shellRun = function (args) {
+            // Check to see if there is PID
+            if (args.length <= 0) {
+                _StdOut.putText("ERROR: Please specify a PID");
+            } else if (!_ProcessList[args[0]]) {
+                _StdOut.putText("ERROR: Invalid PID");
+            } else {
+                // Get requested program
+                var requestedProgram = _ProcessList[args[0]];
+
+                // Check programs state
+                if (requestedProgram.state !== "TERMINATED") {
+                    requestedProgram.state = "READY";
+                    _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
+                } else {
+                    _StdOut.putText("ERROR: Kernel is already handling that process");
+                }
             }
         };
 
@@ -383,9 +413,9 @@ var WesterOS;
 
         // Adds a command to past history
         CommandHistory.prototype.add = function (userCommand) {
-            console.debug(userCommand.command);
             var arguments = "";
 
+            // If the new command has arguments...
             if (userCommand.args.length > 0) {
                 arguments = " ";
                 for (var i = 0; i < userCommand.args.length; i++) {
@@ -394,11 +424,13 @@ var WesterOS;
                 }
             }
 
+            // Attach arguments to new command. Add to list
             var newCommand = userCommand.command + arguments;
             this.history.unshift(newCommand);
             this.position = -1;
         };
 
+        // Get the specified command, if available
         CommandHistory.prototype.getCommand = function () {
             return (this.position === -1) ? "" : this.history[this.position];
         };

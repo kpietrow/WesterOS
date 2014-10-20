@@ -26,6 +26,7 @@ module WesterOS {
 
             // Initialize the console.
             _Console.init();
+            _CPU.init();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -40,6 +41,8 @@ module WesterOS {
             //
             // ... more?
             //
+
+            _ProcessList = new Array();
 
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
@@ -121,6 +124,50 @@ module WesterOS {
                 case KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
+                    break;
+                case PROCESS_EXECUTION_IRQ:
+                    // If a process isn't already being handled...
+                    if (!_CPU.isExecuting) {
+                        // Get a current process
+                        _CurrentProcess = _ProcessList[params[0]];
+                        // Update the process to show a correct state
+                        _ProcessList[params[0]].pcb.state, _CurrentProcess.pcb.state = "RUNNING'"
+                        // Set up the CPU
+                        _CPU.setCpu(_CurrentProcess);
+
+                    // Otherwise forget about it! (We'll add in multiple process execs later)
+                    } else {
+                        _StdOut.putText("ERROR: There is a program already in execution.");
+                    }
+                    break;
+                case MEMORY_ACCESS_VIOLATION_IRQ:
+                    // Shut it down Liz Lemon!
+                    _CurrentProcess.state = "TERMINATED";
+                    // Remove it from the list. SHAME.
+                    _MemoryManager.removeProcessFromList();
+                    this.krnTrace("PID " + _CurrentProcess.pcb.pid + " killed");
+                    this.krnTrace("Memory access violation. PID " + _CurrentProcess.pcb.pid +
+                        " attempted to access memory location " + params[0]);
+
+                    // Reset CPU
+                    _CPU.init();
+                    break;
+
+                case CPU_BREAK_IRQ:
+                    // Terminate the program
+                    _CurrentProcess.pcb.state = "TERMINATED";
+                    _CPU.updateCpu();
+                    // Reset CPU
+                    _CPU.init();
+                    break;
+
+                case SYS_OPCODE_IRQ:
+                    _StdIn.handleSysOpCode();
+                    break;
+
+                case UNKNOWN_OPCODE_IRQ:
+                    _CPU.updateCpu();
+                    this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_MemoryManager.getMemory(_CPU.PC - 1)));
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

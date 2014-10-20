@@ -1,6 +1,12 @@
 WesterOS-2014
 ============
 
+A Game of Thrones themed OS written in Typescript. Fourteen commands are supported at this point, and more functionality will be added as the semester continues.
+
+
+Instructions from Professor:
+=============
+
 This is my Fall 2014 Operating Systems class initial project.
 See http://www.labouseur.com/courses/os/ for details.
 
