@@ -57,138 +57,148 @@
 
 <body onload="onDocumentLoad();">
 
-<div id="divMain" style="width:100%;">
-
-   <table id="statusDateTimeTable" class="statusDateTimeTable" border="0">
-       <tr>
-           <td id="statusColumn" align="left">
-               <div id="statusBar" class="label label-primary">
-                   STATUS: Ready and waiting
-               </div>
-           </td>
-           <td id="dateColumn" align="right">
-               <div id="dateTime" class="label label-success" onload="updateDateTime();">
-                   Time will be activated with WesterOS startup
-               </div>
-           </td>
-       </tr>
-   </table>
-    <br>
-
-
-   <div id="divButtonBar" style="margin:4px;">
-      <input type="button"
-             id = "btnStartOS"
-             name="brnStartOS"
-             class="btn btn-success"
-             value="Start"
-             tabindex="0"
-             onclick="WesterOS.Control.hostBtnStartOS_click(this);">
-
-      <input type="button"
-             id = "btnHaltOS"
-             name="brnHaltOS"
-             class="btn btn-danger"
-             disabled="disabled"
-             value="Halt"
-             tabindex="1"
-             onclick="WesterOS.Control.hostBtnHaltOS_click(this);">
-
-      <input type="button"
-             id = "btnReset"
-             name="brnReset"
-             class="btn btn-warning"
-             disabled="disabled"
-             value="Reset"
-             tabindex="2"
-             onclick="WesterOS.Control.hostBtnReset_click(this);">
-
-   </div>
-
-   <div id="console-display" style="margin-left:4px; width:521px; height:520px; float:left; overflow-y:auto;">
-       <canvas id="display"
-              width="500px"
-              height="500px"
-              tabindex="3">
-      </canvas>
-   </div>
-
-   <div id="divLog" style="margin-left:520px;">
-      <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="26"
-                   cols="48"
-         ></textarea>
-      </label>
-   </div>
-
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         ></textarea>
-      </label>
-   </div>
-
-   <div id="divMemory"><h4>Memory</h4>
-      <table id="memoryTable" class="table table-bordered"></table>
-   </div>
-
-   <div id="cpu"><h4>CPU</h4>
-      <table id="cpuTable" class="table table-bordered">
-          <thead>
-             <tr>
-                 <th>PC</th>
-                 <th>Acc</th>
-                 <th>X-Reg</th>
-                 <th>Y-Reg</th>
-                 <th>Z-Reg</th>
-             </tr>
-          </thead>
-          <tbody>
-             <tr>
-                 <td id="pcValue"></td>
-                 <td id="accValue"></td>
-                 <td id="xRegValue"></td>
-                 <td id="yRegValue"></td>
-                 <td id="zRegValue"></td>
-             </tr>
-          </tbody>
-      </table>
-   </div>
-
-    <div id="pcb"><h4>PCB</h4>
-        <table id="pcbTable" class="table table-bordered">
-            <thead>
-            <tr>
-                <th>PID</th>
-                <th>PC</th>
-                <th>Acc</th>
-                <th>X-Reg</th>
-                <th>Y-Reg</th>
-                <th>Z-Reg</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td id="pcbPidValue"></td>
-                <td id="pcbPcValue"></td>
-                <td id="pcbAccValue"></td>
-                <td id="pcbXRegValue"></td>
-                <td id="pcbYRegValue"></td>
-                <td id="pcbZRegValue"></td>
-            </tr>
-            </tbody>
-        </table>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">WesterOS</a>
+        </div>
+        <div id="navbar" class="pull-right collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="divider-vertical"></li>
+                <li><a href="#" id = "btnStartOS"
+                       name="brnStartOS"
+                       value="Start"
+                       tabindex="0"
+                       onclick="WesterOS.Control.hostBtnStartOS_click(this);">Start</a></li>
+                <li><a href="#" id = "btnHaltOS"
+                       name="brnHaltOS"
+                       class="disabled"
+                       value="Halt"
+                       tabindex="1"
+                       onclick="WesterOS.Control.hostBtnHaltOS_click(this);">Halt</a></li>
+                <li><a href="#" id = "btnReset"
+                       name="brnReset"
+                       class="disabled"
+                       value="Reset"
+                       tabindex="2"
+                       onclick="WesterOS.Control.hostBtnReset_click(this);">Reset</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
+</nav>
 
+<div class="container">
+    <div class="row" id="divMain" style="width:100%;">
+
+       <table id="statusDateTimeTable" class="statusDateTimeTable" border="0">
+           <tr>
+               <td id="statusColumn" align="left">
+                   <div id="statusBar" class="label label-primary">
+                       STATUS: Ready and waiting
+                   </div>
+               </td>
+               <td id="dateColumn" align="right">
+                   <div id="dateTime" class="label label-success" onload="updateDateTime();">
+                       Time will be activated with WesterOS startup
+                   </div>
+               </td>
+           </tr>
+       </table>
+        <br>
+
+
+       <div id="console-display" style="margin-left:4px; width:521px; height:520px; float:left; overflow-y:auto;">
+           <canvas id="display"
+                  width="500px"
+                  height="500px"
+                  tabindex="3">
+          </canvas>
+       </div>
+
+       <div id="divLog" style="margin-left:520px;">
+          <label>
+             Host Log
+             <br>
+             <textarea name="taHostLog"
+                       id  ="taHostLog"
+                       rows="26"
+                       cols="48"
+             ></textarea>
+          </label>
+       </div>
+
+       <div id="divUserProgramInput" style="margin-left:520px;">
+          <label>
+             User Program Input
+             <br>
+             <textarea name="taProgramInput"
+                       id  ="taProgramInput"
+                       rows="8"
+                       cols="48"
+             ></textarea>
+          </label>
+       </div>
+
+        <div class="row">
+       <div class="col-md-4" id="divMemory"><h4>Memory</h4>
+          <table id="memoryTable" class="table table-bordered"></table>
+       </div>
+
+       <div class="col-md-4" id="cpu"><h4>CPU</h4>
+          <table id="cpuTable" class="table table-bordered">
+              <thead>
+                 <tr>
+                     <th>PC</th>
+                     <th>Acc</th>
+                     <th>X-Reg</th>
+                     <th>Y-Reg</th>
+                     <th>Z-Reg</th>
+                 </tr>
+              </thead>
+              <tbody>
+                 <tr>
+                     <td id="pcValue"></td>
+                     <td id="accValue"></td>
+                     <td id="xRegValue"></td>
+                     <td id="yRegValue"></td>
+                     <td id="zRegValue"></td>
+                 </tr>
+              </tbody>
+          </table>
+       </div>
+
+        <div class="col-md-4" id="pcb"><h4>PCB</h4>
+            <table id="pcbTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>PID</th>
+                    <th>PC</th>
+                    <th>Acc</th>
+                    <th>X-Reg</th>
+                    <th>Y-Reg</th>
+                    <th>Z-Reg</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="pcbPidValue"></td>
+                    <td id="pcbPcValue"></td>
+                    <td id="pcbAccValue"></td>
+                    <td id="pcbXRegValue"></td>
+                    <td id="pcbYRegValue"></td>
+                    <td id="pcbZRegValue"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+            </div>
+
+    </div>
 </div>
 
 <p class="footerText" style="clear:both;">

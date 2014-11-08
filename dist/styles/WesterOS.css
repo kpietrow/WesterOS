@@ -17,6 +17,7 @@ body {
     width: 50%;
 }
 
+
 h1 {
   color: black;
   font-size: 24pt;
@@ -51,6 +52,18 @@ h3 {
     height: 250px;
     width: 350px;
     overflow: auto;
+}
+
+.navbar .disabled {
+    color: #bdc3c7 !important;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
 }
 
 .normal_button {

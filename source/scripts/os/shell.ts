@@ -122,6 +122,11 @@ module WesterOS {
                 "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
 
+            // clearmem command
+            sc = new ShellCommand((this.shellClearMem,
+                "clearmem",
+                "- Clears all memory partitions"));
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -423,6 +428,10 @@ module WesterOS {
 
         public shellBSOD(args) {
             _Kernel.krnTrapError("Enabled bsod, for fun and games.");
+        }
+
+        public shellClearMem(args) {
+            _MemoryManager.clearAllMemory();
         }
 
     }
