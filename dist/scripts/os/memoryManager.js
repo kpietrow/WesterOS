@@ -142,6 +142,17 @@ var WesterOS;
             }
         };
 
+        // Clears all memory
+        MemoryManager.prototype.clearAllMemory = function () {
+            for (var i = 0; i < this.memory.bytes; i++) {
+                this.memory.data[i] = "00";
+            }
+
+            for (var i = 0; i < this.locations.length; i++) {
+                this.locations[i].active = false;
+            }
+        };
+
         // Removes a process from the _ProcessList, and deletes its contents in memory
         MemoryManager.prototype.removeProcessFromList = function () {
             this.locations[_CurrentProcess.pcb.location].active = false;

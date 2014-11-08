@@ -86,6 +86,9 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
 
+            // clearmem command
+            sc = new WesterOS.ShellCommand((this.shellClearMem, "clearmem", "- Clears all memory partitions"));
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -384,6 +387,10 @@ var WesterOS;
 
         Shell.prototype.shellBSOD = function (args) {
             _Kernel.krnTrapError("Enabled bsod, for fun and games.");
+        };
+
+        Shell.prototype.shellClearMem = function (args) {
+            _MemoryManager.clearAllMemory();
         };
         return Shell;
     })();

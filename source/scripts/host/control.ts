@@ -96,10 +96,11 @@ module WesterOS {
         public static hostBtnStartOS_click(btn): void {
             // Disable the (passed-in) start button...
             btn.disabled = true;
+            $(btn).addClass('disabled');
 
             // .. enable the Halt and Reset buttons ...
-            document.getElementById("btnHaltOS").disabled = false;
-            document.getElementById("btnReset").disabled = false;
+            $("#btnHaltOS").removeClass('disabled');
+            $("#btnReset").removeClass('disabled');
 
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
