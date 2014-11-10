@@ -88,7 +88,17 @@ module WesterOS {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
+                // Now that we're handling multiple programs, we need to know if a context switch is necessary
+                if (_CpuScheduler.determineNeedToContextSwitch()) {
+                    _CpuScheduler.contextSwitch();
+                }
                 _CPU.cycle();
+
+                WesterOS.Control.displayCpu();
+                WesterOS.Control.displayPcb();
+                _MemoryManager.displayMemory();
+                _CPU.printCPU();
+
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
@@ -128,24 +138,21 @@ module WesterOS {
                     _StdIn.handleInput();
                     break;
                 case PROCESS_EXECUTION_IRQ:
-                    // If a process isn't already being handled...
-                    if (!_CPU.isExecuting) {
-                        // Get a current process
-                        _CurrentProcess = _ProcessList[params[0]];
-                        // Update the process to show a correct state
-                        _ProcessList[params[0]].pcb.state, _CurrentProcess.pcb.state = "RUNNING'"
-                        // Set up the CPU
-                        _CPU.setCpu(_CurrentProcess);
-
-                    // Otherwise forget about it! (We'll add in multiple process execs later)
+                    console.debug("Process exec irq");
+                    if (_CPU.isExecuting) {
+                        if (_CpuScheduler.determineNeedToContextSwitch()) {
+                            _CpuScheduler.contextSwitch();
+                        }
                     } else {
-                        _StdOut.putText("ERROR: There is a program already in execution.");
+                        _CpuScheduler.start();
                     }
                     break;
                 case CONTEXT_SWITCH_IRQ:
+                    console.debug("context switch irq");
                     _CpuScheduler.contextSwitch();
                     break;
                 case MEMORY_ACCESS_VIOLATION_IRQ:
+                    console.debug("mem access violation irq");
                     // Shut it down Liz Lemon!
                     _CurrentProcess.state = "TERMINATED";
                     // Remove it from the list. SHAME.
@@ -154,25 +161,29 @@ module WesterOS {
                     this.krnTrace("Memory access violation. PID " + _CurrentProcess.pcb.pid +
                         " attempted to access memory location " + params[0]);
 
-                    // Reset CPU
-                    _CPU.init();
+                    // Context switch it
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case CPU_BREAK_IRQ:
+                    console.debug("cpu break irq");
                     // Terminate the program
                     _CurrentProcess.pcb.state = "TERMINATED";
-                    _CPU.updateCpu();
-                    // Reset CPU
-                    _CPU.init();
+                    // Context switch it
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case SYS_OPCODE_IRQ:
+                    console.debug("sys opcode irq");
                     _StdIn.handleSysOpCode();
                     break;
 
                 case UNKNOWN_OPCODE_IRQ:
-                    _CPU.updateCpu();
+                    console.debug("unknown opcode irq");
                     this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_MemoryManager.getMemory(_CPU.PC - 1)));
+                    _CurrentProcess.state = "TERMINATED";
+                    // Context switch it
+                    _CpuScheduler.contextSwitch();
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

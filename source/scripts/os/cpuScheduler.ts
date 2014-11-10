@@ -12,7 +12,7 @@ module WesterOS {
         // Starts the scheduler
         public start(): void {
             // Make sure there is a program to start with
-            if (_ReadyQueue.length > 0) {
+            if (_ReadyQueue.length() > 0) {
                 // Set mode to user mode
                 _Mode = 1;
                 _CurrentProcess = this.determineNextProcess();
@@ -27,6 +27,7 @@ module WesterOS {
         public contextSwitch(): void {
             var nextProcess = this.determineNextProcess();
             if (nextProcess !== null && nextProcess !== undefined) {
+                console.debug("next process success");
                 // Updates current program with state of CPU
                 _CPU.updatePcb();
 
@@ -47,6 +48,7 @@ module WesterOS {
                 _CurrentProcess.state = "RUNNING";
                 _CPU.setCpu(_CurrentProcess);
             } else if (_CurrentProcess.state === "TERMINATED") {
+                console.debug("next process failure");
                 this.stop();
             }
 
@@ -56,13 +58,19 @@ module WesterOS {
 
         // Determines whether or not a context switch is necessary
         public determineNeedToContextSwitch() {
-           //
+            // Because we're just RR...
+            // Only switch if cycle count greater or equal to quantum
+            if (_CycleCounter >= this.quantum) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         // Determines the next process
         // We're just RR right now, so it's the next one in the _ReadyQueue
         private determineNextProcess() {
-            return _ReadyQueue.dequeue;
+            return _ReadyQueue.dequeue();
         }
 
         // Allows user to set the quantum value

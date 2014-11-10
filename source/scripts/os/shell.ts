@@ -431,6 +431,7 @@ module WesterOS {
                 if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
                     _ReadyQueue.enqueue(requestedProgram);
+                    console.debug(_ReadyQueue.length());
                     _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ));
                 } else {
                     _StdOut.putText("ERROR: Kernel is already handling that process");

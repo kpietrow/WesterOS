@@ -10,7 +10,7 @@ var WesterOS;
         // Starts the scheduler
         CpuScheduler.prototype.start = function () {
             // Make sure there is a program to start with
-            if (_ReadyQueue.length > 0) {
+            if (_ReadyQueue.length() > 0) {
                 // Set mode to user mode
                 _Mode = 1;
                 _CurrentProcess = this.determineNextProcess();
@@ -25,6 +25,8 @@ var WesterOS;
         CpuScheduler.prototype.contextSwitch = function () {
             var nextProcess = this.determineNextProcess();
             if (nextProcess !== null && nextProcess !== undefined) {
+                console.debug("next process success");
+
                 // Updates current program with state of CPU
                 _CPU.updatePcb();
 
@@ -46,6 +48,7 @@ var WesterOS;
                 _CurrentProcess.state = "RUNNING";
                 _CPU.setCpu(_CurrentProcess);
             } else if (_CurrentProcess.state === "TERMINATED") {
+                console.debug("next process failure:");
                 this.stop();
             }
 
@@ -53,15 +56,21 @@ var WesterOS;
             _CycleCounter = 0;
         };
 
-        // Determines whether or not a context switch if
+        // Determines whether or not a context switch is necessary
         CpuScheduler.prototype.determineNeedToContextSwitch = function () {
-            //
+            // Because we're just RR...
+            // Only switch if cycle count greater or equal to quantum
+            if (_CycleCounter >= this.quantum) {
+                return true;
+            } else {
+                return false;
+            }
         };
 
         // Determines the next process
         // We're just RR right now, so it's the next one in the _ReadyQueue
         CpuScheduler.prototype.determineNextProcess = function () {
-            return _ReadyQueue.dequeue;
+            return _ReadyQueue.dequeue();
         };
 
         // Allows user to set the quantum value

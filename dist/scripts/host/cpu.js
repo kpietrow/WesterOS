@@ -52,6 +52,7 @@ var WesterOS;
 
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            _CycleCounter++;
             this.execute(this.fetch());
 
             this.updateCpu();
@@ -61,11 +62,6 @@ var WesterOS;
             if (this.isExecuting) {
                 this.updatePcb();
             }
-
-            WesterOS.Control.displayCpu();
-            WesterOS.Control.displayPcb();
-            _MemoryManager.displayMemory();
-            this.printCPU();
         };
 
         // Keeps the PCB up to date
@@ -82,7 +78,7 @@ var WesterOS;
         };
 
         Cpu.prototype.execute = function (instruction) {
-            console.debug(instruction);
+            //console.debug(instruction);
             instruction = String(instruction);
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
@@ -225,7 +221,7 @@ var WesterOS;
         };
 
         Cpu.prototype.printCPU = function () {
-            console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
+            //console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
         };
 
         Cpu.prototype.getNextTwoBytes = function () {

@@ -16,6 +16,10 @@ var WesterOS;
             return this.q.length;
         };
 
+        Queue.prototype.length = function () {
+            return this.q.length;
+        };
+
         Queue.prototype.isEmpty = function () {
             return (this.q.length == 0);
         };

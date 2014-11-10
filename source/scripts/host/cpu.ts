@@ -52,6 +52,7 @@ module WesterOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            _CycleCounter++;
             this.execute(this.fetch());
 
             this.updateCpu();
@@ -62,11 +63,6 @@ module WesterOS {
             if (this.isExecuting) {
                 this.updatePcb();
             }
-
-            WesterOS.Control.displayCpu();
-            WesterOS.Control.displayPcb();
-            _MemoryManager.displayMemory();
-            this.printCPU();
 
         }
 
@@ -85,7 +81,7 @@ module WesterOS {
         }
 
         public execute(instruction) {
-            console.debug(instruction);
+            //console.debug(instruction);
             instruction = String(instruction);
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
@@ -226,7 +222,7 @@ module WesterOS {
         }
 
         private printCPU(): void {
-            console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
+            //console.debug(this.PC + ", " + this.Acc + ", " + this.Xreg + ", " + this.Yreg + ", " + this.Zflag + "");
         }
 
 

@@ -18,6 +18,10 @@ module WesterOS {
             return this.q.length;
         }
 
+        public length() {
+            return this.q.length;
+        }
+
         public isEmpty(){
             return (this.q.length == 0);
         }
