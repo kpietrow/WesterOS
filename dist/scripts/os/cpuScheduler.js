@@ -48,7 +48,7 @@ var WesterOS;
                 _CurrentProcess.state = "RUNNING";
                 _CPU.setCpu(_CurrentProcess);
             } else if (_CurrentProcess.state === "TERMINATED") {
-                console.debug("next process failure:");
+                console.debug("next process failure");
                 this.stop();
             }
 
