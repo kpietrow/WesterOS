@@ -24,6 +24,7 @@ var UNKNOWN_OPCODE_IRQ = 3;
 var MEMORY_ACCESS_VIOLATION_IRQ = 4;
 var CPU_BREAK_IRQ = 5;
 var SYS_OPCODE_IRQ = 6;
+var CONTEXT_SWITCH_IRQ = 7;
 
 // Setting some constants for program memory
 var NUMBER_OF_PROGRAMS = 3;
@@ -36,9 +37,12 @@ var MEMORY_SIZE = NUMBER_OF_PROGRAMS * PROGRAM_SIZE;
 // Global Variables
 //
 var _CPU;
+var _CpuScheduler = null;
+var _CycleCounter = 0;
 var _MemoryManager = null;
 
 var _ProcessList = null;
+var _ReadyQueue = null;
 var _CurrentProcess = null;
 
 var _OSclock = 0;

@@ -82,6 +82,14 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellRun, "run", "<PID> - Runs a user program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            // runall command
+            sc = new WesterOS.ShellCommand(this.shellRunAll, "runall", "- Runs all user programs loaded into memory");
+            this.commandList[this.commandList.length] = sc;
+
+            // quantum command
+            sc = new WesterOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets a the quantum to the specified length");
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
@@ -378,10 +386,29 @@ var WesterOS;
                 // Check programs state
                 if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
-                    _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
+                    _ReadyQueue.enqueue(requestedProgram);
+                    _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
                 } else {
                     _StdOut.putText("ERROR: Kernel is already handling that process");
                 }
+            }
+        };
+
+        Shell.prototype.shellRunAll = function (args) {
+            for (var i = 0; i < _ProcessList.length; i++) {
+                var requestedProgram = _ProcessList[i];
+                if (requestedProgram.state !== "TERMINATED") {
+                    _ReadyQueue.enqueue(requestedProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
+        };
+
+        Shell.prototype.quantum = function (args) {
+            if (args.length > 0) {
+                _CpuScheduler.setQuantum(args[0]);
+            } else {
+                _StdOut.putText("ERROR: Please supply an integer value.");
             }
         };
 

@@ -116,6 +116,18 @@ module WesterOS {
                 "<PID> - Runs a user program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            // runall command
+            sc = new ShellCommand(this.shellRunAll,
+                "runall",
+                "- Runs all user programs loaded into memory");
+            this.commandList[this.commandList.length] = sc;
+
+            // quantum command
+            sc = new ShellCommand(this.shellQuantum,
+                "quantum",
+                "<int> - Sets a the quantum to the specified length");
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new ShellCommand(this.shellBSOD,
                 "bsod",
@@ -418,11 +430,30 @@ module WesterOS {
                 // Check programs state
                 if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
-                    _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ, args[0]));
+                    _ReadyQueue.enqueue(requestedProgram);
+                    _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ));
                 } else {
                     _StdOut.putText("ERROR: Kernel is already handling that process");
                 }
 
+            }
+        }
+
+        public shellRunAll(args) {
+            for (var i = 0; i < _ProcessList.length; i++) {
+                var requestedProgram = _ProcessList[i];
+                if (requestedProgram.state !== "TERMINATED") {
+                    _ReadyQueue.enqueue(requestedProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ));
+        }
+
+        public quantum(args) {
+            if (args.length > 0) {
+                _CpuScheduler.setQuantum(args[0]);
+            } else {
+                _StdOut.putText("ERROR: Please supply an integer value.");
             }
         }
 

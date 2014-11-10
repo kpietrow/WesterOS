@@ -71,7 +71,7 @@ module WesterOS {
         }
 
         // Keeps the PCB up to date
-        private updatePcb(): void {
+        public updatePcb(): void {
             _CurrentProcess.pcb.pc = _CPU.PC;
             _CurrentProcess.pcb.acc = _CPU.Acc;
             _CurrentProcess.pcb.xReg = _CPU.Xreg;

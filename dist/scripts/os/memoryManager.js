@@ -154,7 +154,7 @@ var WesterOS;
         };
 
         // Removes a process from the _ProcessList, and deletes its contents in memory
-        MemoryManager.prototype.removeProcessFromList = function () {
+        MemoryManager.prototype.removeCurrentProcessFromList = function () {
             this.locations[_CurrentProcess.pcb.location].active = false;
             this.clearMemorySegment(_CurrentProcess.pcb.location);
         };

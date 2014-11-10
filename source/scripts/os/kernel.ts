@@ -42,7 +42,9 @@ module WesterOS {
             // ... more?
             //
 
+            _CpuScheduler = new CpuScheduler();
             _ProcessList = new Array();
+            _ReadyQueue = new Queue();
 
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
@@ -140,11 +142,14 @@ module WesterOS {
                         _StdOut.putText("ERROR: There is a program already in execution.");
                     }
                     break;
+                case CONTEXT_SWITCH_IRQ:
+                    _CpuScheduler.contextSwitch();
+                    break;
                 case MEMORY_ACCESS_VIOLATION_IRQ:
                     // Shut it down Liz Lemon!
                     _CurrentProcess.state = "TERMINATED";
                     // Remove it from the list. SHAME.
-                    _MemoryManager.removeProcessFromList();
+                    _MemoryManager.removeCurrentProcessFromList();
                     this.krnTrace("PID " + _CurrentProcess.pcb.pid + " killed");
                     this.krnTrace("Memory access violation. PID " + _CurrentProcess.pcb.pid +
                         " attempted to access memory location " + params[0]);
