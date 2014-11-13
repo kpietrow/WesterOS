@@ -125,7 +125,7 @@ module WesterOS {
             // quantum command
             sc = new ShellCommand(this.shellQuantum,
                 "quantum",
-                "<int> - Sets a the quantum to the specified length");
+                "<int> - Sets the quantum length");
             this.commandList[this.commandList.length] = sc;
 
             // bsod command
@@ -450,7 +450,7 @@ module WesterOS {
             _KernelInterruptQueue.enqueue(new Interrupt(PROCESS_EXECUTION_IRQ));
         }
 
-        public quantum(args) {
+        public shellQuantum(args) {
             if (args.length > 0) {
                 _CpuScheduler.setQuantum(args[0]);
             } else {

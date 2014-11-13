@@ -87,7 +87,7 @@ var WesterOS;
             this.commandList[this.commandList.length] = sc;
 
             // quantum command
-            sc = new WesterOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets a the quantum to the specified length");
+            sc = new WesterOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum length");
             this.commandList[this.commandList.length] = sc;
 
             // bsod command
@@ -405,7 +405,7 @@ var WesterOS;
             _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
         };
 
-        Shell.prototype.quantum = function (args) {
+        Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
                 _CpuScheduler.setQuantum(args[0]);
             } else {

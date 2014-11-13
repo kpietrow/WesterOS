@@ -16,7 +16,7 @@ var WesterOS;
             var dateTime = new Date();
             var dateString = dateTime.toDateString();
             dateString += dateTime.getTime();
-            document.getElementById("dateTime").innerHTML = "POOP";
+            document.getElementById("dateTime").innerHTML = "test";
             setTimeout(this.updateDateTime, 1000);
         };
         return dateTimeDisplay;

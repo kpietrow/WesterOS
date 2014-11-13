@@ -25,8 +25,11 @@ module WesterOS {
 
         // Performs RR context switch
         public contextSwitch(): void {
+            console.debug("context switch time " + _CurrentProcess.state);
+            // Sees if there's another process ready to go
             var nextProcess = this.determineNextProcess();
             if (nextProcess !== null && nextProcess !== undefined) {
+                _Kernel.krnTrace("Current cycle count greater than the quantum of " + this.quantum + ". Switching context.");
                 console.debug("next process success");
                 // Updates current program with state of CPU
                 _CPU.updatePcb();
@@ -41,7 +44,9 @@ module WesterOS {
                 }
 
                 // Updates the display
+                WesterOS.Control.displayCpu();
                 WesterOS.Control.displayPcb();
+                _MemoryManager.displayMemory();
 
                 var lastProcess = _CurrentProcess;
                 _CurrentProcess = nextProcess;
@@ -50,6 +55,8 @@ module WesterOS {
             } else if (_CurrentProcess.state === "TERMINATED") {
                 console.debug("next process failure");
                 this.stop();
+            } else {
+                console.debug("else? " + _CurrentProcess.state);
             }
 
             // Reset cycle counter for a new process
@@ -80,17 +87,21 @@ module WesterOS {
 
         // Stops the scheduler
         private stop(): void {
+            console.debug("stop beginning");
             _MemoryManager.removeCurrentProcessFromList();
+            console.debug("after remove");
             _CPU.isExecuting = false;
 
             // Set mode back to kernel mode
             _Mode = 0;
             // Update display
             _CPU.updatePcb();
+            WesterOS.Control.displayPcb();
             // Reset current process
             _CurrentProcess = null;
             // Reset cycle counter
             _CycleCounter = 0;
+            console.debug("at end");
         }
 
     }
