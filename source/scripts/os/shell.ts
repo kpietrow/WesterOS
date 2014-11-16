@@ -482,16 +482,15 @@ module WesterOS {
             var result = "Active Process PIDs: ";
             var resultBool = false;
 
-            if (_ReadyQueue.length > 0) {
-                console.debug("yoyoyo ready queue length!");
-                for (var i = 0; i < _ReadyQueue.length(); i++) {
-                    if(_ReadyQueue[i].pcb.state !== "TERMINATED") {
-                        resultBool = true;
-                        result += _ReadyQueue[i].pcb.pid + " ";
-                        console.debug("ready queue: " + _ReadyQueue[i].pcb.pid);
-                    }
+            for (var i = 0; i < _ReadyQueue.length(); i++) {
+                console.debug(_ReadyQueue.length());
+                if(_ReadyQueue.q[i].pcb.state !== "TERMINATED") {
+                    resultBool = true;
+                    result += _ReadyQueue.q[i].pcb.pid + " ";
+                    console.debug("ready queue: " + _ReadyQueue.q[i].pcb.pid);
                 }
             }
+
 
             if (_CurrentProcess !== null) {
                 console.debug("current process: " + _CurrentProcess.pcb.pid);
