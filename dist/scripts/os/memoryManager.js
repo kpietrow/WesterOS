@@ -57,10 +57,7 @@ var WesterOS;
             address += _CurrentProcess.pcb.base;
 
             if (address >= _CurrentProcess.pcb.limit || address < _CurrentProcess.pcb.base) {
-                var date = new Date();
-                console.debug("memory: " + date.getMinutes() + " " + date.getSeconds() + " " + date.getMilliseconds());
                 _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(MEMORY_ACCESS_VIOLATION_IRQ, address));
-                console.debug(_KernelInterruptQueue.toString());
             }
 
             return this.memory.data[address];

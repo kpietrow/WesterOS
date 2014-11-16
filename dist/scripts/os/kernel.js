@@ -143,9 +143,6 @@ var WesterOS;
                     _CpuScheduler.contextSwitch();
                     break;
                 case MEMORY_ACCESS_VIOLATION_IRQ:
-                    var date = new Date();
-                    console.debug("memory irq: " + date.getMinutes() + " " + date.getSeconds() + " " + date.getMilliseconds());
-
                     console.debug("mem access violation irq");
 
                     // Shut it down Liz Lemon!
@@ -177,14 +174,12 @@ var WesterOS;
 
                 case UNKNOWN_OPCODE_IRQ:
                     var date = new Date();
-                    console.debug("unknown: " + date.getMinutes() + " " + date.getSeconds() + " " + date.getMilliseconds());
                     console.debug("unknown opcode irq");
                     this.krnTrace("Unknown opcode: " + _MemoryManager.getMemory(_CPU.PC - 1));
                     _CurrentProcess.state = "TERMINATED";
 
                     // Context switch it
                     _CpuScheduler.contextSwitch();
-                    console.debug(_KernelInterruptQueue.toString());
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

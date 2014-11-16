@@ -46,6 +46,10 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellStatus, "status", "<string> - Update your status.");
             this.commandList[this.commandList.length] = sc;
 
+            // ps
+            sc = new WesterOS.ShellCommand(this.shellPS, "ps", " - Displays all active process PIDs.");
+            this.commandList[this.commandList.length] = sc;
+
             // help
             sc = new WesterOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
@@ -56,6 +60,10 @@ var WesterOS;
 
             // cls
             sc = new WesterOS.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
+            this.commandList[this.commandList.length] = sc;
+
+            // clearmem command
+            sc = new WesterOS.ShellCommand(this.shellClearMem, "clearmem", "- Clears all memory partitions.");
             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
@@ -93,9 +101,6 @@ var WesterOS;
             // bsod command
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
-
-            // clearmem command
-            sc = new WesterOS.ShellCommand((this.shellClearMem, "clearmem", "- Clears all memory partitions"));
 
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -419,6 +424,37 @@ var WesterOS;
 
         Shell.prototype.shellClearMem = function (args) {
             _MemoryManager.clearAllMemory();
+            _MemoryManager.displayMemory();
+            _StdOut.putText("All memory locations cleared.");
+        };
+
+        Shell.prototype.shellPS = function (args) {
+            console.debug("start");
+            var result = "Active Process PIDs: ";
+            var resultBool = false;
+
+            if (_ReadyQueue.length > 0) {
+                console.debug("yoyoyo ready queue length!");
+                for (var i = 0; i < _ReadyQueue.length(); i++) {
+                    if (_ReadyQueue[i].pcb.state !== "TERMINATED") {
+                        resultBool = true;
+                        result += _ReadyQueue[i].pcb.pid + " ";
+                        console.debug("ready queue: " + _ReadyQueue[i].pcb.pid);
+                    }
+                }
+            }
+
+            if (_CurrentProcess !== null) {
+                console.debug("current process: " + _CurrentProcess.pcb.pid);
+                resultBool = true;
+                result += _CurrentProcess.pcb.pid;
+            }
+
+            if (resultBool) {
+                _StdOut.putText(result);
+            } else {
+                _StdOut.putText("There are no currrently running processes.");
+            }
         };
         return Shell;
     })();

@@ -81,7 +81,6 @@ module WesterOS {
         }
 
         public execute(instruction) {
-            console.debug(instruction);
             instruction = String(instruction);
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
@@ -114,8 +113,6 @@ module WesterOS {
             } else {
                 // Interrupt to handle unknown code
                 _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPCODE_IRQ));
-                console.debug(_KernelInterruptQueue.toString());
-
             }
             // Increment and continue
             this.PC++;
