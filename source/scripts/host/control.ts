@@ -80,13 +80,57 @@ module WesterOS {
             document.getElementById("zRegValue").innerHTML = String(_CPU.Zflag);
         }
 
-        public static displayPcb(): void {
+        // Displays the contents of the Ready Queue
+        public static displayReadyQueue(): void {
+            /*<th>PID</th>
+            <th>State</th>
+            <th>PC</th>
+            <th>Acc</th>
+                <th>X-Reg</th>
+                <th>Y-Reg</th>
+                <th>Z-Reg</th>
+            <th>Base</th>
+            <th>Limit</th>
+            <th>Location</th>
+            <th>Priority</th>  // Don't need this yet!
+
             document.getElementById("pcbPidValue").innerHTML = String(_CurrentProcess.pcb.pid);
             document.getElementById("pcbPcValue").innerHTML = String(_CurrentProcess.pcb.pc);
             document.getElementById("pcbAccValue").innerHTML = String(_CurrentProcess.pcb.acc);
             document.getElementById("pcbXRegValue").innerHTML = String(_CurrentProcess.pcb.xReg);
             document.getElementById("pcbYRegValue").innerHTML = String(_CurrentProcess.pcb.yReg);
-            document.getElementById("pcbZRegValue").innerHTML = String(_CurrentProcess.pcb.zFlag);
+            document.getElementById("pcbZRegValue").innerHTML = String(_CurrentProcess.pcb.zFlag);*/
+
+            var readyQueue = "";
+            var activeProcesses = new Array();
+
+            if (_CurrentProcess && _CurrentProcess.state !== "TERMINATED") {
+                activeProcesses[_CurrentProcess.pcb.pid] = _CurrentProcess;
+            }
+
+            for (var i = 0; i < _ReadyQueue.length(); i++) {
+                console.debug(i);
+                activeProcesses[_ReadyQueue.q[i].pcb.pid] = _ReadyQueue.q[i];
+            }
+
+            for (var i = 0; i < activeProcesses.length; i++) {
+                var process = activeProcesses.shift();
+                console.debug(process);
+                readyQueue += "<tr>";
+                readyQueue += "<td>" + process.pcb.pid + "</td>";
+                readyQueue += "<td>" + process.state + "</td>";
+                readyQueue += "<td>" + process.pcb.pc + "<td>";
+                readyQueue += "<td>" + process.pcb.acc + "</td>";
+                readyQueue += "<td>" + process.pcb.xReg + "</td>";
+                readyQueue += "<td>" + process.pcb.yReg + "</td>";
+                readyQueue += "<td>" + process.pcb.zFlag + "<td>";
+                readyQueue += "<td>" + process.pcb.base + "</td>";
+                readyQueue += "<td>" + process.pcb.limit + "</td>";
+                readyQueue += "<td>" + process.pcb.location + "</td>";
+                readyQueue += "</tr>";
+            }
+
+            document.getElementById("readyQueueRows").innerHTML = readyQueue;
         }
 
 

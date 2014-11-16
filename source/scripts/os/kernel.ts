@@ -95,7 +95,7 @@ module WesterOS {
                 _CPU.cycle();
 
                 WesterOS.Control.displayCpu();
-                WesterOS.Control.displayPcb();
+                WesterOS.Control.displayReadyQueue();
                 _MemoryManager.displayMemory();
                 //_CPU.printCPU();
 

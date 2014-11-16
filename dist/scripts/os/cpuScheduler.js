@@ -43,7 +43,7 @@ var WesterOS;
 
                 // Updates the display
                 WesterOS.Control.displayCpu();
-                WesterOS.Control.displayPcb();
+                WesterOS.Control.displayReadyQueue();
                 _MemoryManager.displayMemory();
 
                 var lastProcess = _CurrentProcess;
@@ -90,14 +90,13 @@ var WesterOS;
 
             // Update display
             _CPU.updatePcb();
-            WesterOS.Control.displayPcb();
+            WesterOS.Control.displayReadyQueue();
 
             // Reset current process
             _CurrentProcess = null;
 
             // Reset cycle counter
             _CycleCounter = 0;
-            console.debug("at end");
         };
         return CpuScheduler;
     })();

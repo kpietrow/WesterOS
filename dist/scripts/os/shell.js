@@ -94,6 +94,10 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellRunAll, "runall", "- Runs all user programs loaded into memory");
             this.commandList[this.commandList.length] = sc;
 
+            // kill command
+            sc = new WesterOS.ShellCommand(this.shellKill, "kill", "<PID> - Kills the specified active process.");
+            this.commandList[this.commandList.length] = sc;
+
             // quantum command
             sc = new WesterOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum length");
             this.commandList[this.commandList.length] = sc;
@@ -382,17 +386,16 @@ var WesterOS;
             // Check to see if there is PID
             if (args.length <= 0) {
                 _StdOut.putText("ERROR: Please specify a PID");
-            } else if (!_ProcessList[args[0]]) {
+            } else if (!_ProcessList[parseInt(args[0])]) {
                 _StdOut.putText("ERROR: Invalid PID");
             } else {
                 // Get requested program
-                var requestedProgram = _ProcessList[args[0]];
+                var requestedProgram = _ProcessList[parseInt(args[0])];
 
                 // Check programs state
                 if (requestedProgram.state !== "TERMINATED") {
                     requestedProgram.state = "READY";
                     _ReadyQueue.enqueue(requestedProgram);
-                    console.debug(_ReadyQueue.length());
                     _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
                 } else {
                     _StdOut.putText("ERROR: Kernel is already handling that process");
@@ -410,9 +413,69 @@ var WesterOS;
             _KernelInterruptQueue.enqueue(new WesterOS.Interrupt(PROCESS_EXECUTION_IRQ));
         };
 
+        Shell.prototype.shellKill = function (args) {
+            if (args.length > 0) {
+                var processPID = parseInt(args[0]);
+                var found = false;
+                console.debug(typeof processPID);
+
+                // Is is the current process?
+                if (_CurrentProcess && _CurrentProcess.pcb.pid === processPID) {
+                    found = true;
+
+                    // Set to TERMINATED
+                    _CurrentProcess.state = "TERMINATED";
+
+                    // Update the process
+                    _CPU.updatePcb();
+
+                    // Display it
+                    WesterOS.Control.displayReadyQueue();
+
+                    // Log the event
+                    _Kernel.krnTrace("Killed the active process with PID: " + processPID);
+
+                    // Remove it from the Resident List
+                    _MemoryManager.removeCurrentProcessFromList();
+
+                    // Context switch
+                    _CpuScheduler.contextSwitch();
+                } else {
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        // Check for a match
+                        if (_ReadyQueue.q[i].pcb.pid == processPID) {
+                            found = true;
+                            _ReadyQueue.q[i].state = "TERMINATED";
+
+                            // Update the display
+                            _CPU.updatePcb();
+                            WesterOS.Control.displayReadyQueue();
+
+                            // Remove it from Ready Queue
+                            _ReadyQueue.q.splice(i, 1);
+
+                            // Remove it from the Resident List
+                            _MemoryManager.removeCurrentProcessFromList();
+
+                            // Log it
+                            _Kernel.krnTrace("Killed the queued process with PID: " + processPID);
+                            break;
+                        }
+                    }
+
+                    // Couldn't find PID, must not be valid
+                    if (!found) {
+                        _StdOut.putText("ERROR: Please supply a valid PID.");
+                    }
+                }
+            } else {
+                _StdOut.putText("ERROR: Please supply a valid PID.");
+            }
+        };
+
         Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
-                _CpuScheduler.setQuantum(args[0]);
+                _CpuScheduler.setQuantum(parseInt(args[0]));
             } else {
                 _StdOut.putText("ERROR: Please supply an integer value.");
             }
@@ -429,7 +492,6 @@ var WesterOS;
         };
 
         Shell.prototype.shellPS = function (args) {
-            console.debug("start");
             var result = "Active Process PIDs: ";
             var resultBool = false;
 
@@ -438,12 +500,10 @@ var WesterOS;
                 if (_ReadyQueue.q[i].pcb.state !== "TERMINATED") {
                     resultBool = true;
                     result += _ReadyQueue.q[i].pcb.pid + " ";
-                    console.debug("ready queue: " + _ReadyQueue.q[i].pcb.pid);
                 }
             }
 
             if (_CurrentProcess !== null) {
-                console.debug("current process: " + _CurrentProcess.pcb.pid);
                 resultBool = true;
                 result += _CurrentProcess.pcb.pid;
             }
@@ -451,7 +511,7 @@ var WesterOS;
             if (resultBool) {
                 _StdOut.putText(result);
             } else {
-                _StdOut.putText("There are no currrently running processes.");
+                _StdOut.putText("There are no currently running processes.");
             }
         };
         return Shell;

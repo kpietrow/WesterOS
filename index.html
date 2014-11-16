@@ -174,18 +174,25 @@
        </div>
 
         <div class="col-md-4" id="pcb"><h4>PCB</h4>
-            <table id="pcbTable" class="table table-bordered">
+            <table id="readyQueueTable" class="table table-bordered">
                 <thead>
                 <tr>
                     <th>PID</th>
+                    <th>State</th>
                     <th>PC</th>
                     <th>Acc</th>
                     <th>X-Reg</th>
                     <th>Y-Reg</th>
                     <th>Z-Reg</th>
+                    <th>Base</th>
+                    <th>Limit</th>
+                    <th>Location</th>
+                    <th>Priority</th>
                 </tr>
                 </thead>
                 <tbody>
+                <div id="readyQueueRows"></div>
+                <!--
                 <tr>
                     <td id="pcbPidValue"></td>
                     <td id="pcbPcValue"></td>
@@ -193,7 +200,7 @@
                     <td id="pcbXRegValue"></td>
                     <td id="pcbYRegValue"></td>
                     <td id="pcbZRegValue"></td>
-                </tr>
+                </tr> -->
                 </tbody>
             </table>
         </div>
