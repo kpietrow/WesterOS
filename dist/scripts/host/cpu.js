@@ -66,11 +66,11 @@ var WesterOS;
 
         // Keeps the PCB up to date
         Cpu.prototype.updatePcb = function () {
-            _CurrentProcess.pcb.pc = _CPU.PC;
-            _CurrentProcess.pcb.acc = _CPU.Acc;
-            _CurrentProcess.pcb.xReg = _CPU.Xreg;
-            _CurrentProcess.pcb.yReg = _CPU.Yreg;
-            _CurrentProcess.pcb.zFlag = _CPU.Zflag;
+            _CurrentProcess.pcb.pc = this.PC;
+            _CurrentProcess.pcb.acc = this.Acc;
+            _CurrentProcess.pcb.xReg = this.Xreg;
+            _CurrentProcess.pcb.yReg = this.Yreg;
+            _CurrentProcess.pcb.zFlag = this.Zflag;
         };
 
         Cpu.prototype.fetch = function () {
