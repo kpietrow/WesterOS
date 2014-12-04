@@ -66,7 +66,6 @@ module WesterOS {
         public krnKbdDriverEntry() {
             // Initialization routine for this, the kernel-mode Keyboard Device Driver.
             this.status = "loaded";
-            // More?
         }
 
         public krnKbdDispatchKeyPress(params) {

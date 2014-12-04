@@ -102,6 +102,9 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum length");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new WesterOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file with the provided name");
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
@@ -512,6 +515,13 @@ var WesterOS;
                 _StdOut.putText(result);
             } else {
                 _StdOut.putText("There are no currently running processes.");
+            }
+        };
+
+        Shell.prototype.shellCreate = function (args) {
+            if (args.length > 0) {
+            } else {
+                _StdOut.putText("ERROR: Please supply a filename");
             }
         };
         return Shell;

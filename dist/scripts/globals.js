@@ -77,6 +77,9 @@ var _SarcasticMode = false;
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver = null;
 
+// File System Driver
+var _FileSystem = null;
+
 var _hardwareClockID = null;
 
 // For testing...

@@ -146,6 +146,11 @@ module WesterOS {
                 "<int> - Sets the quantum length");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellCreate,
+                "create",
+                "<filename> - Creates a file with the provided name");
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new ShellCommand(this.shellBSOD,
                 "bsod",
@@ -555,6 +560,14 @@ module WesterOS {
                 _StdOut.putText(result);
             } else {
                 _StdOut.putText("There are no currently running processes.");
+            }
+        }
+
+        public shellCreate(args) {
+            if (args.length > 0) {
+
+            } else {
+                _StdOut.putText("ERROR: Please supply a filename");
             }
         }
 

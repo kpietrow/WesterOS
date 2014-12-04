@@ -36,9 +36,13 @@ var WesterOS;
             _krnKeyboardDriver.driverEntry(); // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
 
-            //
-            // ... more?
-            //
+            // Load the File System Device Driver
+            this.krnTrace("Loading the file system device driver.");
+            _FileSystem = new WesterOS.FileSystemDeviceDriver();
+            _FileSystem.driverEntry();
+            this.krnTrace(_FileSystem.status);
+
+            // CPU stuff
             _CpuScheduler = new WesterOS.CpuScheduler();
             _ProcessList = new Array();
             _ReadyQueue = new WesterOS.Queue();
