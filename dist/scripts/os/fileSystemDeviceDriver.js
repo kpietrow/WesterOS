@@ -54,28 +54,28 @@ var WesterOS;
 
             // Check file system's state
             if (!this.fileSystemReady()) {
-                return "File system not ready. Please reformat and try again.";
+                return "ERROR: File system not ready. Please reformat and try again.";
             }
 
             // Locate the directory
             var directory = this.findDirByName(name);
 
             if (directory !== -1) {
-                return "There is already a file with this name.";
+                return "ERROR: There is already a file with this name.";
             }
 
             // Find next available directory entry
             var directoryEntry = this.findNextAvailableDirectoryEntry();
 
             if (directoryEntry === -1) {
-                return "No more available directory entries";
+                return "ERROR: No more available directory entries";
             }
 
             // Find next available file entry
             var fileEntry = this.findNextAvailableFileEntry();
 
             if (fileEntry === -1) {
-                return "No more available file entries";
+                return "ERROR: No more available file entries";
             }
 
             var dirMetaData = "1" + fileEntry;
@@ -88,7 +88,7 @@ var WesterOS;
             localStorage.setItem(fileEntry, (fileMetaData + fileData));
 
             // Update the screen
-            // DO IT, DO IT NOW
+            // todo: DO IT, DO IT NOW
             // Return success
             return "File created successfully!";
         };
@@ -96,19 +96,167 @@ var WesterOS;
         FileSystemDeviceDriver.prototype.writeFile = function (name, data) {
             // First check the file system
             if (!this.fileSystemReady()) {
-                return "The file system is not ready. Please format and try again.";
+                return "ERROR: The file system is not ready. Please format and try again.";
             }
 
             // Find directory with file name
             var dir = this.findDirByName(name);
             if (dir === -1) {
-                return "Could not find a file with the given name";
+                return "ERROR: Could not find a file with the given name";
             }
 
             var dirBlock = this.readData(dir);
 
             // Delete any blocks already present
             this.deleteFile(name, false);
+
+            // Write the data
+            var successfulWrite = this.handleWriteData(dirBlock, data);
+
+            if (!successfulWrite) {
+                return "ERROR: Not enough space on disk to write full file";
+            }
+
+            // todo: Update display and print success
+            return "File successfully written to";
+        };
+
+        // Deletes a file, and possibly the directory listing as wel
+        FileSystemDeviceDriver.prototype.deleteFile = function (name, deleteDirListing) {
+            // Check file system state
+            if (!this.fileSystemReady()) {
+                return "ERROR: The file system is not ready. Please format and try again.";
+            }
+
+            if (name === "MBR") {
+                if (_SarcasticMode) {
+                    return "ERROR: Wat.";
+                } else {
+                    return "ERROR: Cannot delete the MBR";
+                }
+            }
+
+            // Find directory with the file name
+            var dir = this.findDirByName(name);
+            if (dir === -1) {
+                return "ERROR: Could not find a file with the given name";
+            }
+
+            var currentBlock = this.readData(dir);
+            var zeroedData = this.padWithZeros();
+            var affectedBlocks = [this.getChainAddress(currentBlock)];
+
+            // Delete the directory listing if from the shell command,
+            // and leave it if we're just writing
+            if (deleteDirListing) {
+                // Add dir listing to currentBlocks
+                affectedBlocks.push(currentBlock.key);
+            }
+
+            while (this.blockHasLink(currentBlock.meta)) {
+                affectedBlocks.push(this.getChainAddress(currentBlock));
+                currentBlock = this.readData(this.getChainAddress(currentBlock));
+            }
+
+            for (var i = 0; i < affectedBlocks.length; i++) {
+                localStorage.setItem((affectedBlocks[i], zeroedData));
+            }
+
+            // Print it
+            // todo: PRINT IT NOW
+            return "Successfully deleted the specified file";
+        };
+
+        // Reads a specified file
+        FileSystemDeviceDriver.prototype.readFile = function (name) {
+            // Check file system
+            if (!this.fileSystemReady()) {
+                return "ERROR: Could not find a file with the given name";
+            }
+
+            // Find directory with file name
+            var dir = this.findDirByName(name);
+
+            if (dir === -1) {
+                return "ERROR: Could not find file with given name";
+            }
+
+            var dirBlock = this.readData(dir);
+            var dirData = this.readBlocks(this.getChainAddress(dirBlock));
+
+            // todo: RETURN RESULTS
+            return "Success!";
+        };
+
+        // Write some data ja
+        FileSystemDeviceDriver.prototype.handleWriteData = function (dirBlock, data) {
+            var encodedData = this.formatString(data);
+            var encodedDataBlocks = [];
+
+            while (encodedData.length) {
+                // Separate data and pad with zeroes
+                encodedDataBlocks.push(this.padDataString(encodedData.slice(0, this.dataSize)));
+                encodedData = encodedData.slice(this.dataSize);
+            }
+
+            // Iterate over the new blocks array, track which blocks point
+            // to others
+            var currentBlockPointsTo = this.getChainAddress(dirBlock);
+            var lastBlock = "---";
+
+            for (var i = 0; i < encodedDataBlocks.length; i++) {
+                if (currentBlockPointsTo === -1) {
+                    // Ran out of space
+                    // Not so good
+                    return false;
+                }
+
+                // Write to file system
+                localStorage.setItem(currentBlockPointsTo, ("1---" + encodedDataBlocks[i]));
+
+                // Check if metadata needs updating
+                if (lastBlock !== "---") {
+                    var lastBlockData = localStorage.getItem(lastBlock).slice(4);
+                    var lastBlockMetaData = "1" + currentBlockPointsTo;
+                    localStorage.setItem(lastBlock, (lastBlockMetaData + lastBlockData));
+                }
+
+                // Advance pointers
+                lastBlock = currentBlockPointsTo;
+                currentBlockPointsTo = this.findNextAvailableFileEntry();
+            }
+
+            return true;
+        };
+
+        // Formats the file system
+        FileSystemDeviceDriver.prototype.format = function () {
+            if (!this.html5StorageSupported()) {
+                return false;
+            }
+
+            var zeroedData = this.padWithZeros();
+
+            for (var track = 0; track < this.tracks; track++) {
+                for (var sector = 0; sector < this.sectors; sector++) {
+                    for (var block = 0; block < this.blocks; block++) {
+                        localStorage.setItem(this.makeKey(track, sector, block), zeroedData);
+                    }
+                }
+            }
+
+            this.createMBR();
+
+            // PRINT IT
+            // todo: PRINT IT NOW
+            return true;
+        };
+
+        FileSystemDeviceDriver.prototype.createMBR = function () {
+            var dirBlock = this.readData(this.makeKey(0, 0, 0));
+
+            // Write MBR to file system
+            var successfulWrite = this.handleWriteData(dirBlock, "MBR");
         };
 
         FileSystemDeviceDriver.prototype.fileSystemReady = function () {
@@ -217,21 +365,13 @@ var WesterOS;
             return -1;
         };
 
-        // Deletes a file, and possibly the directory listing as wel
-        FileSystemDeviceDriver.prototype.deleteFile = function (name, deleteDirListing) {
-            // Check file system state
-            if (!this.fileSystemReady()) {
-                return "The file system is not ready. Please format and try again.";
+        FileSystemDeviceDriver.prototype.blockHasLink = function (metaData) {
+            var link = metaData.substring(1, this.metaDataBytes);
+            if (link !== "" && link !== "---") {
+                return true;
             }
 
-            if (name === "MBR") {
-                if (_SarcasticMode) {
-                    return "Wat.";
-                } else {
-                    return "Cannot delete the MBR";
-                }
-            }
-            // Find directory with the fil
+            return false;
         };
 
         // Creates a full ID for a specific block
@@ -247,6 +387,10 @@ var WesterOS;
             } catch (e) {
                 return false;
             }
+        };
+
+        FileSystemDeviceDriver.prototype.getChainAddress = function (block) {
+            return block.meta.slice(1, this.metaDataBytes);
         };
 
         FileSystemDeviceDriver.prototype.formatString = function (str) {
