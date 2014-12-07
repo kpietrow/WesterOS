@@ -61,6 +61,7 @@ var WesterOS;
         Cpu.prototype.updateCpu = function () {
             if (this.isExecuting) {
                 this.updatePcb();
+                console.debug("pcb: -" + _CurrentProcess.pcb.pid + "- " + this.PC + " " + this.Acc + " " + this.Xreg + " " + this.Yreg + " " + this.Zflag);
             }
         };
 
@@ -79,6 +80,9 @@ var WesterOS;
 
         Cpu.prototype.execute = function (instruction) {
             instruction = String(instruction);
+            console.debug(instruction);
+            var x = 0;
+
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
             } else if (instruction === 'AD') {
@@ -123,7 +127,7 @@ var WesterOS;
 
         // LDA - Load the accumulator from memory
         Cpu.prototype.loadAccumulatorFromMemory = function () {
-            this.Acc = this.getDataFromNextTwoBytes();
+            this.Acc = parseInt(this.getDataFromNextTwoBytes(), 16);
         };
 
         // STA - Store the accumulator in memory
@@ -144,7 +148,7 @@ var WesterOS;
 
         // LDX - Load x register from memory
         Cpu.prototype.loadXFromMemory = function () {
-            this.Xreg = this.getDataFromNextTwoBytes();
+            this.Xreg = parseInt(this.getDataFromNextTwoBytes(), 16);
         };
 
         // LDY - Load y register with constant
@@ -155,7 +159,7 @@ var WesterOS;
 
         // LDY - Load y register from memory
         Cpu.prototype.loadYFromMemory = function () {
-            this.Yreg = this.getDataFromNextTwoBytes();
+            this.Yreg = parseInt(this.getDataFromNextTwoBytes(), 16);
         };
 
         // BRK - Break!
@@ -173,7 +177,7 @@ var WesterOS;
 
         // CPX - Compare a byte in memory to the x flag, set's the Z flag if equal
         Cpu.prototype.compareToX = function () {
-            var byte = this.getDataFromNextTwoBytes();
+            var byte = parseInt(this.getDataFromNextTwoBytes(), 16);
 
             if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;

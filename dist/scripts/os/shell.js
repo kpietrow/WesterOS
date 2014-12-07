@@ -420,10 +420,12 @@ var WesterOS;
             if (args.length > 0) {
                 var processPID = parseInt(args[0]);
                 var found = false;
-                console.debug(typeof processPID);
+                console.debug("killed " + processPID);
 
                 // Is is the current process?
                 if (_CurrentProcess && _CurrentProcess.pcb.pid === processPID) {
+                    console.debug("killed current");
+
                     found = true;
 
                     // Set to TERMINATED
@@ -444,6 +446,8 @@ var WesterOS;
                     // Context switch
                     _CpuScheduler.contextSwitch();
                 } else {
+                    console.debug("killed waiting");
+
                     for (var i = 0; i < _ReadyQueue.length(); i++) {
                         // Check for a match
                         if (_ReadyQueue.q[i].pcb.pid == processPID) {
@@ -454,11 +458,11 @@ var WesterOS;
                             _CPU.updatePcb();
                             WesterOS.Control.displayReadyQueue();
 
+                            // Remove it from the Resident List
+                            _MemoryManager.removeProcessFromList(_ReadyQueue.q[i].pcb);
+
                             // Remove it from Ready Queue
                             _ReadyQueue.q.splice(i, 1);
-
-                            // Remove it from the Resident List
-                            _MemoryManager.removeCurrentProcessFromList();
 
                             // Log it
                             _Kernel.krnTrace("Killed the queued process with PID: " + processPID);
@@ -520,6 +524,8 @@ var WesterOS;
 
         Shell.prototype.shellCreate = function (args) {
             if (args.length > 0) {
+                var result = _FileSystem.createFile(args[0]);
+                _StdOut.putText(result);
             } else {
                 _StdOut.putText("ERROR: Please supply a filename");
             }

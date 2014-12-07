@@ -153,10 +153,16 @@ var WesterOS;
             }
         };
 
-        // Removes a process from the _ProcessList, and deletes its contents in memory
+        // Removes the current process from the _ProcessList, and deletes its contents in memory
         MemoryManager.prototype.removeCurrentProcessFromList = function () {
             this.locations[_CurrentProcess.pcb.location].active = false;
             this.clearMemorySegment(_CurrentProcess.pcb.location);
+        };
+
+        // Removes a process from the _ProcessList, and deletes its contents in memory
+        MemoryManager.prototype.removeProcessFromList = function (pcb) {
+            this.locations[pcb.pid].active = false;
+            this.clearMemorySegment(pcb.location);
         };
         return MemoryManager;
     })();

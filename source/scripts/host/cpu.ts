@@ -62,6 +62,7 @@ module WesterOS {
 
             if (this.isExecuting) {
                 this.updatePcb();
+                console.debug("pcb: -" + _CurrentProcess.pcb.pid + "- " + this.PC + " " + this.Acc + " " + this.Xreg + " " + this.Yreg + " " + this.Zflag);
             }
 
         }
@@ -82,6 +83,9 @@ module WesterOS {
 
         public execute(instruction) {
             instruction = String(instruction);
+            console.debug(instruction);
+            var x = 0;
+
             if (instruction === 'A9') {
                 this.loadAccumulatorConstant();
             } else if (instruction === 'AD') {
@@ -126,7 +130,7 @@ module WesterOS {
 
         // LDA - Load the accumulator from memory
         private loadAccumulatorFromMemory(): void {
-            this.Acc = this.getDataFromNextTwoBytes();
+            this.Acc = parseInt(this.getDataFromNextTwoBytes(), 16);
         }
 
         // STA - Store the accumulator in memory
@@ -147,7 +151,7 @@ module WesterOS {
 
         // LDX - Load x register from memory
         private loadXFromMemory(): void {
-            this.Xreg = this.getDataFromNextTwoBytes();
+            this.Xreg = parseInt(this.getDataFromNextTwoBytes(), 16);
         }
 
         // LDY - Load y register with constant
@@ -158,7 +162,7 @@ module WesterOS {
 
         // LDY - Load y register from memory
         private loadYFromMemory(): void {
-            this.Yreg = this.getDataFromNextTwoBytes();
+            this.Yreg = parseInt(this.getDataFromNextTwoBytes(), 16);
         }
 
         // BRK - Break!
@@ -175,7 +179,7 @@ module WesterOS {
 
         // CPX - Compare a byte in memory to the x flag, set's the Z flag if equal
         private compareToX(): void {
-            var byte = this.getDataFromNextTwoBytes();
+            var byte = parseInt(this.getDataFromNextTwoBytes(), 16);
 
             if (parseInt(String(this.Xreg)) === parseInt(byte)) {
                 this.Zflag = 1;

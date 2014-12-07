@@ -67,7 +67,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">WesterOS</a>
+            <a id="brand" class="navbar-brand" href="index.html" style="color:dodgerblue;">Wester<strong class="text-primary" style="color:darkblue;">OS</strong></a>
         </div>
         <div id="navbar" class="pull-right collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -95,8 +95,6 @@
 </nav>
 
 <div class="container">
-    <div class="row" id="divMain" style="width:100%;">
-
        <table id="statusDateTimeTable" class="statusDateTimeTable" border="0">
            <tr>
                <td id="statusColumn" align="left">
@@ -113,8 +111,9 @@
        </table>
         <br>
 
+  <div class="row">
 
-       <div id="console-display" style="margin-left:4px; width:521px; height:520px; float:left; overflow-y:auto;">
+    <div id="console-display" class="col-xs-7" style="margin-left:4px;">
            <canvas id="display"
                   width="500px"
                   height="500px"
@@ -122,7 +121,10 @@
           </canvas>
        </div>
 
-       <div id="divLog" style="margin-left:520px;">
+      <div class="col-xs-3">
+          <div class="row">
+
+       <div id="divLog" style="margin-left:4px;">
           <label>
              Host Log
              <br>
@@ -134,7 +136,7 @@
           </label>
        </div>
 
-       <div id="divUserProgramInput" style="margin-left:520px;">
+       <div id="divUserProgramInput" style="margin-left:4px;">
           <label>
              User Program Input
              <br>
@@ -145,13 +147,16 @@
              ></textarea>
           </label>
        </div>
+      </div>
+    </div>
+      </div>
 
         <div class="row">
-       <div class="col-md-4" id="divMemory"><h4>Memory</h4>
+       <div class="col-xs-4" id="divMemory"><h4>Memory</h4>
           <table id="memoryTable" class="table table-bordered"></table>
        </div>
 
-       <div class="col-md-4" id="cpu"><h4>CPU</h4>
+       <div class="col-xs-3" id="cpu"><h4>CPU</h4>
           <table id="cpuTable" class="table table-bordered">
               <thead>
                  <tr>
@@ -174,7 +179,7 @@
           </table>
        </div>
 
-        <div class="col-md-4" id="pcb"><h4>Active Processes</h4>
+        <div class="col-xs-3" id="pcb"><h4>Active Processes</h4>
             <table id="readyQueueTable" class="table table-bordered">
                 <thead>
                 <tr>
@@ -203,9 +208,7 @@
                 </tbody>
             </table>
         </div>
-            </div>
-
-    </div>
+      </div>
 </div>
 
 <p class="footerText" style="clear:both;">
