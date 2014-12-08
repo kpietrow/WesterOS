@@ -45,37 +45,42 @@ var WesterOS;
 
         // Creates a file in the file system
         FileSystemDeviceDriver.prototype.createFile = function (name) {
-            var result = "";
+            var result = { "status": "error", "message": "", "data": "" };
 
             // Make sure name isn't too large
             if (this.formatString(name).length > this.dataSize) {
-                return "ERROR: File name too long";
+                result.message = "ERROR: File name too long";
+                return result;
             }
 
             // Check file system's state
             if (!this.fileSystemReady()) {
-                return "ERROR: File system not ready. Please reformat and try again.";
+                result.message = "ERROR: File system not ready. Please reformat and try again.";
+                return;
             }
 
             // Locate the directory
             var directory = this.findDirByName(name);
 
             if (directory !== -1) {
-                return "ERROR: There is already a file with this name.";
+                result.message = "ERROR: There is already a file with this name.";
+                return result;
             }
 
             // Find next available directory entry
             var directoryEntry = this.findNextAvailableDirectoryEntry();
 
             if (directoryEntry === -1) {
-                return "ERROR: No more available directory entries";
+                result.message = "ERROR: No more available directory entries";
+                return result;
             }
 
             // Find next available file entry
             var fileEntry = this.findNextAvailableFileEntry();
 
             if (fileEntry === -1) {
-                return "ERROR: No more available file entries";
+                result.message = "ERROR: No more available file entries";
+                return result;
             }
 
             var dirMetaData = "1" + fileEntry;
@@ -90,19 +95,25 @@ var WesterOS;
             // Update the screen
             // todo: DO IT, DO IT NOW
             // Return success
-            return "File created successfully!";
+            result.status = "Success";
+            result.message = "File created successfully!";
+            return result;
         };
 
         FileSystemDeviceDriver.prototype.writeFile = function (name, data) {
+            var result = { "status": "error", "message": "", "data": "" };
+
             // First check the file system
             if (!this.fileSystemReady()) {
-                return "ERROR: The file system is not ready. Please format and try again.";
+                result.message = "ERROR: The file system is not ready. Please format and try again.";
+                return result;
             }
 
             // Find directory with file name
             var dir = this.findDirByName(name);
             if (dir === -1) {
-                return "ERROR: Could not find a file with the given name";
+                result.message = "ERROR: Could not find a file with the given name";
+                return result;
             }
 
             var dirBlock = this.readData(dir);
@@ -114,11 +125,14 @@ var WesterOS;
             var successfulWrite = this.handleWriteData(dirBlock, data);
 
             if (!successfulWrite) {
-                return "ERROR: Not enough space on disk to write full file";
+                result.message = "ERROR: Not enough space on disk to write full file";
+                return result;
             }
 
             // todo: Update display and print success
-            return "File successfully written to";
+            result.status = "Success";
+            result.message = "File successfully written to";
+            return result;
         };
 
         // Deletes a file, and possibly the directory listing as wel
@@ -130,9 +144,10 @@ var WesterOS;
 
             if (name === "MBR") {
                 if (_SarcasticMode) {
-                    return "ERROR: Wat.";
+                    result.message = "ERROR: Wat.";
+                    return result;
                 } else {
-                    return "ERROR: Cannot delete the MBR";
+                    result.message = "ERROR: Cannot delete the MBR";
                 }
             }
 
@@ -227,6 +242,19 @@ var WesterOS;
             }
 
             return true;
+        };
+
+        // Reads in all linked blocks starting with the key
+        FileSystemDeviceDriver.prototype.readBlocks = function (key) {
+            var currentData = this.readData(key);
+            var returnString = currentData.data;
+
+            while (this.blockHasLink(currentData.meta)) {
+                currentData = this.readData(this.getChainAddress(currentData));
+                returnString += currentData.data;
+            }
+
+            return returnString;
         };
 
         // Formats the file system
