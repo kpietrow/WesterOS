@@ -137,9 +137,12 @@ var WesterOS;
 
         // Deletes a file, and possibly the directory listing as wel
         FileSystemDeviceDriver.prototype.deleteFile = function (name, deleteDirListing) {
+            var result = { "status": "error", "message": "", "data": "" };
+
             // Check file system state
             if (!this.fileSystemReady()) {
-                return "ERROR: The file system is not ready. Please format and try again.";
+                result.message = "ERROR: The file system is not ready. Please format and try again.";
+                return result;
             }
 
             if (name === "MBR") {
@@ -148,13 +151,15 @@ var WesterOS;
                     return result;
                 } else {
                     result.message = "ERROR: Cannot delete the MBR";
+                    return result;
                 }
             }
 
             // Find directory with the file name
             var dir = this.findDirByName(name);
             if (dir === -1) {
-                return "ERROR: Could not find a file with the given name";
+                result.message = "ERROR: Could not find a file with the given name";
+                return result;
             }
 
             var currentBlock = this.readData(dir);
@@ -174,33 +179,41 @@ var WesterOS;
             }
 
             for (var i = 0; i < affectedBlocks.length; i++) {
-                localStorage.setItem((affectedBlocks[i], zeroedData));
+                localStorage.setItem(affectedBlocks[i], zeroedData);
             }
 
             // Print it
             // todo: PRINT IT NOW
-            return "Successfully deleted the specified file";
+            result.status = "Success";
+            result.message = "File was successfully deleted";
+            return result;
         };
 
         // Reads a specified file
         FileSystemDeviceDriver.prototype.readFile = function (name) {
+            var result = { "status": "error", "message": "", "data": "" };
+
             // Check file system
             if (!this.fileSystemReady()) {
-                return "ERROR: Could not find a file with the given name";
+                result.message = "ERROR: Could not find a file with the given name";
+                return result;
             }
 
             // Find directory with file name
             var dir = this.findDirByName(name);
 
             if (dir === -1) {
-                return "ERROR: Could not find file with given name";
+                result.message = "ERROR: Could not find file with given name";
+                return result;
             }
 
             var dirBlock = this.readData(dir);
             var dirData = this.readBlocks(this.getChainAddress(dirBlock));
 
-            // todo: RETURN RESULTS
-            return "Success!";
+            result.status = "Success";
+            result.message = "File contents read successfully";
+            result.data = dirData;
+            return result;
         };
 
         // Write some data ja
@@ -278,6 +291,31 @@ var WesterOS;
             // PRINT IT
             // todo: PRINT IT NOW
             return true;
+        };
+
+        FileSystemDeviceDriver.prototype.listDirectory = function () {
+            var result = { "status": "error", "message": "", "data": [] };
+
+            // Check file system
+            if (!this.fileSystemReady()) {
+                result.message = "ERROR: The file system is not ready. Please format and try again.";
+                return result;
+            }
+
+            for (var sector = 0; sector < this.sectors; sector++) {
+                for (var block = 0; block < this.blocks; block++) {
+                    var key = this.makeKey(0, sector, block);
+                    var data = this.readData(key);
+
+                    if (this.blockIsActive(data)) {
+                        result.data.push({ "key": data.key, "name": data.data });
+                    }
+                }
+            }
+
+            result.status = "Success";
+            result.message = "The file system directory was successfully read";
+            return result;
         };
 
         FileSystemDeviceDriver.prototype.createMBR = function () {

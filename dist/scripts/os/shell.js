@@ -105,6 +105,21 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file with the provided name");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new WesterOS.ShellCommand(this.shellRead, "read", "<filename> - Read and display contents of <filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new WesterOS.ShellCommand(this.shellWrite, "write", '<filename> "data" - Write the data inside the quotes to <filename>');
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new WesterOS.ShellCommand(this.shellDelete, "delete", '<filename> - Removes <filename> from storage');
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new WesterOS.ShellCommand(this.shellFormat, "format", '- Initialize all blocks in all sectors and tracks');
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new WesterOS.ShellCommand(this.shellLs, "ls", '- Lists all files stored on the disk');
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
@@ -525,9 +540,79 @@ var WesterOS;
         Shell.prototype.shellCreate = function (args) {
             if (args.length > 0) {
                 var result = _FileSystem.createFile(args[0]);
-                _StdOut.putText(result);
+                _StdOut.putText(result.message);
             } else {
                 _StdOut.putText("ERROR: Please supply a filename");
+            }
+        };
+
+        Shell.prototype.shellRead = function (args) {
+            if (args.length > 0) {
+                var result = _FileSystem.readFile(args[0]);
+
+                if (result.status === "Success") {
+                    _StdOut.putText(result.data);
+                } else {
+                    _StdOut.putText(result.message);
+                }
+            } else {
+                _StdOut.putText("ERROR: Please input a file name");
+            }
+        };
+
+        Shell.prototype.shellWrite = function (args) {
+            if (args.length > 0) {
+                var data = "";
+
+                for (var i = 1; i < args.length; i++) {
+                    // Also put a space before each data point
+                    if (i > 1) {
+                        data += " " + args[i];
+                    } else {
+                        data += args[i];
+                    }
+                }
+
+                var result = _FileSystem.writeFile(args[0], data);
+                _StdOut.putText(result.message);
+            } else {
+                _StdOut.putText("ERROR: Please supply a file name and data");
+            }
+        };
+
+        Shell.prototype.shellDelete = function (args) {
+            if (args.length > 0) {
+                var result = _FileSystem.deleteFile(args[0], true);
+                _StdOut.putText(result.message);
+            } else {
+                _StdOut.putText("ERROR: Please supply a file name");
+            }
+        };
+
+        Shell.prototype.shellFormat = function (args) {
+            var success = _FileSystem.format();
+
+            if (success) {
+                _StdOut.putText("File system successfully formatted");
+            } else {
+                _StdOut.putText("ERROR: Formatting was not successful");
+            }
+        };
+
+        Shell.prototype.shellLs = function (args) {
+            var result = _FileSystem.listDirectory();
+
+            if (result.status === "Success") {
+                if (result.data.length) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        _StdOut.putText(result.data[i].key + " : " + result.data[i].name);
+                        _StdOut.advanceLine();
+                    }
+                } else {
+                    _StdOut.putText("There are no files currently in the file system");
+                }
+            } else {
+                _StdOut.putText(result.message);
             }
         };
         return Shell;
