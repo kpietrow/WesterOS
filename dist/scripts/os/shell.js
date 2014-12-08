@@ -562,19 +562,30 @@ var WesterOS;
 
         Shell.prototype.shellWrite = function (args) {
             if (args.length > 0) {
-                var data = "";
+                if (args.length > 1) {
+                    var finalData = "";
+                    var lastArg = args[args.length - 1];
 
-                for (var i = 1; i < args.length; i++) {
-                    // Also put a space before each data point
-                    if (i > 1) {
-                        data += " " + args[i];
+                    if ((args[1].charAt(0) === lastArg.charAt(lastArg.length - 1) && (args[1].charAt(0) === "'" || args[1].charAt(0) === '"'))) {
+                        for (var i = 1; i < args.length; i++) {
+                            // Also put a space before each data point
+                            if (i === 1) {
+                                finalData += args[i].slice(1);
+                            } else if (i === args.length - 1) {
+                                finalData += " " + args[i].slice(0, -1);
+                            } else {
+                                finalData += " " + args[i];
+                            }
+                        }
+
+                        var result = _FileSystem.writeFile(args[0], finalData);
+                        _StdOut.putText(result.message);
                     } else {
-                        data += args[i];
+                        _StdOut.putText("ERROR: Incorrect data format: " + args[1] + " " + args.length);
                     }
+                } else {
+                    _StdOut.putText("ERROR: Please supply file data");
                 }
-
-                var result = _FileSystem.writeFile(args[0], data);
-                _StdOut.putText(result.message);
             } else {
                 _StdOut.putText("ERROR: Please supply a file name and data");
             }

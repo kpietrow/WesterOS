@@ -23,9 +23,28 @@ var WesterOS;
         // Load program from the User Input
         MemoryManager.prototype.loadProgram = function (program) {
             var programLocation = this.getAvailableProgramLocation();
+
+            // Main memory is full, try to put it into the file system
             if (programLocation === null) {
-                _StdOut.putText('ERROR: There are too many programs already in memory');
-                return null;
+                var pcb = new WesterOS.Pcb();
+                var file = _FileSystem.createFile("swap" + pcb.pid);
+
+                if (file.status === "error") {
+                    _StdOut.putText("ERROR: No available program locations are left in memory or in the file system");
+                    return null;
+                }
+
+                var write = _FileSystem.writeFile("swap" + pcb.pid);
+
+                if (write.status === "error") {
+                    _StdOut.putText(write.message);
+                    return null;
+                }
+
+                pcb.location = -1;
+                _ProcessList[pcb.pid] = { pcb: pcb, state: "NEW" };
+
+                return pcb.pid;
             } else {
                 // Create PCB for process
                 var thisPcb = new WesterOS.Pcb();
@@ -49,6 +68,40 @@ var WesterOS;
 
                 return thisPcb.pid;
             }
+        };
+
+        // Moves process to the file system
+        MemoryManager.prototype.rollOut = function (program) {
+            _Kernel.krnTrace("Rolling out PID: " + program.pcb.pid);
+
+            // Create the file in the file system
+            var createFile = _FileSystem.createFile("swap" + program.pcb.pid);
+
+            if (createFile.status === "error") {
+                return false;
+            }
+
+            // Find the location of this process in memory
+            var locationInMem = this.findLocationWithBase(program.pcb.base);
+            if (locationInMem === -1) {
+                return false;
+            }
+
+            // Write the file to disk
+            var writeFile = _FileSystem.writeFile("swap" + program.pcb.pid, this.readProgramAtLocation(locationInMem));
+            if (writeFile.status === "error") {
+                return false;
+            }
+        };
+
+        MemoryManager.prototype.findLocationWithBase = function (base) {
+            for (var i = 0; i < this.locations.length; i++) {
+                if (this.locations[i].base === base) {
+                    return i;
+                }
+            }
+
+            return -1;
         };
 
         // Grabs the memory at the base location of the current process
