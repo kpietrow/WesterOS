@@ -86,7 +86,7 @@ module WesterOS {
             }
 
             // Find the location of this process in memory
-            var locationInMem = this.findLocationWithBase(program.pcb.base);
+            var locationInMem = program.pcb.location;
             if (locationInMem === -1) {
                 return false;
             }
@@ -97,18 +97,56 @@ module WesterOS {
                 return false;
             }
 
+            // Mark the location as inactive
+            this.locations[locationInMem].active = false;
+
+            // Update the process state to reflect changes in the base and limit
+            program.pcb.base = -1;
+            program.pcb.limit = -1;
+            program.pcb.location = -1;
+
+            // Update the view
+            // todo: UPDATE (although this should probs happen automatically in the kernel)
+
+            return true;
+
         }
 
-        public findLocationWithBase(base) {
-            for (var i = 0; i < this.locations.length; i++) {
-                if (this.locations[i].base === base) {
-                    return i;
-                }
+        // Moves process out of the file system
+        public rollIn(program) {
+            _Kernel.krnTrace("Rolling in PID: " + program.pcb.pid);
+
+            // Ensure that we have a spot in memory
+            var programLocation = this.getAvailableProgramLocation();
+            if (programLocation === null) {
+                return false;
             }
 
-            return -1;
-        }
+            // Read in the process from the file system
+            var fileFromDisk = _FileSystem.readFile("swap" + program.pcb.pid);
+            if (fileFromDisk.status === "error") {
+                return false;
+            }
 
+            // Bring the process into memory
+            this.loadProgramIntoMemory(fileFromDisk.data, programLocation);
+
+            // Remove the process from the file system
+            var deleteProcess = _FileSystem.deleteFile("swap" + program.pcb.pid, true);
+            if (deleteProcess.status === "error") {
+                return false;
+            }
+
+            // Update the process state
+            program.pcb.base = this.locations[programLocation].base;
+            program.pcb.limit = this.locations[programLocation].limit;
+            program.pcb.location = programLocation;
+
+            // Update to screen
+            // todo: do it, DO IT NOW
+
+            return true;
+        }
 
         // Grabs the memory at the base location of the current process
         public getMemory(address) {
@@ -123,7 +161,14 @@ module WesterOS {
             return this.memory.data[address];
         }
 
-        public readProgramAtLocation()
+        public readProgramAtLocation(location) {
+            var program = "";
+            for (var i = this.locations[location].base; i < this.locations[location].limit; i++) {
+                program += this.memory.data[i] + " ";
+            }
+
+            return program.slice(0, -1);
+        }
 
 
         // Stores data into a specified address
@@ -222,16 +267,56 @@ module WesterOS {
 
         // Removes the current process from the _ProcessList, and deletes its contents in memory
         public removeCurrentProcessFromList() {
+            // Success?
+            var removed = false;
+            var pcb = _CurrentProcess.pcb;
 
-            this.locations[_CurrentProcess.pcb.location].active = false;
-            this.clearMemorySegment(_CurrentProcess.pcb.location);
+            // Find the element in the ProcessList with the given pid
+            for (var i = 0; i < _ProcessList.length; i++) {
+
+                if (_ProcessList[i] && _ProcessList[i].pcb.pid === pcb.pid) {
+                    if (pcb.location === -1) {
+                        // Delete the process on the hard drive
+                        _FileSystem.deleteFile("swap" + pcb.pid, true);
+
+                    } else {
+                        // Mark the location in memory as available
+                        this.locations[pcb.location].active = false;
+                    }
+                    // Remove it from the ResidentList
+                    _ProcessList.splice(i, 1);
+                    removed = true;
+                }
+            }
+            return removed;
 
         }
 
+
+
         // Removes a process from the _ProcessList, and deletes its contents in memory
         public removeProcessFromList(pcb) {
-            this.locations[pcb.pid].active = false;
-            this.clearMemorySegment(pcb.location);
+            // Success?
+            var removed = false;
+
+            // Find the element in the ProcessList with the given pid
+            for (var i = 0; i < _ProcessList.length; i++) {
+
+                if (_ProcessList[i] && _ProcessList[i].pcb.pid === pcb.pid) {
+                    if (pcb.location === -1) {
+                        // Delete the process on the hard drive
+                        _FileSystem.deleteFile("swap" + pcb.pid, true);
+
+                    } else {
+                        // Mark the location in memory as available
+                        this.locations[pcb.location].active = false;
+                    }
+                    // Remove it from the ResidentList
+                    _ProcessList.splice(i, 1);
+                    removed = true;
+                }
+            }
+            return removed;
 
         }
     }

@@ -69,6 +69,24 @@ module WesterOS {
             }
         }
 
+        // Handles process from memory to the file system, and vice versa
+        public handleRollInRollOut(lastProcess) {
+            // In the file system
+            if (_CurrentProcess.location === -1) {
+                if (lastProcess.state !== "TERMINATED") {
+                    var rollOutSuccess = _MemoryManager.rollOut(lastProcess);
+                    if (!rollOutSuccess) {
+                        _Kernel.krnTrace("ERROR: While rolling out PID: " + lastProcess.pcb.pid);
+                    }
+                }
+
+                var successfulRollIn = _MemoryManager.rollIn(_CurrentProcess);
+                if (!successfulRollIn) {
+                    _Kernel.krnTrace("ERROR: While rolling in PID: " + lastProcess.pcb.pid);
+                }
+            }
+        }
+
         // Determines the next process
         // We're just RR right now, so it's the next one in the _ReadyQueue
         private determineNextProcess() {
