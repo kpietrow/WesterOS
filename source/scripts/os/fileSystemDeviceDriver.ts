@@ -61,6 +61,7 @@ module WesterOS {
                 return;
             }
 
+            console.debug(name);
             // Locate the directory
             var directory = this.findDirByName(name);
 

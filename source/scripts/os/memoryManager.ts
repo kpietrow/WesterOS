@@ -39,7 +39,7 @@ module WesterOS {
                     return null;
                 }
 
-                var write = _FileSystem.writeFile("swap" + pcb.pid);
+                var write = _FileSystem.writeFile("swap" + pcb.pid, program);
 
                 if (write.status === "error") {
                     _StdOut.putText(write.message);
