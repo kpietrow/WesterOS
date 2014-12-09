@@ -80,7 +80,8 @@ var WesterOS;
 
         Cpu.prototype.execute = function (instruction) {
             instruction = String(instruction);
-            console.debug(instruction);
+
+            // console.debug(instruction);
             var x = 0;
 
             if (instruction === 'A9') {

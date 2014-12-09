@@ -485,9 +485,10 @@ module WesterOS {
         }
 
         public shellRunAll(args) {
+            console.debug(_ProcessList.length);
             for (var i = 0; i < _ProcessList.length; i++) {
                 var requestedProgram = _ProcessList[i];
-                if (requestedProgram.state !== "TERMINATED") {
+                if (requestedProgram && requestedProgram.state !== "TERMINATED") {
                     _ReadyQueue.enqueue(requestedProgram);
                 }
             }
