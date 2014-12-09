@@ -176,20 +176,8 @@ module WesterOS {
             if (this.scheduler === this.schedulingOptions[0] || this.scheduler === this.schedulingOptions[1]) {
                 return _ReadyQueue.dequeue();
             } else if (this.scheduler === this.schedulingOptions[2]) {
-                // Make sure to remove terminated current processes
-                if (_CurrentProcess && _CurrentProcess.pcb.state === "TERMINATED") {
-                    _MemoryManager.removeCurrentProcessFromList();
 
-                    // Also need to remove it from the ready queue, otherwise we get a loop
-                    for (var i = 0; i < _ReadyQueue.length(); i++) {
-                        if (_ReadyQueue.q[i].pcb.pid === _CurrentProcess.pcb.pid) {
-                            _ReadyQueue.q.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
-
-                console.debug("in determine");
+                console.debug("in determine: " + _ReadyQueue.toString());
 
 
                 // Find process with lowest priority
@@ -206,7 +194,7 @@ module WesterOS {
 
                 // Found it! Remove from ready queue
                 var nextProcess = _ReadyQueue.q[lowestPriorityIndex];
-                _ReadyQueue.q.splice(lowestPriority, 1);
+                _ReadyQueue.q.splice(lowestPriorityIndex, 1);
                 return nextProcess;
 
             }
