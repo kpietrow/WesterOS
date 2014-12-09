@@ -26,7 +26,6 @@ module WesterOS {
 
         // Load program from the User Input
         public loadProgram(program, priority) {
-            console.debug("the priority: " + priority);
             var programLocation = this.getAvailableProgramLocation();
 
             // Main memory is full, try to put it into the file system

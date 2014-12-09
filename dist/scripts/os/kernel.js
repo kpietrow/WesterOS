@@ -97,6 +97,7 @@ var WesterOS;
 
                 WesterOS.Control.displayCpu();
                 WesterOS.Control.displayReadyQueue();
+                WesterOS.Control.displayHardDrive();
                 _MemoryManager.displayMemory();
                 //_CPU.printCPU();
             } else {

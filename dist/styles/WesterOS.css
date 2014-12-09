@@ -53,8 +53,16 @@ h3 {
 #memoryTable {
     display:block;
     max-height: 250px;
-    height: 250px;
+    height: 350px;
     width: 350px;
+    overflow: auto;
+}
+
+#hardDriveTable {
+    display:block;
+    max-height: 150px;
+    height: 150px;
+    width: 700px;
     overflow: auto;
 }
 

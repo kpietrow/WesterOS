@@ -21,6 +21,7 @@ module WesterOS {
         // How many bytes are taken up by metadata in a block
         public metaDataBytes = 0;
         public dataSize = 0;
+        public status = "unloaded";
 
 
         constructor() {
@@ -39,6 +40,7 @@ module WesterOS {
         public krnFileSystemDriverEntry() {
             // Initialization!
             this.status = "loaded";
+            WesterOS.Control.displayHardDrive();
         }
 
         public krnFileSystemISR() {
@@ -97,6 +99,8 @@ module WesterOS {
 
             // Update the screen
             // todo: DO IT, DO IT NOW
+            WesterOS.Control.displayHardDrive();
+
 
             // Return success
             result.status = "Success";
@@ -134,6 +138,8 @@ module WesterOS {
             }
 
             // todo: Update display and print success
+            WesterOS.Control.displayHardDrive();
+
 
             result.status = "Success";
             result.message = "File successfully written to";
@@ -191,6 +197,8 @@ module WesterOS {
 
             // Print it
             // todo: PRINT IT NOW
+            WesterOS.Control.displayHardDrive();
+
 
             result.status = "Success";
             result.message = "File was successfully deleted"
@@ -301,6 +309,8 @@ module WesterOS {
 
             // PRINT IT
             // todo: PRINT IT NOW
+            WesterOS.Control.displayHardDrive();
+
 
             return true;
         }

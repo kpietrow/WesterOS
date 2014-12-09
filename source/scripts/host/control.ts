@@ -136,6 +136,39 @@ module WesterOS {
             document.getElementById("readyQueueRows").innerHTML = readyQueue;
         }
 
+        // Displays the hard drive
+        public static displayHardDrive(): void {
+
+            // Make sure that it's loaded first
+            if (_FileSystem.status !== "loaded") {
+                return;
+            }
+
+            if (!_FileSystem.fileSystemReady()) {
+                console.debug("huh");
+                $('#hardDriveRows').hide();
+                return;
+            }
+
+            var output = '';
+
+            for (var track = 0; track < _FileSystem.tracks; track++) {
+                for (var sector = 0; sector < _FileSystem.sectors; sector++) {
+                    for (var block = 0; block < _FileSystem.blocks; block++) {
+                        var key = _FileSystem.makeKey(track, sector, block);
+                        var data = localStorage.getItem(key);
+
+                        output += '<tr><td>' + key + '</td>' +
+                            '<td>' + data.substring(0, 4) + '</td>' +
+                            '<td>' + data.substring(4) + '</td></tr>';
+                    }
+                }
+            }
+
+            document.getElementById('hardDriveRows').innerHTML = output;
+        }
+
+
 
         //
         // Host Events

@@ -26,6 +26,7 @@ var WesterOS;
             // How many bytes are taken up by metadata in a block
             this.metaDataBytes = 0;
             this.dataSize = 0;
+            this.status = "unloaded";
 
             // Constants for the file system
             this.tracks = 4;
@@ -38,6 +39,7 @@ var WesterOS;
         FileSystemDeviceDriver.prototype.krnFileSystemDriverEntry = function () {
             // Initialization!
             this.status = "loaded";
+            WesterOS.Control.displayHardDrive();
         };
 
         FileSystemDeviceDriver.prototype.krnFileSystemISR = function () {
@@ -96,6 +98,8 @@ var WesterOS;
 
             // Update the screen
             // todo: DO IT, DO IT NOW
+            WesterOS.Control.displayHardDrive();
+
             // Return success
             result.status = "Success";
             result.message = "File created successfully!";
@@ -132,6 +136,8 @@ var WesterOS;
             }
 
             // todo: Update display and print success
+            WesterOS.Control.displayHardDrive();
+
             result.status = "Success";
             result.message = "File successfully written to";
             return result;
@@ -186,6 +192,8 @@ var WesterOS;
 
             // Print it
             // todo: PRINT IT NOW
+            WesterOS.Control.displayHardDrive();
+
             result.status = "Success";
             result.message = "File was successfully deleted";
             return result;
@@ -292,6 +300,8 @@ var WesterOS;
 
             // PRINT IT
             // todo: PRINT IT NOW
+            WesterOS.Control.displayHardDrive();
+
             return true;
         };
 

@@ -462,7 +462,6 @@ module WesterOS {
             // If the priority was passed in...
             if (args.length >= 1) {
                 priority = parseInt(args[0]);
-                console.debug("checking...: " + priority);
             }
 
             // Attempt to load the function into the Memory Manager

@@ -22,7 +22,6 @@ var WesterOS;
 
         // Load program from the User Input
         MemoryManager.prototype.loadProgram = function (program, priority) {
-            console.debug("the priority: " + priority);
             var programLocation = this.getAvailableProgramLocation();
 
             // Main memory is full, try to put it into the file system
