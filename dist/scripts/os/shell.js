@@ -120,6 +120,12 @@ var WesterOS;
             sc = new WesterOS.ShellCommand(this.shellLs, "ls", '- Lists all files stored on the disk');
             this.commandList[this.commandList.length] = sc;
 
+            sc = new WesterOS.ShellCommand(this.shellSetSchedule, "setschedule", '[rr, fcfs, priority] - Allows user to set a scheduling algorithm');
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new WesterOS.ShellCommand(this.shellGetSchedule, "getschedule", '- Returns the current cpu scheduling alogorithm');
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new WesterOS.ShellCommand(this.shellBSOD, "bsod", "- Enables the... 'blue' screen of death");
             this.commandList[this.commandList.length] = sc;
@@ -633,6 +639,28 @@ var WesterOS;
                 }
             } else {
                 _StdOut.putText(result.message);
+            }
+        };
+
+        Shell.prototype.shellSetSchedule = function (args) {
+            if (args.length > 0) {
+                var schedulerIndex = -1;
+
+                for (var i = 0; i < _CpuScheduler.schedulingOptions.length; i++) {
+                    if (args[0] === _CpuScheduler.schedulingOptions[i]) {
+                        schedulerIndex = i;
+                    }
+                }
+
+                // If it wasn't found, yell at user
+                if (schedulerIndex === -1) {
+                    _StdOut.putText("ERROR: Please supply a valid scheduler");
+                } else {
+                    _CpuScheduler.scheduler = _CpuScheduler.schedulingOptions[schedulerIndex];
+                    _StdOut.putText("CPU scheduling algorithm successfully set to " + _CpuScheduler.schedulingOptions[schedulerIndex]);
+                }
+            } else {
+                _StdOut.putText("ERROR: Please supply a scheduler");
             }
         };
         return Shell;

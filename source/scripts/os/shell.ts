@@ -176,6 +176,16 @@ module WesterOS {
                 '- Lists all files stored on the disk');
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellSetSchedule,
+                "setschedule",
+                '[rr, fcfs, priority] - Allows user to set a scheduling algorithm');
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellGetSchedule,
+                "getschedule",
+                '- Returns the current cpu scheduling alogorithm');
+            this.commandList[this.commandList.length] = sc;
+
             // bsod command
             sc = new ShellCommand(this.shellBSOD,
                 "bsod",
@@ -686,6 +696,31 @@ module WesterOS {
             } else {
                 _StdOut.putText(result.message);
             }
+        }
+
+        public shellSetSchedule(args) {
+
+            if (args.length > 0) {
+                var schedulerIndex = -1;
+
+                // Check to ensure that given scheduling argument is valid
+                for (var i = 0; i < _CpuScheduler.schedulingOptions.length; i++) {
+                    if (args[0] === _CpuScheduler.schedulingOptions[i]) {
+                        schedulerIndex = i;
+                    }
+                }
+
+                // If it wasn't found, yell at user
+                if (schedulerIndex === -1) {
+                    _StdOut.putText("ERROR: Please supply a valid scheduler");
+                } else {
+                    _CpuScheduler.scheduler = _CpuScheduler.schedulingOptions[schedulerIndex];
+                    _StdOut.putText("CPU scheduling algorithm successfully set to " + _CpuScheduler.schedulingOptions[schedulerIndex]);
+                }
+            } else {
+                _StdOut.putText("ERROR: Please supply a scheduler");
+            }
+
         }
 
     }

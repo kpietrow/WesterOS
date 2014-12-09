@@ -59,8 +59,6 @@ var WesterOS;
 
             // Reset cycle counter for a new process
             _CycleCounter = 0;
-
-            console.debug(_CurrentProcess.pcb.base);
         };
 
         // Handles the RR context switch
@@ -127,14 +125,12 @@ var WesterOS;
                 if (lastProcess.state !== "TERMINATED") {
                     var rollOutSuccess = _MemoryManager.rollOut(lastProcess);
                     if (!rollOutSuccess) {
-                        console.debug("failure roll out");
                         _Kernel.krnTrace("ERROR: While rolling out PID: " + lastProcess.pcb.pid);
                     }
                 }
 
                 var successfulRollIn = _MemoryManager.rollIn(_CurrentProcess);
                 if (!successfulRollIn) {
-                    console.debug("failure roll in");
                     _Kernel.krnTrace("ERROR: While rolling in PID: " + lastProcess.pcb.pid);
                 }
             }
@@ -151,8 +147,8 @@ var WesterOS;
                 var lowestPriorityIndex = -1;
 
                 for (var i = 0; i < _ReadyQueue.length; i++) {
-                    if (_ReadyQueue[i].priority < lowestPriority) {
-                        lowestPriority = _ReadyQueue[i].priority;
+                    if (_ReadyQueue[i].pcb.priority < lowestPriority) {
+                        lowestPriority = _ReadyQueue[i].pcb.priority;
                         lowestPriorityIndex = i;
                     }
                 }
