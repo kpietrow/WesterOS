@@ -391,8 +391,16 @@ var WesterOS;
                 }
             }
 
+            // Set the priority to the default, which will be 10
+            var priority = 10;
+
+            // If the priority was passed in...
+            if (args.length >= 1) {
+                priority = parseInt(args[0]);
+            }
+
             // Attempt to load the function into the Memory Manager
-            var pid = _MemoryManager.loadProgram(input);
+            var pid = _MemoryManager.loadProgram(input, priority);
             if (pid !== null) {
                 _StdOut.putText("PID: " + pid);
             } else {

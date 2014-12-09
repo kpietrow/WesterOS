@@ -22,6 +22,9 @@ module WesterOS {
         public limit = 0;
         public location = 0;
 
+        // For priority. 10 will be the default
+        public priority = 10;
+
         constructor() {
         }
 

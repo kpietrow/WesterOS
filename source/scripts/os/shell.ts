@@ -439,11 +439,6 @@ module WesterOS {
                 _StdOut.putText("ERROR: No program entered.");
                 return;
             }
-            // Check that program's length
-            /*} else if (input.length % 2 != 0) {
-                _StdOut.putText("ERROR: Incorrect number of characters in program: " + input.length);
-                return;
-            }*/
 
             // Check for invalid characters
             for (var index = 0; index < input.length; index++) {
@@ -453,8 +448,16 @@ module WesterOS {
                 }
             }
 
+            // Set the priority to the default, which will be 10
+            var priority = 10;
+
+            // If the priority was passed in...
+            if (args.length >= 1) {
+                priority = parseInt(args[0]);
+            }
+
             // Attempt to load the function into the Memory Manager
-            var pid = _MemoryManager.loadProgram(input);
+            var pid = _MemoryManager.loadProgram(input, priority);
             if (pid !== null) {
                 _StdOut.putText("PID: " + pid);
             } else {

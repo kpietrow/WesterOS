@@ -87,6 +87,13 @@ var WesterOS;
             this.handleRoundRobinSwitch(nextProcess);
         };
 
+        // Handles Priority switching
+        CpuScheduler.prototype.handlePrioritySwitch = function (nextProcess) {
+            // Update the PCB
+            _CPU.updatePcb();
+            _MemoryManager.removeCurrentProcessFromList();
+        };
+
         // Determines whether or not a context switch is necessary
         CpuScheduler.prototype.determineNeedToContextSwitch = function () {
             // RR
@@ -134,9 +141,22 @@ var WesterOS;
         };
 
         // Determines the next process
-        // We're just RR right now, so it's the next one in the _ReadyQueue
         CpuScheduler.prototype.determineNextProcess = function () {
-            return _ReadyQueue.dequeue();
+            // If RR or FCFS, just go to next one in the queue
+            if (this.scheduler === this.schedulingOptions[0] || this.scheduler === this.schedulingOptions[1]) {
+                return _ReadyQueue.dequeue();
+            } else if (this.scheduler === this.schedulingOptions[2]) {
+                // Find process with lowest priority
+                var lowestPriority = Infinity;
+                var lowestPriorityIndex = -1;
+
+                for (var i = 0; i < _ReadyQueue.length; i++) {
+                    if (_ReadyQueue[i].priority < lowestPriority) {
+                        lowestPriority = _ReadyQueue[i].priority;
+                        lowestPriorityIndex = i;
+                    }
+                }
+            }
         };
 
         // Allows user to set the quantum value

@@ -21,7 +21,7 @@ var WesterOS;
         };
 
         // Load program from the User Input
-        MemoryManager.prototype.loadProgram = function (program) {
+        MemoryManager.prototype.loadProgram = function (program, priority) {
             var programLocation = this.getAvailableProgramLocation();
 
             // Main memory is full, try to put it into the file system
@@ -42,6 +42,8 @@ var WesterOS;
                 }
 
                 pcb.location = -1;
+                pcb.priority = priority;
+
                 _ProcessList[pcb.pid] = { pcb: pcb, state: "NEW" };
 
                 return pcb.pid;
@@ -56,6 +58,7 @@ var WesterOS;
                 thisPcb.limit = ((programLocation + 1) * PROGRAM_SIZE) - 1;
 
                 thisPcb.location = programLocation;
+                thisPcb.priority = priority;
 
                 // Load the program into memory
                 this.loadProgramIntoMemory(program, programLocation);

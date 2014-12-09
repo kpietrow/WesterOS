@@ -17,6 +17,8 @@ var WesterOS;
             this.base = 0;
             this.limit = 0;
             this.location = 0;
+            // For priority. 10 will be the default
+            this.priority = 10;
         }
         Pcb.globalPid = 0;
         return Pcb;
