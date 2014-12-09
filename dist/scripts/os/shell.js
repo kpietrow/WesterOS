@@ -382,7 +382,6 @@ var WesterOS;
         Shell.prototype.shellLoad = function (args) {
             var input = document.getElementById("taProgramInput").value;
             input = input.replace(/\s+/g, ' ').toUpperCase();
-            var priority = 10;
 
             // Check to see that there is a program
             if (input.length <= 0) {
@@ -403,6 +402,7 @@ var WesterOS;
             // If the priority was passed in...
             if (args.length >= 1) {
                 priority = parseInt(args[0]);
+                console.debug("checking...: " + priority);
             }
 
             // Attempt to load the function into the Memory Manager
@@ -436,7 +436,6 @@ var WesterOS;
         };
 
         Shell.prototype.shellRunAll = function (args) {
-            console.debug(_ProcessList.length);
             for (var i = 0; i < _ProcessList.length; i++) {
                 var requestedProgram = _ProcessList[i];
                 if (requestedProgram && requestedProgram.state !== "TERMINATED") {
@@ -454,8 +453,6 @@ var WesterOS;
 
                 // Is is the current process?
                 if (_CurrentProcess && _CurrentProcess.pcb.pid === processPID) {
-                    console.debug("killed current");
-
                     found = true;
 
                     // Set to TERMINATED
@@ -476,8 +473,6 @@ var WesterOS;
                     // Context switch
                     _CpuScheduler.contextSwitch();
                 } else {
-                    console.debug("killed waiting");
-
                     for (var i = 0; i < _ReadyQueue.length(); i++) {
                         // Check for a match
                         if (_ReadyQueue.q[i].pcb.pid == processPID) {
@@ -533,7 +528,6 @@ var WesterOS;
             var resultBool = false;
 
             for (var i = 0; i < _ReadyQueue.length(); i++) {
-                console.debug(_ReadyQueue.length());
                 if (_ReadyQueue.q[i].pcb.state !== "TERMINATED") {
                     resultBool = true;
                     result += _ReadyQueue.q[i].pcb.pid + " ";

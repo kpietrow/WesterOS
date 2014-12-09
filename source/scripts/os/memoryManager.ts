@@ -26,6 +26,7 @@ module WesterOS {
 
         // Load program from the User Input
         public loadProgram(program, priority) {
+            console.debug("the priority: " + priority);
             var programLocation = this.getAvailableProgramLocation();
 
             // Main memory is full, try to put it into the file system
@@ -286,7 +287,7 @@ module WesterOS {
                         // Mark the location in memory as available
                         this.locations[pcb.location].active = false;
                     }
-                    // Remove it from the ResidentList
+                    // Remove it from the ProcessList
                     _ProcessList.splice(i, 1);
                     removed = true;
                 }
@@ -314,7 +315,7 @@ module WesterOS {
                         // Mark the location in memory as available
                         this.locations[pcb.location].active = false;
                     }
-                    // Remove it from the ResidentList
+                    // Remove it from the ProcessList
                     _ProcessList.splice(i, 1);
                     removed = true;
                 }

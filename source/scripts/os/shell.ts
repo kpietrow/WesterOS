@@ -441,8 +441,6 @@ module WesterOS {
         public shellLoad(args) {
             var input = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
             input = input.replace(/\s+/g, ' ').toUpperCase();
-            var priority = 10;
-
 
             // Check to see that there is a program
             if (input.length <= 0) {
@@ -464,6 +462,7 @@ module WesterOS {
             // If the priority was passed in...
             if (args.length >= 1) {
                 priority = parseInt(args[0]);
+                console.debug("checking...: " + priority);
             }
 
             // Attempt to load the function into the Memory Manager
@@ -498,7 +497,6 @@ module WesterOS {
         }
 
         public shellRunAll(args) {
-            console.debug(_ProcessList.length);
             for (var i = 0; i < _ProcessList.length; i++) {
                 var requestedProgram = _ProcessList[i];
                 if (requestedProgram && requestedProgram.state !== "TERMINATED") {
@@ -516,7 +514,6 @@ module WesterOS {
 
                 // Is is the current process?
                 if (_CurrentProcess && _CurrentProcess.pcb.pid === processPID) {
-                    console.debug("killed current");
 
                     found = true;
                     // Set to TERMINATED
@@ -532,7 +529,6 @@ module WesterOS {
                     // Context switch
                     _CpuScheduler.contextSwitch();
                 } else {
-                    console.debug("killed waiting");
 
                     // Try to find the PID in the Ready Queue
                     for (var i = 0; i < _ReadyQueue.length(); i++) {
@@ -586,7 +582,6 @@ module WesterOS {
             var resultBool = false;
 
             for (var i = 0; i < _ReadyQueue.length(); i++) {
-                console.debug(_ReadyQueue.length());
                 if(_ReadyQueue.q[i].pcb.state !== "TERMINATED") {
                     resultBool = true;
                     result += _ReadyQueue.q[i].pcb.pid + " ";

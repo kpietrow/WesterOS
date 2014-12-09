@@ -20,10 +20,38 @@ var WesterOS;
                 // Process is now running
                 _CurrentProcess.state = "RUNNING";
                 _CPU.setCpu(_CurrentProcess);
+
+                // Handles the scenario of a file system process being the top priority.
+                // Swap it into the file system, trading it with the worst priority process
+                // currently in memory.
+                if (this.scheduler === this.schedulingOptions[2] && _CurrentProcess.pcb.location === -1) {
+                    console.debug("first stage");
+                    var unfortunateProcess = null;
+                    var unfortunateProcessPriority = -1;
+                    var unfortunateProcessIndex = -1;
+
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        // Makes sure it's not the current process
+                        if (_ReadyQueue.q[i].pcb.pid !== _CurrentProcess.pcb.pid) {
+                            console.debug("not the same");
+
+                            // Find the worst
+                            if (_ReadyQueue.q[i].pcb.priority > unfortunateProcessPriority) {
+                                unfortunateProcess = _ReadyQueue.q[i];
+                                unfortunateProcessPriority = _ReadyQueue.q[i].pcb.priority;
+                            }
+                        }
+                    }
+
+                    // If we have a match
+                    if (unfortunateProcessPriority !== -1) {
+                        console.debug("well, we got here: " + unfortunateProcess.pcb.pid);
+                        this.handleRollInRollOut(unfortunateProcess);
+                    }
+                }
             }
         };
 
-        // Performs RR context switch
         CpuScheduler.prototype.contextSwitch = function () {
             // Sees if there's another process ready to go
             var nextProcess = this.determineNextProcess();
@@ -142,17 +170,37 @@ var WesterOS;
             if (this.scheduler === this.schedulingOptions[0] || this.scheduler === this.schedulingOptions[1]) {
                 return _ReadyQueue.dequeue();
             } else if (this.scheduler === this.schedulingOptions[2]) {
+                // Make sure to remove terminated current processes
+                if (_CurrentProcess && _CurrentProcess.pcb.state === "TERMINATED") {
+                    _MemoryManager.removeCurrentProcessFromList();
+
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        if (_ReadyQueue.q[i].pcb.pid === _CurrentProcess.pcb.pid) {
+                            _ReadyQueue.q.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+
+                console.debug("in determine");
+
                 // Find process with lowest priority
-                var lowestPriority = Infinity;
+                var lowestPriority = 999;
                 var lowestPriorityIndex = -1;
 
-                for (var i = 0; i < _ReadyQueue.length; i++) {
-                    if (_ReadyQueue[i].pcb.priority < lowestPriority) {
-                        lowestPriority = _ReadyQueue[i].pcb.priority;
+                for (var i = 0; i < _ReadyQueue.length(); i++) {
+                    if (_ReadyQueue.q[i].pcb.priority < lowestPriority) {
+                        lowestPriority = _ReadyQueue.q[i].pcb.priority;
                         lowestPriorityIndex = i;
                     }
                 }
+
+                // Found it! Remove from ready queue
+                var nextProcess = _ReadyQueue.q[lowestPriorityIndex];
+                _ReadyQueue.q.splice(lowestPriority, 1);
+                return nextProcess;
             }
+            return null;
         };
 
         // Allows user to set the quantum value
