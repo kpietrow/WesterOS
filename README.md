@@ -1,4 +1,5 @@
 WesterOS-2014
+Live Demo: http://kpietrow.github.io/WesterOS/
 ============
 
 A Game of Thrones themed OS written in Typescript. Fourteen commands are supported at this point, and more functionality will be added as the semester continues.
